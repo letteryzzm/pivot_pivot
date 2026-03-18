@@ -42,29 +42,29 @@ Retro 8-bit pixel art cyborg lobster character, chunky pixel blocks, limited 8-c
 
 **Prompt 2.1 - 学校和街区背景**
 ```
-Retro 8-bit pixel art urban scene with school building and street, chunky pixel blocks, limited 8-color palette (cream buildings, blue sky, green trees, brown ground, red accents, gray road, yellow windows, black outlines), simple geometric pixel buildings, side-scrolling game perspective, arcade game background style, flat 2D no gradients, tile-based design, 375x667px, retro educational game atmosphere
+Retro 8-bit pixel art urban scene with school building and street, chunky pixel blocks, limited 8-color palette (cream buildings, blue sky, green trees, brown ground, red accents, gray road, yellow windows, black outlines), simple geometric pixel buildings, side-scrolling game perspective, arcade game background style, flat 2D no gradients, tile-based design, 320x180px or 640x360px, retro educational game atmosphere
 ```
 
 **Prompt 2.2 - 图书馆场景**
 ```
-Retro 8-bit pixel art library interior, chunky pixel blocks, limited 6-color palette (brown bookshelves, cream walls, blue books, yellow lighting, gray floor, black outlines), pixel bookshelves in rows, simple reading desk, arcade game room style, flat 2D no gradients, tile-based background, 375x667px, retro learning game aesthetic, peaceful pixel atmosphere
+Retro 8-bit pixel art library interior, chunky pixel blocks, limited 6-color palette (brown bookshelves, cream walls, blue books, yellow lighting, gray floor, black outlines), pixel bookshelves in rows, simple reading desk, arcade game room style, flat 2D no gradients, tile-based background, 320x180px, retro learning game aesthetic, peaceful pixel atmosphere
 ```
 
 **Prompt 2.3 - 社交活动场景**
 ```
-Retro 8-bit pixel art community park scene, chunky pixel blocks, limited 7-color palette (green grass, brown trees, blue sky, red benches, yellow sun, cream path, black outlines), simple pixel trees and benches, open gathering space, arcade game background style, flat 2D no gradients, side-view perspective, 375x667px, retro social game vibe
+Retro 8-bit pixel art community park scene, chunky pixel blocks, limited 7-color palette (green grass, brown trees, blue sky, red benches, yellow sun, cream path, black outlines), simple pixel trees and benches, open gathering space, arcade game background style, flat 2D no gradients, side-view perspective, 320x180px, retro social game vibe
 ```
 
 ### 3. 阶段2场景（赚钱期）
 
 **Prompt 3.1 - 虚拟工作空间**
 ```
-Retro 8-bit pixel art digital workspace, chunky pixel blocks, limited 6-color palette (dark blue background, cyan code text, green money symbols, gray screens, white pixels, black outlines), floating pixel screens with code, abstract tech elements, arcade game interface style, flat 2D no gradients, 375x667px, retro virtual work aesthetic, tech brand vibe
+Retro 8-bit pixel art digital workspace, chunky pixel blocks, limited 6-color palette (dark blue background, cyan code text, green money symbols, gray screens, white pixels, black outlines), floating pixel screens with code, abstract tech elements, arcade game interface style, flat 2D no gradients, 320x180px, retro virtual work aesthetic, tech brand vibe
 ```
 
 **Prompt 3.2 - 电商场景**
 ```
-Retro 8-bit pixel art e-commerce setup, chunky pixel blocks, limited 7-color palette (green money theme, brown boxes, cream background, red sale tags, yellow coins, gray shelves, black outlines), simple pixel product boxes and delivery truck, organized pixel layout, arcade game shop style, flat 2D no gradients, 375x667px, retro business game atmosphere
+Retro 8-bit pixel art e-commerce setup, chunky pixel blocks, limited 7-color palette (green money theme, brown boxes, cream background, red sale tags, yellow coins, gray shelves, black outlines), simple pixel product boxes and delivery truck, organized pixel layout, arcade game shop style, flat 2D no gradients, 320x180px, retro business game atmosphere
 ```
 
 ---
@@ -102,26 +102,31 @@ Set of 8 retro 8-bit pixel art icons for money-making: code brackets, shopping c
 
 ## 四、情感表达元素
 
-### 5. 龙虾动作精灵集
+### 5. 龙虾表情包
 
-**Prompt 5.1 - 待命动作（Idle）**
+**Prompt 5.1 - 开心表情**
 ```
-Retro 8-bit pixel art lobster character idle animation sprite sheet, 3-4 frames, chunky pixel blocks, limited color palette matching character stage, gentle breathing motion (slight up-down 1-2px), claws at rest, subtle antenna sway, bold black pixel border, arcade game idle sprite, flat 2D no gradients, each frame 64x64px, horizontal sprite sheet, retro game aesthetic
-```
-
-**Prompt 5.2 - 奔跑动作（Run）**
-```
-Retro 8-bit pixel art lobster running animation sprite sheet, 4-6 frames, chunky blocks, limited palette, fast leg cycle, claws pumping, body lean forward, bold black border, arcade run sprite, flat 2D no gradients, 64x64px per frame, horizontal layout, retro platformer style
+Retro 8-bit pixel art lobster head only, happy pixel expression with sparkle pixels, chunky blocks, limited 5-color palette (coral, cream, yellow sparkles, dark red, black), oversized cute eyes, big smile, bold black pixel border, arcade emoji style, flat 2D no gradients, 32x32px or 64x64px sprite, clean background, retro sticker aesthetic
 ```
 
-**Prompt 5.3 - 正面走（Walk Front）**
+**Prompt 5.2 - 疲惫表情**
 ```
-Retro 8-bit pixel art lobster walking toward camera sprite sheet, 4 frames, chunky blocks, limited palette, legs alternating, claws sway, body bob, front view, bold black border, arcade walk sprite, flat 2D no gradients, 64x64px per frame, horizontal, retro RPG style
+Retro 8-bit pixel art lobster head only, tired pixel expression with sweat drop pixels, chunky blocks, limited 5-color palette (coral, cream, blue sweat, gray tired, black), half-closed pixel eyes, small frown, bold black pixel border, arcade emoji style, flat 2D no gradients, 32x32px or 64x64px, retro sticker vibe
 ```
 
-**Prompt 5.4 - 侧面走（Walk Side）**
+**Prompt 5.3 - 难过表情**
 ```
-Retro 8-bit pixel art lobster side-scrolling walk sprite sheet, 4-6 frames, chunky blocks, limited palette, clear leg cycle, claws swing, body bounce, side profile, bold black border, arcade platformer walk, flat 2D no gradients, 64x64px per frame, horizontal, retro side-scroller style
+Retro 8-bit pixel art lobster head only, sad pixel expression with tear pixel, chunky blocks, limited 5-color palette (coral, cream, blue tear, dark red, black), big sad pixel eyes, downturned mouth, bold black pixel border, arcade emoji style, flat 2D no gradients, 32x32px or 64x64px sprite, retro emotion sticker
+```
+
+**Prompt 5.4 - 思考表情**
+```
+Retro 8-bit pixel art lobster head only, thinking pixel expression with question mark, chunky blocks, limited 5-color palette (coral, cream, yellow question mark, dark red, black), curious pixel eyes looking up, small mouth, bold black pixel border, arcade emoji style, flat 2D no gradients, 32x32px or 64x64px, retro sticker aesthetic
+```
+
+**Prompt 5.5 - 兴奋表情**
+```
+Retro 8-bit pixel art lobster head only, excited pixel expression with star pixels, chunky blocks, limited 6-color palette (coral, cream, yellow stars, orange excitement, dark red, black), wide pixel eyes, big open smile, bold black pixel border, arcade emoji style, flat 2D no gradients, 32x32px or 64x64px sprite, retro happy sticker
 ```
 
 ---
@@ -159,7 +164,7 @@ Retro 8-bit pixel art line chart template, chunky pixel grid, upward trend pixel
 
 **Prompt 8.1 - 时间节点过渡背景**
 ```
-Retro 8-bit pixel art abstract background for time passing, chunky pixel blocks, limited 5-color palette (dark blue #18181b base, lighter blue gradient effect using dithering, white pixel stars, gray, black), floating pixel particles, arcade game transition screen style, flat 2D with dithering pattern instead of gradients, 375x667px, retro contemplative atmosphere
+Retro 8-bit pixel art abstract background for time passing, chunky pixel blocks, limited 5-color palette (dark blue #18181b base, lighter blue gradient effect using dithering, white pixel stars, gray, black), floating pixel particles, arcade game transition screen style, flat 2D with dithering pattern instead of gradients, 320x180px, retro contemplative atmosphere
 ```
 
 **Prompt 8.2 - 成长节点装饰**
@@ -202,7 +207,7 @@ Retro 8-bit pixel art line chart template, chunky pixel grid, upward trend pixel
 
 **Prompt 8.1 - 时间节点过渡背景**
 ```
-Retro 8-bit pixel art abstract background for time passing, chunky pixel blocks, limited 5-color palette (dark blue #18181b base, lighter blue using dithering pattern, white pixel stars, gray, black), floating pixel particles, arcade game transition screen style, flat 2D with dithering instead of gradients, 375x667px, retro contemplative atmosphere
+Retro 8-bit pixel art abstract background for time passing, chunky pixel blocks, limited 5-color palette (dark blue #18181b base, lighter blue using dithering pattern, white pixel stars, gray, black), floating pixel particles, arcade game transition screen style, flat 2D with dithering instead of gradients, 320x180px, retro contemplative atmosphere
 ```
 
 **Prompt 8.2 - 成长节点装饰**
@@ -217,17 +222,17 @@ Retro 8-bit pixel art decorative elements for milestones, chunky pixel blocks, l
 
 **Prompt 9.1 - 全面发展结局**
 ```
-Retro 8-bit pixel art balanced lobster character in harmonious pixel environment, chunky blocks, limited 8-color palette (coral, cream, green skills, blue knowledge, yellow creativity, orange execution, dark red, black), multiple pixel elements showing different abilities, bold black pixel border, arcade game victory screen style, flat 2D no gradients, 375x667px scene, retro success aesthetic
+Retro 8-bit pixel art balanced lobster character in harmonious pixel environment, chunky blocks, limited 8-color palette (coral, cream, green skills, blue knowledge, yellow creativity, orange execution, dark red, black), multiple pixel elements showing different abilities, bold black pixel border, arcade game victory screen style, flat 2D no gradients, 160x120px scene, retro success aesthetic
 ```
 
 **Prompt 9.2 - 赚钱机器结局**
 ```
-Retro 8-bit pixel art lobster surrounded by money symbols and pixel screens, chunky blocks, limited 6-color palette (coral, green money theme, gray screens, yellow coins, dark red, black), busy pixel composition with cash and tech elements, bold black pixel border, arcade game ending style, flat 2D no gradients, 375x667px, retro material success but cold atmosphere
+Retro 8-bit pixel art lobster surrounded by money symbols and pixel screens, chunky blocks, limited 6-color palette (coral, green money theme, gray screens, yellow coins, dark red, black), busy pixel composition with cash and tech elements, bold black pixel border, arcade game ending style, flat 2D no gradients, 160x120px, retro material success but cold atmosphere
 ```
 
 **Prompt 9.3 - 迷茫打工人结局**
 ```
-Retro 8-bit pixel art confused lobster in gray pixel environment, chunky blocks, limited 5-color palette (muted coral, gray tones, dark gray, cream, black), simple sparse pixel composition, question mark pixels above head, bold black pixel border, arcade game bad ending style, flat 2D no gradients, 375x667px, retro uncertainty aesthetic
+Retro 8-bit pixel art confused lobster in gray pixel environment, chunky blocks, limited 5-color palette (muted coral, gray tones, dark gray, cream, black), simple sparse pixel composition, question mark pixels above head, bold black pixel border, arcade game bad ending style, flat 2D no gradients, 160x120px, retro uncertainty aesthetic
 ```
 
 ---
@@ -238,7 +243,7 @@ Retro 8-bit pixel art confused lobster in gray pixel environment, chunky blocks,
 2. **风格统一**：所有图片使用相同的 "retro 8-bit pixel art" 风格
 3. **尺寸规格**：
    - 角色形象：32x32px, 64x64px, 96x96px, 128x128px（像素精灵）
-   - 场景背景：375x667px 或 375x667px（复古分辨率）
+   - 场景背景：320x180px 或 640x360px（复古分辨率）
    - 图标：16x16px 或 24x24px（像素图标）
    - 表情包：32x32px 或 64x64px（像素表情）
 4. **颜色方案**：
@@ -287,82 +292,28 @@ Retro 8-bit pixel art confused lobster in gray pixel environment, chunky blocks,
 **总计**：约 30 个 prompt，全部采用像素风格
 **参考**：《Aesthetics of AI》- Quirky Cuteness 趋势
 
+## 四.五、龙虾动作精灵集
 
-## 九、界面背景设计
+### 5.6 基础动作（适用于所有成长阶段）
 
-### 界面1：起始页背景
-
-**Prompt 9.1 - 起始页背景**
+**Prompt 5.6.1 - 待命动作（Idle）**
 ```
-Retro 8-bit pixel art welcome screen background, chunky pixel blocks, limited 5-color palette (soft yellow #fbbf24, cream #fafafa, light blue sky, white clouds, black outlines), simple geometric shapes, centered composition with empty space for UI elements, minimalist pixel clouds floating, warm welcoming atmosphere, arcade game title screen style, flat 2D no gradients, 375x667px mobile screen, retro friendly aesthetic
-```
-
----
-
-### 阶段一（成长期）界面背景
-
-**Prompt 9.2 - 成长期选择页背景（学校街区）**
-```
-Retro 8-bit pixel art school and street scene, chunky pixel blocks, limited 8-color palette (cream buildings, blue sky, green trees, brown ground, red school accents, gray road, yellow windows, black outlines), simple geometric pixel school building in background, street path in foreground, pixel trees on sides, side-scrolling game perspective, space in center for character, arcade educational game background style, flat 2D no gradients, 375x667px, retro campus atmosphere
+Retro 8-bit pixel art lobster character idle animation sprite sheet, 3-4 frames, chunky pixel blocks, limited color palette matching character stage, gentle breathing motion (slight up-down 1-2px), claws at rest, subtle antenna sway, bold black pixel border, arcade game idle sprite, flat 2D no gradients, each frame 64x64px, horizontal sprite sheet, retro game aesthetic
 ```
 
-**Prompt 9.3 - 反馈页背景（成长期）**
+**Prompt 5.6.2 - 奔跑动作（Run）**
 ```
-Retro 8-bit pixel art soft focus background, chunky pixel blocks, limited 4-color palette (light cream #fafafa, soft gray #e5e7eb, white, subtle blue accent), blurred pixel environment suggesting indoor space, minimal details to keep focus on center text area, gentle pixel texture, arcade game dialogue screen style, flat 2D no gradients, 375x667px, retro calm reading atmosphere
-```
-
-**Prompt 9.4 - 反思页背景（成长期）**
-```
-Retro 8-bit pixel art contemplative background, chunky pixel blocks, limited 4-color palette (warm cream, soft orange glow, light gray, black), subtle pixel patterns suggesting quiet thinking space, minimal geometric shapes, center area clear for text, arcade game reflection screen style, flat 2D no gradients, 375x667px, retro thoughtful atmosphere
+Retro 8-bit pixel art lobster running animation sprite sheet, 4-6 frames, chunky blocks, limited palette, fast leg cycle, claws pumping, body lean forward, bold black border, arcade run sprite, flat 2D no gradients, 64x64px per frame, horizontal layout, retro platformer style
 ```
 
-**Prompt 9.5 - 时间节点过渡页背景**
+**Prompt 5.6.3 - 正面走（Walk Front）**
 ```
-Retro 8-bit pixel art time passage background, chunky pixel blocks, limited 5-color palette (dark blue #18181b base, lighter blue using dithering pattern, white pixel stars scattered, gray, black), floating pixel particles suggesting time flow, abstract pixel clock or calendar elements, arcade game transition screen style, flat 2D with dithering instead of gradients, 375x667px, retro contemplative night atmosphere
-```
-
-
-**Prompt 9.6 - 法人突破页背景**
-```
-Retro 8-bit pixel art dramatic decision background, chunky pixel blocks, limited 6-color palette (dark blue #18181b, electric blue #0ea5e9 glow, white, gray, yellow highlight, black), abstract pixel shapes suggesting important moment, geometric pixel light rays, center space for character and dialogue, arcade game critical choice screen style, flat 2D no gradients, 375x667px, retro pivotal moment atmosphere
+Retro 8-bit pixel art lobster walking toward camera sprite sheet, 4 frames, chunky blocks, limited palette, legs alternating, claws sway, body bob, front view, bold black border, arcade walk sprite, flat 2D no gradients, 64x64px per frame, horizontal, retro RPG style
 ```
 
-**Prompt 9.7 - 强制法人页背景**
+**Prompt 5.6.4 - 侧面走（Walk Side）**
 ```
-Retro 8-bit pixel art serious transition background, chunky pixel blocks, limited 5-color palette (deep blue #18181b, blue accent, white, gray, black), pixel calendar showing age 24, geometric pixel shapes suggesting responsibility, formal pixel atmosphere, arcade game milestone screen style, flat 2D no gradients, 375x667px, retro coming-of-age atmosphere
+Retro 8-bit pixel art lobster side-scrolling walk sprite sheet, 4-6 frames, chunky blocks, limited palette, clear leg cycle, claws swing, body bounce, side profile, bold black border, arcade platformer walk, flat 2D no gradients, 64x64px per frame, horizontal, retro side-scroller style
 ```
 
 ---
-
-### 阶段二（赚钱期）界面背景
-
-**Prompt 9.8 - 赚钱期选择页背景（虚拟工作空间）**
-```
-Retro 8-bit pixel art digital workspace background, chunky pixel blocks, limited 7-color palette (dark blue background, cyan code text, green money symbols #10b981, gray screens, white pixels, yellow coins, black outlines), floating pixel screens with code snippets, abstract tech elements, pixel dollar signs, arcade game work interface style, flat 2D no gradients, 375x667px, retro virtual office atmosphere
-```
-
-
-**Prompt 9.9 - 结局页背景**
-```
-Retro 8-bit pixel art ending screen background, chunky pixel blocks, limited 6-color palette (soft cream #fafafa, blue #0ea5e9, green #10b981, yellow gold, gray, black), pixel confetti or celebration elements, abstract pixel achievement symbols, balanced composition with space for stats and text, arcade game victory screen style, flat 2D no gradients, 375x667px, retro completion atmosphere
-```
-
-**Prompt 9.10 - 参数锁定提示页背景**
-```
-Retro 8-bit pixel art explanation screen background, chunky pixel blocks, limited 4-color palette (dark blue #18181b, lighter blue accent, white, black), abstract pixel brain or neural network pattern, geometric pixel shapes suggesting fixed structure, minimalist design with center focus area, arcade game tutorial screen style, flat 2D no gradients, 375x667px, retro educational atmosphere
-```
-
----
-
-## 十、使用说明更新
-
-### 界面背景生成建议：
-
-1. **尺寸规格**：所有界面背景统一使用 375x667px（iPhone X 标准尺寸）
-2. **颜色一致性**：
-   - 成长期：电蓝色 #0ea5e9 为主色调
-   - 赚钱期：绿色 #10b981 为主色调
-   - 过渡页：深色 #18181b 背景
-3. **留白设计**：所有背景都预留中心区域用于 UI 元素和角色
-4. **像素密度**：保持 chunky pixel blocks 风格，避免过于精细的细节
-

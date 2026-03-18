@@ -24,24 +24,23 @@ export default function ActivitySelectPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#fafafa] flex flex-col">
+    <div className="min-h-screen bg-[#18181b] flex flex-col p-4">
       {/* 顶部标题 */}
       <div className="h-20 flex items-center justify-center">
-        <span className="text-xl font-semibold text-[#18181b]">
+        <span className="text-xl font-semibold text-white">
           {lobster.stage === 1 ? '选择活动' : '选择赚钱活动'}
         </span>
       </div>
 
-      {/* 活动列表 */}
-      <div className="flex-1 overflow-y-auto px-4 pb-4 flex flex-col gap-3">
+      {/* 图标网格 */}
+      <div className="flex-1 grid grid-cols-3 gap-4 content-start">
         {activities.map(activity => (
           <button
             key={activity.id}
             onClick={() => handleSelect(activity.id)}
-            className="w-full p-4 rounded-xl bg-white flex flex-col gap-2"
+            className="aspect-square bg-[#2a2a2a] rounded-xl flex items-center justify-center text-5xl hover:bg-[#3a3a3a] transition-colors border-2 border-[#3a3a3a]"
           >
-            <p className="text-base font-medium text-[#18181b]">{activity.name}</p>
-            <p className="text-sm text-[#71717a]">{activity.description}</p>
+            {activity.icon}
           </button>
         ))}
       </div>

@@ -32,6 +32,7 @@ export interface Activity {
   name: string;
   description: string;
   stage: 1 | 2;
+  icon: string;
 }
 
 // API响应
