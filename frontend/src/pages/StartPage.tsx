@@ -15,7 +15,10 @@ export default function StartPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#fafafa] flex flex-col">
+    <div
+      className="min-h-screen flex flex-col bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: "url('/images/背景/欢迎屏幕背景_2.png')" }}
+    >
       {/* 状态栏 */}
       <div className="h-[62px] flex items-center justify-center">
         <span className="text-sm text-[#18181b]">9:41</span>

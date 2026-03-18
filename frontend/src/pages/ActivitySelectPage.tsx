@@ -8,6 +8,9 @@ export default function ActivitySelectPage() {
   const { lobster, executeActivity, addIncome } = useGameStore();
 
   const activities = lobster.stage === 1 ? stage1Activities : stage2Activities;
+  const backgroundImage = lobster.stage === 1
+    ? "url('/images/背景/学校和街区背景_1.png')"
+    : "url('/images/背景/虚拟工作空间_1.png')";
 
   const handleSelect = async (activityId: string) => {
     const activity = activities.find(a => a.id === activityId);
@@ -24,7 +27,10 @@ export default function ActivitySelectPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#18181b] flex flex-col p-4">
+    <div
+      className="min-h-screen flex flex-col p-4 bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage }}
+    >
       {/* 顶部标题 */}
       <div className="h-20 flex items-center justify-center relative">
         <span className="text-xl font-semibold text-white">

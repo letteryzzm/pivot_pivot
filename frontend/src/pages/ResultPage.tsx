@@ -9,7 +9,10 @@ export default function ResultPage() {
   const entrepreneurScore = calculateEntrepreneurScore(lobster);
 
   return (
-    <div className="min-h-screen bg-[#fafafa] flex flex-col gap-4 p-4">
+    <div
+      className="min-h-screen flex flex-col gap-4 p-4 bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: "url('/images/背景/欢迎屏幕背景_4.png')" }}
+    >
       {/* 标题区域 */}
       <div className="bg-white rounded-2xl h-[120px] flex flex-col items-center justify-center gap-1">
         <h1 className="text-2xl font-semibold text-[#18181b]">你养成的龙虾</h1>
