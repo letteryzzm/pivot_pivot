@@ -1,7 +1,14 @@
 import { useNavigate } from 'react-router-dom';
+import { useGameStore } from '../store/gameStore';
 
 export default function ForceLegalPage() {
   const navigate = useNavigate();
+  const { nextStage } = useGameStore();
+
+  const handleAccept = () => {
+    nextStage(); // 强制进入阶段2
+    navigate('/select');
+  };
 
   return (
     <div className="min-h-screen bg-[#18181b] flex flex-col items-center justify-center gap-8 p-6">
@@ -31,7 +38,7 @@ export default function ForceLegalPage() {
       </div>
 
       <button
-        onClick={() => navigate('/game')}
+        onClick={handleAccept}
         className="w-[340px] h-12 bg-[#ef4444] text-white rounded-xl text-base font-medium"
       >
         接受成为法人

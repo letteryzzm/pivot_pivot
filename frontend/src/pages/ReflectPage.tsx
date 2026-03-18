@@ -5,7 +5,7 @@ import { callAPI } from '../utils/api';
 
 export default function ReflectPage() {
   const navigate = useNavigate();
-  const { lobster, currentFeedback, checkLegalBreak } = useGameStore();
+  const { lobster, currentFeedback, checkLegalBreak, checkForceLegal } = useGameStore();
   const [reflection, setReflection] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 
@@ -57,6 +57,12 @@ export default function ReflectPage() {
 
       <button
         onClick={() => {
+          // 优先检查24岁强制法人
+          if (checkForceLegal()) {
+            navigate('/force-legal');
+            return;
+          }
+
           // 检查是否应该触发法人突破
           const shouldBreak = checkLegalBreak();
           if (shouldBreak) {

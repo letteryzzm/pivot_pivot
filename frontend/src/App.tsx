@@ -8,6 +8,7 @@ import ReflectPage from './pages/ReflectPage';
 import TransitionPage from './pages/TransitionPage';
 import LegalBreakPage from './pages/LegalBreakPage';
 import ForceLegalPage from './pages/ForceLegalPage';
+import ParameterLockPage from './pages/ParameterLockPage';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
             <Route path="/transition" element={<TransitionPage />} />
             <Route path="/legal-break" element={<LegalBreakPage />} />
             <Route path="/force-legal" element={<ForceLegalPage />} />
+            <Route path="/parameter-lock" element={<ParameterLockPage />} />
             <Route path="/result" element={<ResultPage />} />
           </Routes>
         </BrowserRouter>

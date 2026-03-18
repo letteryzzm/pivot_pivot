@@ -10,12 +10,14 @@ interface GameStore {
   currentFeedback: FeedbackResponse | null;
   isLoading: boolean;
   shouldShowLegalBreak: boolean;
+  shouldShowForceLegal: boolean;
 
   startGame: (name: string) => void;
   executeActivity: (activity: Activity) => Promise<void>;
   addIncome: (amount: number) => void;
   nextStage: () => void;
   checkLegalBreak: () => boolean;
+  checkForceLegal: () => boolean;
   dismissLegalBreak: () => void;
   resetGame: () => void;
 }
@@ -35,11 +37,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
   currentFeedback: null,
   isLoading: false,
   shouldShowLegalBreak: false,
+  shouldShowForceLegal: false,
 
   startGame: (name) => set({
     isPlaying: true,
     lobster: { ...initialLobster, name },
-    shouldShowLegalBreak: false
+    shouldShowLegalBreak: false,
+    shouldShowForceLegal: false
   }),
 
   executeActivity: async (activity) => {
@@ -119,12 +123,24 @@ export const useGameStore = create<GameStore>((set, get) => ({
     return false;
   },
 
+  checkForceLegal: () => {
+    const state = get();
+    const { lobster } = state;
+    // 24岁强制成为法人
+    if (lobster.age >= 24 && lobster.stage === 1) {
+      set({ shouldShowForceLegal: true });
+      return true;
+    }
+    return false;
+  },
+
   dismissLegalBreak: () => set({ shouldShowLegalBreak: false }),
 
   resetGame: () => set({
     lobster: initialLobster,
     isPlaying: false,
     currentFeedback: null,
-    shouldShowLegalBreak: false
+    shouldShowLegalBreak: false,
+    shouldShowForceLegal: false
   })
 }));
