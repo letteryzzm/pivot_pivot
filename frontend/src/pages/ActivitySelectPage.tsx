@@ -17,8 +17,8 @@ export default function ActivitySelectPage() {
     if (!activity) return;
 
     if (lobster.stage === 1) {
-      await executeActivity(activity);
-      navigate('/feedback');
+      // 立刻跳转，不等待API
+      navigate('/feedback', { state: { activity } });
     } else {
       const income = calculateIncome(lobster, activity);
       addIncome(income);

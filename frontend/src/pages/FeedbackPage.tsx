@@ -1,12 +1,21 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useGameStore } from '../store/gameStore';
 import LobsterSprite from '../components/LobsterSprite';
 
 export default function FeedbackPage() {
   const navigate = useNavigate();
-  const { lobster, currentFeedback, isLoading, setUserResponse } = useGameStore();
+  const location = useLocation();
+  const { lobster, currentFeedback, isLoading, setUserResponse, executeActivity } = useGameStore();
   const [input, setInput] = useState('你可以这样想，但我更建议你再深度思考一下');
+
+  // 执行活动
+  useEffect(() => {
+    const activity = location.state?.activity;
+    if (activity && !currentFeedback) {
+      executeActivity(activity);
+    }
+  }, []);
 
   const handleSubmit = () => {
     setUserResponse(input);
