@@ -5,17 +5,17 @@ import { calculateIncome } from '../game/gameEngine';
 
 export default function ActivitySelectPage() {
   const navigate = useNavigate();
-  const { lobster, executeActivities, addIncome } = useGameStore();
+  const { lobster, executeActivity, addIncome } = useGameStore();
 
   const activities = lobster.stage === 1 ? stage1Activities : stage2Activities;
 
-  const handleSelect = (activityId: string) => {
+  const handleSelect = async (activityId: string) => {
     const activity = activities.find(a => a.id === activityId);
     if (!activity) return;
 
     if (lobster.stage === 1) {
-      executeActivities([activity]);
-      navigate('/game');
+      await executeActivity(activity);
+      navigate('/feedback');
     } else {
       const income = calculateIncome(lobster, activity);
       addIncome(income);
