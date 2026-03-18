@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useGameStore } from '../store/gameStore';
 import { determineEnding, calculateEntrepreneurScore } from '../game/endings';
+import LobsterSprite from '../components/LobsterSprite';
 
 export default function ResultPage() {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ export default function ResultPage() {
 
       {/* 龙虾区域 */}
       <div className="flex flex-col items-center gap-2">
-        <div className="text-[120px] leading-none">🦞</div>
+        <LobsterSprite age={lobster.age} action="idle" size={120} />
         <div className="px-1.5 py-1.5 bg-[#10b981] rounded">
           <span className="text-xs text-white font-medium">{ending.title}</span>
         </div>

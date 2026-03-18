@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useGameStore } from '../store/gameStore';
+import LobsterSprite from '../components/LobsterSprite';
 
 export default function GamePage() {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ export default function GamePage() {
 
       {/* 龙虾区域 */}
       <div className="bg-white rounded-2xl p-4 h-[280px] flex flex-col items-center justify-center gap-4">
-        <div className="text-6xl leading-none">🦞</div>
+        <LobsterSprite age={lobster.age} action="idle" size={120} />
         {currentFeedback && (
           <div className="bg-white rounded-2xl p-4 w-[320px]">
             <p className="text-sm text-[#18181b] whitespace-pre-line">{currentFeedback}</p>

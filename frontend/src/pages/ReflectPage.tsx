@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGameStore } from '../store/gameStore';
 import { callAPI } from '../utils/api';
+import LobsterSprite from '../components/LobsterSprite';
 
 export default function ReflectPage() {
   const navigate = useNavigate();
@@ -46,7 +47,7 @@ export default function ReflectPage() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[#fafafa] flex items-center justify-center">
-        <div className="text-[80px] leading-none animate-pulse">🦞</div>
+        <LobsterSprite age={lobster.age} action="idle" size={80} />
       </div>
     );
   }
@@ -58,7 +59,7 @@ export default function ReflectPage() {
       </div>
 
       <div className="flex flex-col items-center gap-4">
-        <div className="text-[80px] leading-none">🦞</div>
+        <LobsterSprite age={lobster.age} action="idle" size={80} />
         <div className="w-[340px] bg-white rounded-[20px] p-6">
           <p className="text-base text-[#18181b] text-center leading-relaxed whitespace-pre-line">
             {reflection}

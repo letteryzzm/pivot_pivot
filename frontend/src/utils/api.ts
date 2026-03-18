@@ -16,7 +16,7 @@ export async function callAPI(prompt: string): Promise<string> {
     body: JSON.stringify({
       model: 'stepfun-ai/Step-3.5-Flash',
       messages: [{ role: 'user', content: prompt }],
-      max_tokens: 200,
+      max_tokens: 300,
     }),
   });
 
@@ -25,5 +25,28 @@ export async function callAPI(prompt: string): Promise<string> {
   }
 
   const data = await response.json();
-  return data.choices[0].message.content;
+  let content = data.choices[0].message.content;
+
+  // 清理markdown代码块和多余空白
+  content = content
+    .replace(/```json\n?/g, '')
+    .replace(/```\n?/g, '')
+    .replace(/^\s+|\s+$/g, '')
+    .trim();
+
+  return content;
+}
+
+// 安全解析JSON
+export function safeParseJSON<T>(text: string, fallback: T): T {
+  try {
+    // 尝试提取JSON对象
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+      return JSON.parse(jsonMatch[0]);
+    }
+    return JSON.parse(text);
+  } catch {
+    return fallback;
+  }
 }

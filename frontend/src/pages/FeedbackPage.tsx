@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGameStore } from '../store/gameStore';
+import LobsterSprite from '../components/LobsterSprite';
 
 export default function FeedbackPage() {
   const navigate = useNavigate();
-  const { currentFeedback, isLoading, setUserResponse } = useGameStore();
+  const { lobster, currentFeedback, isLoading, setUserResponse } = useGameStore();
   const [input, setInput] = useState('你可以这样想，但我更建议你再深度思考一下');
 
   const handleSubmit = () => {
@@ -16,7 +17,7 @@ export default function FeedbackPage() {
     return (
       <div className="min-h-screen bg-[#fafafa] flex items-center justify-center">
         <div className="text-center">
-          <div className="text-[80px] leading-none animate-bounce">🦞</div>
+          <LobsterSprite age={lobster.age} action="idle" size={80} />
           <p className="mt-4 text-sm text-[#71717a]">龙虾正在思考...</p>
         </div>
       </div>
@@ -30,7 +31,7 @@ export default function FeedbackPage() {
       </div>
 
       <div className="flex flex-col items-center gap-4">
-        <div className="text-[80px] leading-none">🦞</div>
+        <LobsterSprite age={lobster.age} action="idle" size={80} />
         <div className="w-[340px] bg-white rounded-[20px] p-6 flex flex-col gap-3">
           <p className="text-base text-[#18181b] text-center leading-relaxed">
             {currentFeedback?.feedback || '我完成了活动...'}

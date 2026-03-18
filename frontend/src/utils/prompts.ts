@@ -26,24 +26,27 @@ export function generateFeedbackPrompt(context: {
 4. 不要提具体数值
 5. 体现你的个性和当前情绪
 
-## 执行程度判断
-- 如果喜欢这个活动：execution 70-100
-- 如果勉强接受：execution 40-70
-- 如果不想做：execution 0-40
+## 输出格式（严格遵守）
+必须输出纯JSON，不要有任何其他文字或markdown标记：
 
-## 成长幅度判断
-- 根据执行程度和活动类型，决定各项能力的变化（-5到+8）
-- 有得有失：提升某项能力时，可能降低其他能力
-
-请直接输出JSON格式：
 {
-  "feedback": "你的感受（带颜文字）",
-  "execution": 执行程度0-100,
+  "feedback": "你的感受文字（带颜文字，不超过30字）",
+  "execution": 75,
   "growth": {
-    "iq": -5到+8,
-    "social": -5到+8,
-    "creativity": -5到+8,
-    "execution": -5到+8
+    "iq": 3,
+    "social": -2,
+    "creativity": 5,
+    "execution": 2
   }
-}`;
+}
+
+字段说明：
+- feedback: 你对这个活动的感受（字符串）
+- execution: 你的执行程度，0-100的数字
+- growth.iq: 学习能力变化，-5到8的整数
+- growth.social: 社交能力变化，-5到8的整数
+- growth.creativity: 创造能力变化，-5到8的整数
+- growth.execution: 执行能力变化，-5到8的整数
+
+注意：有得有失，提升某项能力时可能降低其他能力（用负数表示）`;
 }

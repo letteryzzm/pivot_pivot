@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import type { LobsterState, Activity, FeedbackResponse } from '../types/game';
 import { applyAIGrowth, calculateIncome } from '../game/gameEngine';
-import { callAPI } from '../utils/api';
+import { callAPI, safeParseJSON } from '../utils/api';
 import { generateFeedbackPrompt } from '../utils/prompts';
 
 interface GameStore {
@@ -67,16 +67,31 @@ export const useGameStore = create<GameStore>((set, get) => ({
       });
 
       const response = await callAPI(prompt);
-      const aiResponse: FeedbackResponse = JSON.parse(response);
+      const aiResponse: FeedbackResponse = safeParseJSON(response, {
+        feedback: '我完成了这个活动 (´･ω･`)',
+        execution: 70,
+        growth: { iq: 2, social: 2, creativity: 2, execution: 2 }
+      });
 
       // 应用AI决定的成长值
       const newStats = applyAIGrowth(lobster, aiResponse);
       const newRound = lobster.history.round + 1;
 
+      // 阶段2：计算收入
+      let newIncome = lobster.income;
+      if (lobster.stage === 2) {
+        const income = calculateIncome(lobster, activity);
+        newIncome = {
+          total: lobster.income.total + income,
+          weekly: income
+        };
+      }
+
       set({
         lobster: {
           ...lobster,
           stats: newStats,
+          income: newIncome,
           age: lobster.age + 1,
           history: {
             ...lobster.history,
@@ -102,10 +117,21 @@ export const useGameStore = create<GameStore>((set, get) => ({
       const newStats = applyAIGrowth(lobster, fallbackResponse);
       const newRound = lobster.history.round + 1;
 
+      // 阶段2：计算收入
+      let newIncome = lobster.income;
+      if (lobster.stage === 2) {
+        const income = calculateIncome(lobster, activity);
+        newIncome = {
+          total: lobster.income.total + income,
+          weekly: income
+        };
+      }
+
       set({
         lobster: {
           ...lobster,
           stats: newStats,
+          income: newIncome,
           age: lobster.age + 1,
           history: {
             ...lobster.history,
