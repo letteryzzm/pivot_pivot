@@ -7,7 +7,7 @@ export default function FeedbackPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const { lobster, currentFeedback, isLoading, setUserResponse, executeActivity } = useGameStore();
-  const [input, setInput] = useState('你可以这样想，但我更建议你再深度思考一下');
+  const [input, setInput] = useState('');
 
   // 执行活动
   useEffect(() => {
@@ -18,7 +18,8 @@ export default function FeedbackPage() {
   }, []);
 
   const handleSubmit = () => {
-    setUserResponse(input);
+    const response = input.trim() || '你可以这样想，但我更建议你再深度思考一下';
+    setUserResponse(response);
     navigate('/reflect');
   };
 
@@ -56,7 +57,8 @@ export default function FeedbackPage() {
         <textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          className="w-full h-20 px-3 py-3 bg-white rounded-xl text-sm leading-relaxed resize-none"
+          placeholder="你可以这样想，但我更建议你再深度思考一下"
+          className="w-full h-20 px-3 py-3 bg-white rounded-xl text-sm leading-relaxed resize-none placeholder:text-gray-400"
         />
       </div>
 
