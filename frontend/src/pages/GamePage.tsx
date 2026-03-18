@@ -13,6 +13,13 @@ export default function GamePage() {
     execution: '执行力'
   };
 
+  const statColors = {
+    iq: { bg: 'bg-blue-500', text: 'text-blue-600' },
+    social: { bg: 'bg-green-500', text: 'text-green-600' },
+    creativity: { bg: 'bg-purple-500', text: 'text-purple-600' },
+    execution: { bg: 'bg-orange-500', text: 'text-orange-600' }
+  };
+
   return (
     <div className="min-h-screen bg-[#fafafa] flex flex-col gap-4 p-4">
       {/* 状态栏 */}
@@ -29,35 +36,35 @@ export default function GamePage() {
       </div>
 
       {/* 龙虾区域 */}
-      <div className="bg-white rounded-2xl p-4 h-[280px] flex flex-col items-center justify-center gap-4">
+      <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-6 shadow-sm flex flex-col items-center justify-center gap-4">
         <LobsterSprite age={lobster.age} action="idle" size={120} />
         {currentFeedback && (
-          <div className="bg-white rounded-2xl p-4 w-[320px]">
+          <div className="bg-white/80 backdrop-blur rounded-xl p-4 w-full">
             <p className="text-sm text-[#18181b] whitespace-pre-line">{currentFeedback}</p>
           </div>
         )}
       </div>
 
       {/* 时间卡片 */}
-      <div className="bg-white rounded-xl p-3 flex flex-col gap-2">
-        <p className="text-xs text-[#71717a]">距离下次成长节点</p>
-        <p className="text-base font-mono text-[#18181b]">2 天 5 小时</p>
-        <div className="w-full h-1 bg-[#e5e7eb] rounded-full">
-          <div className="w-1/3 h-1 bg-[#0ea5e9] rounded-full"></div>
+      <div className="bg-white rounded-xl p-4 shadow-sm">
+        <p className="text-xs text-[#71717a] mb-1">距离下次成长节点</p>
+        <p className="text-lg font-semibold text-[#18181b] mb-3">2 天 5 小时</p>
+        <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+          <div className="w-1/3 h-2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"></div>
         </div>
       </div>
 
       {/* 能力面板 */}
       <div className="flex flex-col gap-3">
         {Object.entries(lobster.stats).map(([key, value]) => (
-          <div key={key} className="bg-white rounded-xl p-3">
+          <div key={key} className="bg-white rounded-xl p-4 shadow-sm">
             <div className="flex justify-between items-center mb-2">
-              <span className="text-sm text-[#71717a]">{statLabels[key as keyof typeof statLabels]}</span>
-              <span className="text-sm font-semibold text-[#18181b]">{value}</span>
+              <span className="text-sm font-medium text-[#18181b]">{statLabels[key as keyof typeof statLabels]}</span>
+              <span className={`text-lg font-bold ${statColors[key as keyof typeof statColors].text}`}>{value}</span>
             </div>
-            <div className="w-full h-2 bg-[#e5e7eb] rounded-full">
+            <div className="w-full h-2.5 bg-gray-100 rounded-full overflow-hidden">
               <div
-                className="h-2 bg-[#0ea5e9] rounded-full transition-all"
+                className={`h-2.5 ${statColors[key as keyof typeof statColors].bg} rounded-full transition-all duration-500`}
                 style={{ width: `${value}%` }}
               />
             </div>
