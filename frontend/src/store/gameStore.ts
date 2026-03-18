@@ -11,9 +11,11 @@ interface GameStore {
   isLoading: boolean;
   shouldShowLegalBreak: boolean;
   shouldShowForceLegal: boolean;
+  userResponse: string;
 
   startGame: (name: string) => void;
   executeActivity: (activity: Activity) => Promise<void>;
+  setUserResponse: (response: string) => void;
   addIncome: (amount: number) => void;
   nextStage: () => void;
   checkLegalBreak: () => boolean;
@@ -38,6 +40,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   isLoading: false,
   shouldShowLegalBreak: false,
   shouldShowForceLegal: false,
+  userResponse: '',
 
   startGame: (name) => set({
     isPlaying: true,
@@ -86,13 +89,31 @@ export const useGameStore = create<GameStore>((set, get) => ({
       });
     } catch (error) {
       console.error('AI调用失败:', error);
+      const state = get();
+      const { lobster } = state;
+
       // 降级方案：使用默认值
+      const fallbackResponse: FeedbackResponse = {
+        feedback: '我完成了这个活动 (´･ω･`)',
+        execution: 70,
+        growth: { iq: 2, social: 2, creativity: 2, execution: 2 }
+      };
+
+      const newStats = applyAIGrowth(lobster, fallbackResponse);
+      const newRound = lobster.history.round + 1;
+
       set({
-        currentFeedback: {
-          feedback: '我完成了这个活动 (´･ω･`)',
-          execution: 70,
-          growth: { iq: 2, social: 2, creativity: 2, execution: 2 }
+        lobster: {
+          ...lobster,
+          stats: newStats,
+          age: lobster.age + 1,
+          history: {
+            ...lobster.history,
+            activities: [...lobster.history.activities, activity.name],
+            round: newRound
+          }
         },
+        currentFeedback: fallbackResponse,
         isLoading: false
       });
     }
@@ -135,6 +156,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   dismissLegalBreak: () => set({ shouldShowLegalBreak: false }),
+
+  setUserResponse: (response) => set({ userResponse: response }),
 
   resetGame: () => set({
     lobster: initialLobster,

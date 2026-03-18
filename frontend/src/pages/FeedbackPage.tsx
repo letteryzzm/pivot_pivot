@@ -4,10 +4,11 @@ import { useGameStore } from '../store/gameStore';
 
 export default function FeedbackPage() {
   const navigate = useNavigate();
-  const { currentFeedback, isLoading } = useGameStore();
+  const { currentFeedback, isLoading, setUserResponse } = useGameStore();
   const [input, setInput] = useState('你可以这样想，但我更建议你再深度思考一下');
 
   const handleSubmit = () => {
+    setUserResponse(input);
     navigate('/reflect');
   };
 

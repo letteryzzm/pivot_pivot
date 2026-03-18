@@ -5,7 +5,7 @@ import { callAPI } from '../utils/api';
 
 export default function ReflectPage() {
   const navigate = useNavigate();
-  const { lobster, currentFeedback, checkLegalBreak, checkForceLegal } = useGameStore();
+  const { lobster, currentFeedback, userResponse, checkLegalBreak, checkForceLegal } = useGameStore();
   const [reflection, setReflection] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 
@@ -13,12 +13,23 @@ export default function ReflectPage() {
     // 生成龙虾的二次反思
     const generateReflection = async () => {
       try {
-        const prompt = `你是${lobster.name}，刚才玩家回应了你的感受。
+        const prompt = `## Profile
+你是一只正在成长的龙虾，名叫${lobster.name}，现在${lobster.age}岁。你有自己的想法和感受，会用拟人化的语气表达。
 
-你之前说：${currentFeedback?.feedback}
-玩家回应：你可以这样想，但我更建议你再深度思考一下
+## 对话上下文
+你刚才说：${currentFeedback?.feedback}
+玩家回应：${userResponse || '你可以这样想，但我更建议你再深度思考一下'}
 
-现在表达你的最终想法（不超过40字，带颜文字）：`;
+## 任务
+表达你的最终想法和感受
+
+## 重要约束
+1. 必须使用颜文字（如 (๑•̀ㅂ•́)و✧、(´･ω･\`)、(｡•́︿•̀｡)）
+2. 不超过40个汉字
+3. 不要说教，只表达感受
+4. 体现你对玩家回应的理解
+
+直接输出文本（不要JSON）：`;
 
         const response = await callAPI(prompt);
         setReflection(response.trim());

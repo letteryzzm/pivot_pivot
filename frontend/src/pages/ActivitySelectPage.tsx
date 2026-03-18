@@ -45,9 +45,13 @@ export default function ActivitySelectPage() {
           <button
             key={activity.id}
             onClick={() => handleSelect(activity.id)}
-            className="aspect-square bg-[#2a2a2a] rounded-xl flex items-center justify-center text-5xl hover:bg-[#3a3a3a] transition-colors border-2 border-[#3a3a3a]"
+            className="aspect-square bg-[#2a2a2a] rounded-xl flex items-center justify-center hover:bg-[#3a3a3a] transition-colors border-2 border-[#3a3a3a] p-3"
           >
-            {activity.icon}
+            <img
+              src={activity.icon}
+              alt={activity.name}
+              className="w-full h-full object-contain"
+            />
           </button>
         ))}
       </div>
