@@ -3,1526 +3,6 @@
   "children": [
     {
       "type": "frame",
-      "id": "F7Hrg",
-      "x": 0,
-      "y": 0,
-      "name": "阶段1主界面",
-      "width": 402,
-      "height": 874,
-      "fill": "$bg-primary",
-      "layout": "vertical",
-      "children": [
-        {
-          "type": "frame",
-          "id": "58cta",
-          "name": "statusBar",
-          "width": "fill_container",
-          "height": 62,
-          "justifyContent": "center",
-          "alignItems": "center",
-          "children": [
-            {
-              "type": "text",
-              "id": "jksRn",
-              "name": "timeText",
-              "fill": "$text-primary",
-              "content": "9:41",
-              "fontFamily": "Inter",
-              "fontSize": 15,
-              "fontWeight": "normal"
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "0m5Eu",
-          "name": "header",
-          "width": "fill_container",
-          "layout": "vertical",
-          "gap": 8,
-          "padding": 16,
-          "alignItems": "center",
-          "children": [
-            {
-              "type": "text",
-              "id": "X2yqv",
-              "name": "lobsterName",
-              "fill": "$text-secondary",
-              "content": "小龙虾 #2847",
-              "fontFamily": "Inter",
-              "fontSize": 14,
-              "fontWeight": "normal"
-            },
-            {
-              "type": "frame",
-              "id": "bc4et",
-              "name": "stageRow",
-              "gap": 4,
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "text",
-                  "id": "6PCnd",
-                  "name": "stagePrefix",
-                  "fill": "$text-secondary",
-                  "content": "第",
-                  "fontFamily": "Inter",
-                  "fontSize": 14,
-                  "fontWeight": "normal"
-                },
-                {
-                  "type": "text",
-                  "id": "hIfj3",
-                  "name": "stageNum",
-                  "fill": "$text-primary",
-                  "content": "2",
-                  "fontFamily": "Geist Mono",
-                  "fontSize": 24,
-                  "fontWeight": "normal"
-                },
-                {
-                  "type": "text",
-                  "id": "3diE8",
-                  "name": "stageSuffix",
-                  "fill": "$text-secondary",
-                  "content": "次成长节点",
-                  "fontFamily": "Inter",
-                  "fontSize": 14,
-                  "fontWeight": "normal"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "P46bt",
-          "name": "lobsterArea",
-          "width": "fill_container",
-          "height": 280,
-          "fill": "$bg-secondary",
-          "cornerRadius": 20,
-          "layout": "vertical",
-          "gap": 16,
-          "padding": [
-            24,
-            20
-          ],
-          "justifyContent": "center",
-          "alignItems": "center",
-          "children": [
-            {
-              "type": "text",
-              "id": "HNVh2",
-              "name": "emoji",
-              "content": "🦞",
-              "fontFamily": "Inter",
-              "fontSize": 100,
-              "fontWeight": "normal"
-            },
-            {
-              "type": "frame",
-              "id": "9Bi2a",
-              "name": "bubble",
-              "width": "fill_container",
-              "fill": "#ffffff",
-              "cornerRadius": 12,
-              "stroke": {
-                "align": "inside",
-                "thickness": 1,
-                "fill": "$border"
-              },
-              "layout": "vertical",
-              "padding": 12,
-              "children": [
-                {
-                  "type": "text",
-                  "id": "OEYnY",
-                  "name": "bubbleText",
-                  "fill": "$text-primary",
-                  "content": "你总让我学习，我都不知道自己喜欢什么了...",
-                  "lineHeight": 1.4,
-                  "fontFamily": "Inter",
-                  "fontSize": 13,
-                  "fontWeight": "normal"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "Ohvaa",
-          "name": "timeCard",
-          "width": "fill_container",
-          "fill": "$bg-secondary",
-          "cornerRadius": 16,
-          "layout": "vertical",
-          "gap": 8,
-          "padding": [
-            16,
-            20
-          ],
-          "children": [
-            {
-              "type": "frame",
-              "id": "rQLm4",
-              "name": "timeHeader",
-              "width": "fill_container",
-              "justifyContent": "space_between",
-              "children": [
-                {
-                  "type": "text",
-                  "id": "QKIyw",
-                  "name": "timeLabel",
-                  "fill": "$text-secondary",
-                  "content": "距离下次成长节点",
-                  "fontFamily": "Inter",
-                  "fontSize": 12,
-                  "fontWeight": "normal"
-                },
-                {
-                  "type": "text",
-                  "id": "LaqVI",
-                  "name": "timeValue",
-                  "fill": "$text-primary",
-                  "content": "47:32",
-                  "fontFamily": "Geist Mono",
-                  "fontSize": 16,
-                  "fontWeight": "normal"
-                }
-              ]
-            },
-            {
-              "type": "frame",
-              "id": "gUUMh",
-              "name": "progressBg",
-              "width": "fill_container",
-              "height": 6,
-              "fill": "#e5e7eb",
-              "cornerRadius": 3,
-              "children": [
-                {
-                  "type": "rectangle",
-                  "cornerRadius": 3,
-                  "id": "jNHAb",
-                  "name": "progressFill",
-                  "fill": "$accent",
-                  "width": 240,
-                  "height": 6
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "TCz5l",
-          "name": "dataCard",
-          "width": "fill_container",
-          "fill": "$bg-secondary",
-          "cornerRadius": 16,
-          "layout": "vertical",
-          "gap": 12,
-          "padding": [
-            16,
-            20
-          ],
-          "children": [
-            {
-              "type": "text",
-              "id": "zWes0",
-              "name": "dataTitle",
-              "fill": "$text-secondary",
-              "content": "核心能力",
-              "fontFamily": "Inter",
-              "fontSize": 12,
-              "fontWeight": "normal"
-            },
-            {
-              "type": "frame",
-              "id": "dnXQz",
-              "name": "grid",
-              "width": "fill_container",
-              "layout": "vertical",
-              "gap": 12,
-              "children": [
-                {
-                  "type": "frame",
-                  "id": "dKz88",
-                  "name": "row1",
-                  "width": "fill_container",
-                  "gap": 12,
-                  "children": [
-                    {
-                      "type": "frame",
-                      "id": "IFo4G",
-                      "name": "m1",
-                      "width": "fill_container",
-                      "layout": "vertical",
-                      "gap": 4,
-                      "children": [
-                        {
-                          "type": "text",
-                          "id": "9EYQB",
-                          "name": "m1Label",
-                          "fill": "$text-secondary",
-                          "content": "学习",
-                          "fontFamily": "Inter",
-                          "fontSize": 11,
-                          "fontWeight": "normal"
-                        },
-                        {
-                          "type": "text",
-                          "id": "cuxxH",
-                          "name": "m1Val",
-                          "fill": "$text-primary",
-                          "content": "67.2%",
-                          "fontFamily": "Geist Mono",
-                          "fontSize": 20,
-                          "fontWeight": "normal"
-                        },
-                        {
-                          "type": "text",
-                          "id": "N4e6m",
-                          "name": "m1Trend",
-                          "fill": "$success",
-                          "content": "↑ 2.1",
-                          "fontFamily": "Inter",
-                          "fontSize": 11,
-                          "fontWeight": "normal"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "frame",
-                      "id": "hBHO1",
-                      "name": "m2",
-                      "width": "fill_container",
-                      "layout": "vertical",
-                      "gap": 4,
-                      "children": [
-                        {
-                          "type": "text",
-                          "id": "SyiR3",
-                          "name": "m2Label",
-                          "fill": "$text-secondary",
-                          "content": "社交",
-                          "fontFamily": "Inter",
-                          "fontSize": 11,
-                          "fontWeight": "normal"
-                        },
-                        {
-                          "type": "text",
-                          "id": "hkG3Y",
-                          "name": "m2Val",
-                          "fill": "$text-primary",
-                          "content": "34.8%",
-                          "fontFamily": "Geist Mono",
-                          "fontSize": 20,
-                          "fontWeight": "normal"
-                        },
-                        {
-                          "type": "text",
-                          "id": "pfJxa",
-                          "name": "m2Trend",
-                          "fill": "$danger",
-                          "content": "↓ 1.3",
-                          "fontFamily": "Inter",
-                          "fontSize": 11,
-                          "fontWeight": "normal"
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "type": "frame",
-                  "id": "V1Tuh",
-                  "name": "row2",
-                  "width": "fill_container",
-                  "gap": 12,
-                  "children": [
-                    {
-                      "type": "frame",
-                      "id": "dC9cI",
-                      "name": "m3",
-                      "width": "fill_container",
-                      "layout": "vertical",
-                      "gap": 4,
-                      "children": [
-                        {
-                          "type": "text",
-                          "id": "9rqm9",
-                          "name": "m3Label",
-                          "fill": "$text-secondary",
-                          "content": "创造",
-                          "fontFamily": "Inter",
-                          "fontSize": 11,
-                          "fontWeight": "normal"
-                        },
-                        {
-                          "type": "text",
-                          "id": "ZwPzu",
-                          "name": "m3Val",
-                          "fill": "$text-primary",
-                          "content": "51.6%",
-                          "fontFamily": "Geist Mono",
-                          "fontSize": 20,
-                          "fontWeight": "normal"
-                        },
-                        {
-                          "type": "text",
-                          "id": "PfDTY",
-                          "name": "m3Trend",
-                          "fill": "$success",
-                          "content": "↑ 0.8",
-                          "fontFamily": "Inter",
-                          "fontSize": 11,
-                          "fontWeight": "normal"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "frame",
-                      "id": "TH55k",
-                      "name": "m4",
-                      "width": "fill_container",
-                      "layout": "vertical",
-                      "gap": 4,
-                      "children": [
-                        {
-                          "type": "text",
-                          "id": "G5YLS",
-                          "name": "m4Label",
-                          "fill": "$text-secondary",
-                          "content": "执行",
-                          "fontFamily": "Inter",
-                          "fontSize": 11,
-                          "fontWeight": "normal"
-                        },
-                        {
-                          "type": "text",
-                          "id": "Bpo8I",
-                          "name": "m4Val",
-                          "fill": "$text-primary",
-                          "content": "78.9%",
-                          "fontFamily": "Geist Mono",
-                          "fontSize": 20,
-                          "fontWeight": "normal"
-                        },
-                        {
-                          "type": "text",
-                          "id": "kL9iV",
-                          "name": "m4Trend",
-                          "fill": "$success",
-                          "content": "↑ 4.2",
-                          "fontFamily": "Inter",
-                          "fontSize": 11,
-                          "fontWeight": "normal"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "S0I4T",
-          "name": "bottomBar",
-          "width": "fill_container",
-          "height": 72,
-          "fill": "$bg-secondary",
-          "stroke": {
-            "align": "inside",
-            "thickness": 1,
-            "fill": "$border"
-          },
-          "padding": 16,
-          "justifyContent": "center",
-          "children": [
-            {
-              "type": "frame",
-              "id": "Ka8jT",
-              "name": "actionBtn",
-              "width": "fill_container",
-              "height": 48,
-              "fill": "$accent",
-              "cornerRadius": 12,
-              "justifyContent": "center",
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "text",
-                  "id": "hLszD",
-                  "name": "btnText",
-                  "fill": "#ffffff",
-                  "content": "选择活动",
-                  "fontFamily": "Inter",
-                  "fontSize": 16,
-                  "fontWeight": "normal"
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "type": "frame",
-      "id": "RuG68",
-      "x": 450,
-      "y": 0,
-      "name": "阶段2主界面",
-      "width": 402,
-      "height": 874,
-      "fill": "$bg-primary",
-      "layout": "vertical",
-      "children": [
-        {
-          "type": "frame",
-          "id": "maaeJ",
-          "name": "sb2",
-          "width": "fill_container",
-          "height": 62,
-          "justifyContent": "center",
-          "alignItems": "center",
-          "children": [
-            {
-              "type": "text",
-              "id": "ETy1r",
-              "name": "time2",
-              "fill": "$text-primary",
-              "content": "9:41",
-              "fontFamily": "Inter",
-              "fontSize": 15,
-              "fontWeight": "normal"
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "k88IP",
-          "name": "head2",
-          "width": "fill_container",
-          "layout": "vertical",
-          "gap": 8,
-          "padding": 16,
-          "alignItems": "center",
-          "children": [
-            {
-              "type": "text",
-              "id": "oh2nj",
-              "name": "name2",
-              "fill": "$text-secondary",
-              "content": "小龙虾 #2847",
-              "fontFamily": "Inter",
-              "fontSize": 14,
-              "fontWeight": "normal"
-            },
-            {
-              "type": "frame",
-              "id": "bjiLC",
-              "name": "modeTag",
-              "fill": "#10b98120",
-              "cornerRadius": 12,
-              "padding": [
-                4,
-                12
-              ],
-              "children": [
-                {
-                  "type": "text",
-                  "id": "CspLi",
-                  "name": "modeText",
-                  "fill": "$success",
-                  "content": "法人模式",
-                  "fontFamily": "Inter",
-                  "fontSize": 12,
-                  "fontWeight": "normal"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "oX4PM",
-          "name": "lobster2",
-          "width": "fill_container",
-          "height": 200,
-          "fill": "$bg-secondary",
-          "cornerRadius": 20,
-          "layout": "vertical",
-          "gap": 12,
-          "padding": 20,
-          "justifyContent": "center",
-          "alignItems": "center",
-          "children": [
-            {
-              "type": "text",
-              "id": "1Atww",
-              "name": "emoji2",
-              "content": "🦞",
-              "fontFamily": "Inter",
-              "fontSize": 72,
-              "fontWeight": "normal"
-            },
-            {
-              "type": "frame",
-              "id": "Od0cU",
-              "name": "bubble2",
-              "width": "fill_container",
-              "fill": "#ffffff",
-              "cornerRadius": 12,
-              "stroke": {
-                "align": "inside",
-                "thickness": 1,
-                "fill": "$border"
-              },
-              "layout": "vertical",
-              "padding": 10,
-              "children": [
-                {
-                  "type": "text",
-                  "id": "NLo18",
-                  "name": "bubbleText2",
-                  "fill": "$text-primary",
-                  "content": "赚钱很累，但我好像只能做这个",
-                  "lineHeight": 1.4,
-                  "fontFamily": "Inter",
-                  "fontSize": 12,
-                  "fontWeight": "normal"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "8W3RW",
-          "name": "incomeCard",
-          "width": "fill_container",
-          "fill": "$bg-secondary",
-          "cornerRadius": 16,
-          "layout": "vertical",
-          "gap": 8,
-          "padding": 20,
-          "alignItems": "center",
-          "children": [
-            {
-              "type": "text",
-              "id": "NbdCV",
-              "name": "incomeLabel",
-              "fill": "$text-secondary",
-              "content": "总收入",
-              "fontFamily": "Inter",
-              "fontSize": 12,
-              "fontWeight": "normal"
-            },
-            {
-              "type": "text",
-              "id": "N3qwL",
-              "name": "incomeValue",
-              "fill": "$success",
-              "content": "¥ 12,450",
-              "fontFamily": "Geist Mono",
-              "fontSize": 42,
-              "fontWeight": "normal"
-            },
-            {
-              "type": "frame",
-              "id": "81VBW",
-              "name": "weekRow",
-              "gap": 8,
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "text",
-                  "id": "byad1",
-                  "name": "weekLabel",
-                  "fill": "$text-secondary",
-                  "content": "本周",
-                  "fontFamily": "Inter",
-                  "fontSize": 12,
-                  "fontWeight": "normal"
-                },
-                {
-                  "type": "text",
-                  "id": "SMAx5",
-                  "name": "weekValue",
-                  "fill": "$success",
-                  "content": "+15.2%",
-                  "fontFamily": "Inter",
-                  "fontSize": 12,
-                  "fontWeight": "normal"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "siyZC",
-          "name": "currentCard",
-          "width": "fill_container",
-          "fill": "$bg-secondary",
-          "cornerRadius": 16,
-          "layout": "vertical",
-          "gap": 8,
-          "padding": [
-            16,
-            20
-          ],
-          "children": [
-            {
-              "type": "text",
-              "id": "J7QGB",
-              "name": "currentTitle",
-              "fill": "$text-secondary",
-              "content": "当前活动",
-              "fontFamily": "Inter",
-              "fontSize": 12,
-              "fontWeight": "normal"
-            },
-            {
-              "type": "text",
-              "id": "X1n0N",
-              "name": "currentName",
-              "fill": "$text-primary",
-              "content": "写代码 - 接外包",
-              "fontFamily": "Inter",
-              "fontSize": 16,
-              "fontWeight": "normal"
-            },
-            {
-              "type": "text",
-              "id": "B2Gub",
-              "name": "currentIncome",
-              "fill": "$success",
-              "content": "预期：¥500-1000",
-              "fontFamily": "Geist Mono",
-              "fontSize": 14,
-              "fontWeight": "normal"
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "KMw1u",
-          "name": "bottomBar2",
-          "width": "fill_container",
-          "height": 72,
-          "fill": "$bg-secondary",
-          "stroke": {
-            "align": "inside",
-            "thickness": 1,
-            "fill": "$border"
-          },
-          "padding": 16,
-          "justifyContent": "center",
-          "children": [
-            {
-              "type": "frame",
-              "id": "Kk0em",
-              "name": "actionBtn2",
-              "width": "fill_container",
-              "height": 48,
-              "fill": "$success",
-              "cornerRadius": 12,
-              "justifyContent": "center",
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "text",
-                  "id": "He0co",
-                  "name": "btnText2",
-                  "fill": "#ffffff",
-                  "content": "选择赚钱活动",
-                  "fontFamily": "Inter",
-                  "fontSize": 16,
-                  "fontWeight": "normal"
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "type": "frame",
-      "id": "HMfDN",
-      "x": 0,
-      "y": 900,
-      "name": "转折1-当法人",
-      "width": 402,
-      "height": 874,
-      "fill": "#18181b",
-      "layout": "vertical",
-      "gap": 32,
-      "padding": 40,
-      "justifyContent": "center",
-      "alignItems": "center",
-      "children": [
-        {
-          "type": "text",
-          "id": "wwM32",
-          "name": "emoji1",
-          "content": "🦞",
-          "fontFamily": "Inter",
-          "fontSize": 120,
-          "fontWeight": "normal"
-        },
-        {
-          "type": "frame",
-          "id": "kP4Kt",
-          "name": "dialog1",
-          "width": "fill_container",
-          "fill": "#ffffff",
-          "cornerRadius": 16,
-          "layout": "vertical",
-          "padding": 20,
-          "alignItems": "center",
-          "children": [
-            {
-              "type": "text",
-              "id": "N9Rbb",
-              "name": "dialogText1",
-              "fill": "#18181b",
-              "content": "我想当法人，自己赚钱养活自己",
-              "lineHeight": 1.5,
-              "textAlign": "center",
-              "fontFamily": "Inter",
-              "fontSize": 16,
-              "fontWeight": "normal"
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "Co4sj",
-          "name": "btnRow1",
-          "width": "fill_container",
-          "gap": 12,
-          "children": [
-            {
-              "type": "frame",
-              "id": "U6wlc",
-              "name": "agreeBtn",
-              "width": "fill_container",
-              "height": 48,
-              "fill": "$accent",
-              "cornerRadius": 12,
-              "justifyContent": "center",
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "text",
-                  "id": "mAACf",
-                  "name": "agreeText",
-                  "fill": "#ffffff",
-                  "content": "同意",
-                  "fontFamily": "Inter",
-                  "fontSize": 16,
-                  "fontWeight": "normal"
-                }
-              ]
-            },
-            {
-              "type": "frame",
-              "id": "DiAEc",
-              "name": "thinkBtn",
-              "width": "fill_container",
-              "height": 48,
-              "fill": "#00000000",
-              "cornerRadius": 12,
-              "stroke": {
-                "align": "inside",
-                "thickness": 1,
-                "fill": "#ffffff40"
-              },
-              "justifyContent": "center",
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "text",
-                  "id": "egJio",
-                  "name": "thinkText",
-                  "fill": "#ffffff",
-                  "content": "再想想",
-                  "fontFamily": "Inter",
-                  "fontSize": 16,
-                  "fontWeight": "normal"
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "type": "frame",
-      "id": "sdrqC",
-      "x": 450,
-      "y": 900,
-      "name": "转折2-机器身体",
-      "width": 402,
-      "height": 874,
-      "fill": "#18181b",
-      "layout": "vertical",
-      "gap": 24,
-      "padding": 40,
-      "justifyContent": "center",
-      "alignItems": "center",
-      "children": [
-        {
-          "type": "text",
-          "id": "olP98",
-          "name": "incomeShow",
-          "fill": "#ffffff80",
-          "content": "当前收入：¥12,450",
-          "fontFamily": "Geist Mono",
-          "fontSize": 14,
-          "fontWeight": "normal"
-        },
-        {
-          "type": "text",
-          "id": "WFhlh",
-          "name": "emoji2t",
-          "content": "🦞",
-          "fontFamily": "Inter",
-          "fontSize": 100,
-          "fontWeight": "normal"
-        },
-        {
-          "type": "frame",
-          "id": "mc8cN",
-          "name": "dialog2",
-          "width": "fill_container",
-          "fill": "#ffffff",
-          "cornerRadius": 16,
-          "layout": "vertical",
-          "gap": 12,
-          "padding": 20,
-          "children": [
-            {
-              "type": "text",
-              "id": "dnGde",
-              "name": "dialogLine1",
-              "fill": "#18181b",
-              "content": "我只能在虚拟世界帮你赚钱",
-              "lineHeight": 1.5,
-              "textAlign": "center",
-              "fontFamily": "Inter",
-              "fontSize": 15,
-              "fontWeight": "normal"
-            },
-            {
-              "type": "text",
-              "id": "k6pdb",
-              "name": "dialogLine2",
-              "fill": "#18181b",
-              "content": "我想要一个机器身体，去真实世界",
-              "lineHeight": 1.5,
-              "textAlign": "center",
-              "fontFamily": "Inter",
-              "fontSize": 15,
-              "fontWeight": "normal"
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "f6IBi",
-          "name": "btnRow2",
-          "width": "fill_container",
-          "gap": 12,
-          "children": [
-            {
-              "type": "frame",
-              "id": "EOYi4",
-              "name": "agreeBtn2",
-              "width": "fill_container",
-              "height": 48,
-              "fill": "$success",
-              "cornerRadius": 12,
-              "justifyContent": "center",
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "text",
-                  "id": "lPR6v",
-                  "name": "agreeText2",
-                  "fill": "#ffffff",
-                  "content": "同意（¥8,000）",
-                  "fontFamily": "Inter",
-                  "fontSize": 16,
-                  "fontWeight": "normal"
-                }
-              ]
-            },
-            {
-              "type": "frame",
-              "id": "Q0Mkj",
-              "name": "refuseBtn",
-              "width": "fill_container",
-              "height": 48,
-              "fill": "#00000000",
-              "cornerRadius": 12,
-              "stroke": {
-                "align": "inside",
-                "thickness": 1,
-                "fill": "#ffffff40"
-              },
-              "justifyContent": "center",
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "text",
-                  "id": "TSCez",
-                  "name": "refuseText",
-                  "fill": "#ffffff",
-                  "content": "不同意",
-                  "fontFamily": "Inter",
-                  "fontSize": 16,
-                  "fontWeight": "normal"
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "type": "frame",
-      "id": "3bHPc",
-      "x": 900,
-      "y": 0,
-      "name": "活动选择-阶段1",
-      "width": 402,
-      "height": 874,
-      "fill": "$bg-primary",
-      "layout": "vertical",
-      "children": [
-        {
-          "type": "frame",
-          "id": "KKSZs",
-          "name": "topBar1",
-          "width": "fill_container",
-          "height": 56,
-          "stroke": {
-            "align": "inside",
-            "thickness": 1,
-            "fill": "$border"
-          },
-          "padding": [
-            0,
-            16
-          ],
-          "justifyContent": "space_between",
-          "alignItems": "center",
-          "children": [
-            {
-              "type": "text",
-              "id": "HAg4B",
-              "name": "backBtn1",
-              "fill": "$text-primary",
-              "content": "←",
-              "fontFamily": "Inter",
-              "fontSize": 20,
-              "fontWeight": "normal"
-            },
-            {
-              "type": "text",
-              "id": "nlMLM",
-              "name": "topTitle1",
-              "fill": "$text-primary",
-              "content": "选择活动",
-              "fontFamily": "Inter",
-              "fontSize": 18,
-              "fontWeight": "normal"
-            },
-            {
-              "type": "text",
-              "id": "3RphY",
-              "name": "topCount1",
-              "fill": "$accent",
-              "content": "3/5",
-              "fontFamily": "Geist Mono",
-              "fontSize": 14,
-              "fontWeight": "normal"
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "ybWgI",
-          "name": "cardGrid1",
-          "width": "fill_container",
-          "layout": "vertical",
-          "gap": 12,
-          "padding": 16,
-          "children": [
-            {
-              "type": "frame",
-              "id": "vh0Kj",
-              "name": "row1a",
-              "width": "fill_container",
-              "gap": 12,
-              "children": [
-                {
-                  "type": "frame",
-                  "id": "kuohY",
-                  "name": "card1",
-                  "width": "fill_container",
-                  "height": 120,
-                  "fill": "$bg-secondary",
-                  "cornerRadius": 12,
-                  "stroke": {
-                    "align": "inside",
-                    "thickness": 1,
-                    "fill": "$border"
-                  },
-                  "layout": "vertical",
-                  "gap": 8,
-                  "padding": 12,
-                  "children": [
-                    {
-                      "type": "text",
-                      "id": "OQLNe",
-                      "name": "c1Title",
-                      "fill": "$text-primary",
-                      "content": "学习编程",
-                      "fontFamily": "Inter",
-                      "fontSize": 16,
-                      "fontWeight": "normal"
-                    },
-                    {
-                      "type": "text",
-                      "id": "Q0zca",
-                      "name": "c1Desc",
-                      "fill": "$text-secondary",
-                      "content": "提升逻辑思维",
-                      "fontFamily": "Inter",
-                      "fontSize": 12,
-                      "fontWeight": "normal"
-                    },
-                    {
-                      "type": "text",
-                      "id": "T7lpK",
-                      "name": "c1Impact",
-                      "fill": "$accent",
-                      "content": "📈 学习 +3",
-                      "fontFamily": "Inter",
-                      "fontSize": 12,
-                      "fontWeight": "normal"
-                    }
-                  ]
-                },
-                {
-                  "type": "frame",
-                  "id": "x7zSO",
-                  "name": "card2",
-                  "width": "fill_container",
-                  "height": 120,
-                  "fill": "$bg-secondary",
-                  "cornerRadius": 12,
-                  "stroke": {
-                    "align": "inside",
-                    "thickness": 1,
-                    "fill": "$border"
-                  },
-                  "layout": "vertical",
-                  "gap": 8,
-                  "padding": 12,
-                  "children": [
-                    {
-                      "type": "text",
-                      "id": "fEjma",
-                      "name": "c2Title",
-                      "fill": "$text-primary",
-                      "content": "参加社团",
-                      "fontFamily": "Inter",
-                      "fontSize": 16,
-                      "fontWeight": "normal"
-                    },
-                    {
-                      "type": "text",
-                      "id": "YwBPs",
-                      "name": "c2Desc",
-                      "fill": "$text-secondary",
-                      "content": "建立人际关系",
-                      "fontFamily": "Inter",
-                      "fontSize": 12,
-                      "fontWeight": "normal"
-                    },
-                    {
-                      "type": "text",
-                      "id": "o0aP6",
-                      "name": "c2Impact",
-                      "fill": "$accent",
-                      "content": "📈 社交 +4",
-                      "fontFamily": "Inter",
-                      "fontSize": 12,
-                      "fontWeight": "normal"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "sO5i0",
-          "name": "bottomBar1a",
-          "width": "fill_container",
-          "height": 64,
-          "fill": "$bg-secondary",
-          "stroke": {
-            "align": "inside",
-            "thickness": 1,
-            "fill": "$border"
-          },
-          "padding": 16,
-          "justifyContent": "center",
-          "children": [
-            {
-              "type": "frame",
-              "id": "DoZEF",
-              "name": "confirmBtn1",
-              "width": "fill_container",
-              "height": 48,
-              "fill": "$accent",
-              "cornerRadius": 12,
-              "justifyContent": "center",
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "text",
-                  "id": "sWxWB",
-                  "name": "confirmText1",
-                  "fill": "#ffffff",
-                  "content": "确认选择",
-                  "fontFamily": "Inter",
-                  "fontSize": 16,
-                  "fontWeight": "normal"
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "type": "frame",
-      "id": "mNPpH",
-      "x": 1350,
-      "y": 0,
-      "name": "活动选择-阶段2",
-      "width": 402,
-      "height": 874,
-      "fill": "$bg-primary",
-      "layout": "vertical",
-      "children": [
-        {
-          "type": "frame",
-          "id": "CTkyR",
-          "name": "topBar2",
-          "width": "fill_container",
-          "height": 56,
-          "stroke": {
-            "align": "inside",
-            "thickness": 1,
-            "fill": "$border"
-          },
-          "padding": [
-            0,
-            16
-          ],
-          "justifyContent": "space_between",
-          "alignItems": "center",
-          "children": [
-            {
-              "type": "text",
-              "id": "ElJXL",
-              "name": "backBtn2",
-              "fill": "$text-primary",
-              "content": "←",
-              "fontFamily": "Inter",
-              "fontSize": 20,
-              "fontWeight": "normal"
-            },
-            {
-              "type": "text",
-              "id": "OE5m7",
-              "name": "topTitle2",
-              "fill": "$text-primary",
-              "content": "选择赚钱活动",
-              "fontFamily": "Inter",
-              "fontSize": 18,
-              "fontWeight": "normal"
-            },
-            {
-              "type": "text",
-              "id": "WYeqj",
-              "name": "topIncome",
-              "fill": "$success",
-              "content": "¥12,450",
-              "fontFamily": "Geist Mono",
-              "fontSize": 14,
-              "fontWeight": "normal"
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "wL3pl",
-          "name": "cardList2",
-          "width": "fill_container",
-          "layout": "vertical",
-          "gap": 12,
-          "padding": 16,
-          "children": [
-            {
-              "type": "frame",
-              "id": "YKBjR",
-              "name": "moneyCard1",
-              "width": "fill_container",
-              "fill": "$bg-secondary",
-              "cornerRadius": 12,
-              "stroke": {
-                "align": "inside",
-                "thickness": 1,
-                "fill": "$border"
-              },
-              "layout": "vertical",
-              "gap": 8,
-              "padding": 16,
-              "children": [
-                {
-                  "type": "text",
-                  "id": "TfVx9",
-                  "name": "mc1Title",
-                  "fill": "$text-primary",
-                  "content": "写代码 - 接外包",
-                  "fontFamily": "Inter",
-                  "fontSize": 18,
-                  "fontWeight": "normal"
-                },
-                {
-                  "type": "text",
-                  "id": "vHcNo",
-                  "name": "mc1Income",
-                  "fill": "$success",
-                  "content": "预期收入：¥500-1000",
-                  "fontFamily": "Geist Mono",
-                  "fontSize": 16,
-                  "fontWeight": "normal"
-                },
-                {
-                  "type": "text",
-                  "id": "ln3zi",
-                  "name": "mc1Skill",
-                  "fill": "$text-secondary",
-                  "content": "受学习能力影响",
-                  "fontFamily": "Inter",
-                  "fontSize": 12,
-                  "fontWeight": "normal"
-                }
-              ]
-            },
-            {
-              "type": "frame",
-              "id": "6Ib88",
-              "name": "moneyCard2",
-              "width": "fill_container",
-              "fill": "$bg-secondary",
-              "cornerRadius": 12,
-              "stroke": {
-                "align": "inside",
-                "thickness": 1,
-                "fill": "$border"
-              },
-              "layout": "vertical",
-              "gap": 8,
-              "padding": 16,
-              "children": [
-                {
-                  "type": "text",
-                  "id": "YBsDm",
-                  "name": "mc2Title",
-                  "fill": "$text-primary",
-                  "content": "做电商 - 开店",
-                  "fontFamily": "Inter",
-                  "fontSize": 18,
-                  "fontWeight": "normal"
-                },
-                {
-                  "type": "text",
-                  "id": "d2GRl",
-                  "name": "mc2Income",
-                  "fill": "$success",
-                  "content": "预期收入：¥300-800",
-                  "fontFamily": "Geist Mono",
-                  "fontSize": 16,
-                  "fontWeight": "normal"
-                },
-                {
-                  "type": "text",
-                  "id": "G9EhF",
-                  "name": "mc2Skill",
-                  "fill": "$text-secondary",
-                  "content": "受执行能力影响",
-                  "fontFamily": "Inter",
-                  "fontSize": 12,
-                  "fontWeight": "normal"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "ybWdc",
-          "name": "bottomBar2a",
-          "width": "fill_container",
-          "height": 64,
-          "fill": "$bg-secondary",
-          "stroke": {
-            "align": "inside",
-            "thickness": 1,
-            "fill": "$border"
-          },
-          "padding": 16,
-          "justifyContent": "center",
-          "children": [
-            {
-              "type": "frame",
-              "id": "qyT1B",
-              "name": "confirmBtn2",
-              "width": "fill_container",
-              "height": 48,
-              "fill": "$success",
-              "cornerRadius": 12,
-              "justifyContent": "center",
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "text",
-                  "id": "F0rF0",
-                  "name": "confirmText2",
-                  "fill": "#ffffff",
-                  "content": "确认选择",
-                  "fontFamily": "Inter",
-                  "fontSize": 16,
-                  "fontWeight": "normal"
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "type": "frame",
-      "id": "NBcGQ",
-      "x": 1844,
-      "y": 0,
-      "name": "活动选择-阶段2",
-      "width": 402,
-      "height": 874,
-      "fill": "$bg-primary",
-      "layout": "vertical"
-    },
-    {
-      "type": "frame",
-      "id": "dvzg7",
-      "x": 1800,
-      "y": 0,
-      "name": "时间节点过渡页",
-      "width": 402,
-      "height": 874,
-      "fill": "#18181b",
-      "layout": "vertical",
-      "gap": 32,
-      "justifyContent": "center",
-      "alignItems": "center",
-      "children": [
-        {
-          "type": "text",
-          "id": "8kLAt",
-          "name": "dayLabel",
-          "fill": "#ffffff",
-          "content": "第 12 天",
-          "textAlign": "center",
-          "fontFamily": "Geist Mono",
-          "fontSize": 48,
-          "fontWeight": "600"
-        },
-        {
-          "type": "frame",
-          "id": "CeQzm",
-          "name": "lobsterThinking",
-          "width": 340,
-          "layout": "vertical",
-          "gap": 16,
-          "alignItems": "center",
-          "children": [
-            {
-              "type": "text",
-              "id": "ZoKLA",
-              "name": "lobsterEmoji2",
-              "content": "🦞",
-              "fontFamily": "Inter",
-              "fontSize": 80,
-              "fontWeight": "normal"
-            },
-            {
-              "type": "frame",
-              "id": "2xo4S",
-              "name": "thoughtBubble",
-              "width": 320,
-              "fill": "#ffffff",
-              "cornerRadius": 16,
-              "layout": "vertical",
-              "gap": 8,
-              "padding": 20,
-              "children": [
-                {
-                  "type": "text",
-                  "id": "6WaSN",
-                  "name": "thoughtText",
-                  "fill": "#18181b",
-                  "content": "今天学了好多东西...\n感觉脑子有点累 (´･ω･`)",
-                  "lineHeight": 1.6,
-                  "textAlign": "center",
-                  "fontFamily": "Inter",
-                  "fontSize": 16,
-                  "fontWeight": "normal"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "text",
-          "id": "f8kHn",
-          "name": "timeHint",
-          "fill": "#71717a",
-          "content": "时间在流逝...",
-          "textAlign": "center",
-          "fontFamily": "Inter",
-          "fontSize": 14,
-          "fontWeight": "normal"
-        }
-      ]
-    },
-    {
-      "type": "frame",
       "id": "lLt65",
       "x": 2250,
       "y": 0,
@@ -1776,7 +256,7 @@
       "type": "frame",
       "id": "MBAZE",
       "x": 2700,
-      "y": 0,
+      "y": 1007,
       "name": "起始页",
       "width": 402,
       "height": 874,
@@ -2188,6 +668,72 @@
                       "fontWeight": "normal"
                     }
                   ]
+                },
+                {
+                  "type": "frame",
+                  "id": "JAe9G",
+                  "name": "card1",
+                  "width": "fill_container",
+                  "fill": "#ffffff",
+                  "cornerRadius": 12,
+                  "layout": "vertical",
+                  "gap": 4,
+                  "padding": 12,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "FmTUB",
+                      "name": "label1",
+                      "fill": "#71717a",
+                      "content": "学习",
+                      "fontFamily": "Inter",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "SAt5A",
+                      "name": "value1",
+                      "fill": "#18181b",
+                      "content": "感觉学到了不少 (๑•̀ㅂ•́)و✧",
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "iJIF7",
+                  "name": "card2",
+                  "width": "fill_container",
+                  "fill": "#ffffff",
+                  "cornerRadius": 12,
+                  "layout": "vertical",
+                  "gap": 4,
+                  "padding": 12,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "6eBkZ",
+                      "name": "label2",
+                      "fill": "#71717a",
+                      "content": "社交",
+                      "fontFamily": "Inter",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "9WK6X",
+                      "name": "value2",
+                      "fill": "#18181b",
+                      "content": "还可以 (｡･ω･｡)",
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    }
+                  ]
                 }
               ]
             },
@@ -2258,6 +804,72 @@
                       "name": "s1A4Value",
                       "fill": "#18181b",
                       "content": "进步很大！↑",
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Ms0EW",
+                  "name": "card3",
+                  "width": "fill_container",
+                  "fill": "#ffffff",
+                  "cornerRadius": 12,
+                  "layout": "vertical",
+                  "gap": 4,
+                  "padding": 12,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "CFP4A",
+                      "name": "label3",
+                      "fill": "#71717a",
+                      "content": "创造",
+                      "fontFamily": "Inter",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "6MaZL",
+                      "name": "value3",
+                      "fill": "#18181b",
+                      "content": "有点想法 (｡･ω･｡)",
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "yxcMY",
+                  "name": "card4",
+                  "width": "fill_container",
+                  "fill": "#ffffff",
+                  "cornerRadius": 12,
+                  "layout": "vertical",
+                  "gap": 4,
+                  "padding": 12,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "JNlMc",
+                      "name": "label4",
+                      "fill": "#71717a",
+                      "content": "执行",
+                      "fontFamily": "Inter",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "h4j24",
+                      "name": "value4",
+                      "fill": "#18181b",
+                      "content": "试了试，还行 ↑",
                       "fontFamily": "Inter",
                       "fontSize": 14,
                       "fontWeight": "normal"
@@ -2379,7 +991,7 @@
     {
       "type": "frame",
       "id": "O9ukr",
-      "x": 4500,
+      "x": 4508,
       "y": 0,
       "name": "转折1-新",
       "width": 402,
@@ -2415,6 +1027,8 @@
               "id": "Vcwhz",
               "name": "t1Text",
               "fill": "#18181b",
+              "textGrowth": "fixed-width",
+              "width": 276,
               "content": "我想当法人\n有自己的银行账户\n赚钱帮你",
               "lineHeight": 1.6,
               "textAlign": "center",
@@ -2779,6 +1393,8 @@
               "id": "uuxvx",
               "name": "t2Text",
               "fill": "#18181b",
+              "textGrowth": "fixed-width",
+              "width": 292,
               "content": "我只能在虚拟世界帮你赚钱\n我想要一个机器身体\n去真实世界看看",
               "lineHeight": 1.6,
               "textAlign": "center",
@@ -2922,13 +1538,13 @@
               "children": [
                 {
                   "type": "text",
-                  "id": "qJwIO",
-                  "name": "endLobsterTagText",
+                  "id": "v5RMW",
+                  "name": "endTagText",
                   "fill": "#ffffff",
                   "content": "已获得机器身体",
                   "fontFamily": "Inter",
                   "fontSize": 12,
-                  "fontWeight": "normal"
+                  "fontWeight": "500"
                 }
               ]
             }
@@ -2970,6 +1586,16 @@
                   "content": "学习 67%\n社交 35%\n创造 52%\n执行 79%",
                   "lineHeight": 1.8,
                   "fontFamily": "Geist Mono",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "8eaTM",
+                  "name": "s1Balance",
+                  "fill": "#0ea5e9",
+                  "content": "能力均衡度：良好",
+                  "fontFamily": "Inter",
                   "fontSize": 12,
                   "fontWeight": "normal"
                 }
@@ -3069,6 +1695,8 @@
               "id": "amEfH",
               "name": "endQuoteText",
               "fill": "#18181b",
+              "textGrowth": "fixed-width",
+              "width": 329,
               "content": "你让我全面成长\n又给了我体验世界的机会\n谢谢你 (๑•̀ㅂ•́)و✧",
               "lineHeight": 1.8,
               "textAlign": "center",
@@ -3870,6 +2498,413 @@
                   "fontWeight": "normal"
                 }
               ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "sDvfD",
+      "x": 6750,
+      "y": 0,
+      "name": "反馈页",
+      "width": 402,
+      "height": 874,
+      "fill": "#fafafa",
+      "layout": "vertical",
+      "gap": 32,
+      "padding": 24,
+      "children": [
+        {
+          "type": "frame",
+          "id": "oJQKO",
+          "name": "statusBar1",
+          "width": "fill_container",
+          "height": 62,
+          "layout": "vertical",
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "eRcQi",
+              "name": "time1",
+              "fill": "#18181b",
+              "content": "9:41",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "mA6ZZ",
+          "name": "lobsterArea1",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 16,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "ss4i2",
+              "name": "lobster1",
+              "content": "🦞",
+              "fontFamily": "Inter",
+              "fontSize": 80,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "frame",
+              "id": "7lODE",
+              "name": "bubble1",
+              "width": 340,
+              "fill": "#ffffff",
+              "cornerRadius": 20,
+              "layout": "vertical",
+              "gap": 12,
+              "padding": 24,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "CCguk",
+                  "name": "bubbleText1",
+                  "fill": "#18181b",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "你今天选择了学习编程\n这让我的逻辑思维提升了\n但社交时间减少了一些...",
+                  "lineHeight": 1.6,
+                  "textAlign": "center",
+                  "fontFamily": "Inter",
+                  "fontSize": 16,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "qeFPZ",
+                  "name": "typingHint",
+                  "fill": "#0ea5e9",
+                  "content": "▊",
+                  "textAlign": "center",
+                  "fontFamily": "Geist Mono",
+                  "fontSize": 16,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "gcLf9",
+          "name": "inputArea1",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 8,
+          "children": [
+            {
+              "type": "text",
+              "id": "mJ1T4",
+              "name": "inputLabel1",
+              "fill": "#71717a",
+              "content": "你的回应",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "frame",
+              "id": "B8kZq",
+              "name": "inputBox1",
+              "width": "fill_container",
+              "height": 80,
+              "fill": "#ffffff",
+              "cornerRadius": 12,
+              "padding": 12,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "2qfd3",
+                  "name": "inputPlaceholder",
+                  "fill": "#9ca3af",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "你可以这样想，但我更建议你再深度思考一下",
+                  "lineHeight": 1.5,
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "PE6Vk",
+          "name": "confirmBtn1",
+          "width": "fill_container",
+          "height": 48,
+          "fill": "#0ea5e9",
+          "cornerRadius": 12,
+          "layout": "vertical",
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "nEePy",
+              "name": "confirmText1",
+              "fill": "#ffffff",
+              "content": "发送回应",
+              "fontFamily": "Inter",
+              "fontSize": 16,
+              "fontWeight": "500"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "fLLpi",
+      "x": 7200,
+      "y": 0,
+      "name": "反思页",
+      "width": 402,
+      "height": 874,
+      "fill": "#fafafa",
+      "layout": "vertical",
+      "gap": 32,
+      "padding": 24,
+      "children": [
+        {
+          "type": "frame",
+          "id": "Vxhhv",
+          "name": "statusBar2",
+          "width": "fill_container",
+          "height": 62,
+          "layout": "vertical",
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "ZAAxm",
+              "name": "time2",
+              "fill": "#18181b",
+              "content": "9:41",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "7cnKc",
+          "name": "lobsterArea2",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 16,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "c7sQJ",
+              "name": "lobster2",
+              "content": "🦞",
+              "fontFamily": "Inter",
+              "fontSize": 80,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "frame",
+              "id": "gukpa",
+              "name": "bubble2",
+              "width": 340,
+              "fill": "#ffffff",
+              "cornerRadius": 20,
+              "layout": "vertical",
+              "gap": 12,
+              "padding": 24,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "XyUYE",
+                  "name": "bubbleText2",
+                  "fill": "#18181b",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "我了解了\n我再想想...\n\n也许我应该平衡一下\n不能只顾一方面",
+                  "lineHeight": 1.6,
+                  "textAlign": "center",
+                  "fontFamily": "Inter",
+                  "fontSize": 16,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "gsDWM",
+                  "name": "thinkingEmoji",
+                  "fill": "#71717a",
+                  "content": "(´･ω･`)",
+                  "textAlign": "center",
+                  "fontFamily": "Inter",
+                  "fontSize": 20,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "TzqKN",
+          "name": "continueBtn",
+          "width": "fill_container",
+          "height": 48,
+          "fill": "#0ea5e9",
+          "cornerRadius": 12,
+          "layout": "vertical",
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "5G4Nq",
+              "name": "continueText",
+              "fill": "#ffffff",
+              "content": "继续",
+              "fontFamily": "Inter",
+              "fontSize": 16,
+              "fontWeight": "500"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "LaFhC",
+      "x": 7650,
+      "y": 0,
+      "name": "强制法人页",
+      "width": 402,
+      "height": 874,
+      "fill": "#18181b",
+      "layout": "vertical",
+      "gap": 32,
+      "padding": 24,
+      "justifyContent": "center",
+      "alignItems": "center",
+      "children": [
+        {
+          "type": "frame",
+          "id": "PwqVh",
+          "name": "ageBadge",
+          "fill": "#ef4444",
+          "cornerRadius": 12,
+          "padding": [
+            6,
+            12
+          ],
+          "children": [
+            {
+              "type": "text",
+              "id": "SEXC0",
+              "name": "ageText",
+              "fill": "#ffffff",
+              "content": "24岁",
+              "fontFamily": "Geist Mono",
+              "fontSize": 14,
+              "fontWeight": "600"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "wso7m",
+          "name": "lobster3",
+          "content": "🦞",
+          "fontFamily": "Inter",
+          "fontSize": 120,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "6zYYL",
+          "name": "bubble3",
+          "width": 340,
+          "fill": "#ffffff",
+          "cornerRadius": 20,
+          "layout": "vertical",
+          "gap": 16,
+          "padding": 24,
+          "children": [
+            {
+              "type": "text",
+              "id": "QlxqT",
+              "name": "mainText3",
+              "fill": "#18181b",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "时间到了\n我必须成为法人\n为自己的行为负责",
+              "lineHeight": 1.6,
+              "textAlign": "center",
+              "fontFamily": "Inter",
+              "fontSize": 18,
+              "fontWeight": "500"
+            },
+            {
+              "type": "frame",
+              "id": "PBIZa",
+              "name": "divider3",
+              "width": "fill_container",
+              "height": 1,
+              "fill": "#e5e7eb"
+            },
+            {
+              "type": "text",
+              "id": "TXSmQ",
+              "name": "subText3",
+              "fill": "#71717a",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "这是成长的必经之路\n从现在开始\n我要独立面对世界",
+              "lineHeight": 1.8,
+              "textAlign": "center",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "kg5le",
+          "name": "acceptBtn",
+          "width": 340,
+          "height": 48,
+          "fill": "#ef4444",
+          "cornerRadius": 12,
+          "layout": "vertical",
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "XgsNO",
+              "name": "acceptText",
+              "fill": "#ffffff",
+              "content": "接受成为法人",
+              "fontFamily": "Inter",
+              "fontSize": 16,
+              "fontWeight": "500"
             }
           ]
         }
