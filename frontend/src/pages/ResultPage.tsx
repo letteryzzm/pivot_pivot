@@ -1,11 +1,12 @@
 import { useNavigate } from 'react-router-dom';
 import { useGameStore } from '../store/gameStore';
-import { determineEnding } from '../game/endings';
+import { determineEnding, calculateEntrepreneurScore } from '../game/endings';
 
 export default function ResultPage() {
   const navigate = useNavigate();
   const { lobster } = useGameStore();
   const ending = determineEnding(lobster);
+  const entrepreneurScore = calculateEntrepreneurScore(lobster);
 
   return (
     <div className="min-h-screen bg-[#fafafa] flex flex-col gap-4 p-4">
@@ -53,10 +54,16 @@ export default function ResultPage() {
         </div>
       </div>
 
+      {/* 收入显示 */}
+      <div className="bg-white rounded-xl p-3 flex justify-between items-center">
+        <span className="text-sm text-[#71717a]">总收入</span>
+        <span className="text-xl font-semibold text-[#10b981] font-mono">¥{lobster.income.total}</span>
+      </div>
+
       {/* 创业成功概率 */}
       <div className="bg-white rounded-xl p-4 flex flex-col items-center gap-2">
         <p className="text-base font-medium text-[#18181b]">创业成功概率</p>
-        <p className="text-5xl font-semibold text-[#0ea5e9] font-mono">68.5%</p>
+        <p className="text-5xl font-semibold text-[#0ea5e9] font-mono">{entrepreneurScore.toFixed(1)}%</p>
       </div>
 
       {/* 龙虾评价 */}

@@ -38,5 +38,11 @@ export interface Activity {
 // API响应
 export interface FeedbackResponse {
   feedback: string;
-  mood: 'positive' | 'neutral' | 'negative';
+  execution: number;
+  growth: {
+    iq: number;
+    social: number;
+    creativity: number;
+    execution: number;
+  };
 }

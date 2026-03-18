@@ -1,14 +1,19 @@
 import { useNavigate } from 'react-router-dom';
+import { useGameStore } from '../store/gameStore';
 
 export default function LegalBreakPage() {
   const navigate = useNavigate();
+  const { nextStage, dismissLegalBreak } = useGameStore();
 
   const handleAgree = () => {
-    navigate('/game');
+    nextStage(); // 进入阶段2
+    dismissLegalBreak();
+    navigate('/select');
   };
 
   const handleThink = () => {
-    navigate('/reflect');
+    dismissLegalBreak();
+    navigate('/select'); // 继续成长期
   };
 
   return (

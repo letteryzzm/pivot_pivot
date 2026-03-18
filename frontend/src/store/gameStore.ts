@@ -1,16 +1,22 @@
 import { create } from 'zustand';
-import type { LobsterState, Activity } from '../types/game';
-import { executeActivity, calculateIncome } from '../game/gameEngine';
+import type { LobsterState, Activity, FeedbackResponse } from '../types/game';
+import { applyAIGrowth, calculateIncome } from '../game/gameEngine';
+import { callAPI } from '../utils/api';
+import { generateFeedbackPrompt } from '../utils/prompts';
 
 interface GameStore {
   lobster: LobsterState;
   isPlaying: boolean;
-  currentFeedback: string;
+  currentFeedback: FeedbackResponse | null;
+  isLoading: boolean;
+  shouldShowLegalBreak: boolean;
 
   startGame: (name: string) => void;
-  executeActivities: (activities: Activity[]) => void;
+  executeActivity: (activity: Activity) => Promise<void>;
   addIncome: (amount: number) => void;
   nextStage: () => void;
+  checkLegalBreak: () => boolean;
+  dismissLegalBreak: () => void;
   resetGame: () => void;
 }
 
@@ -23,44 +29,70 @@ const initialLobster: LobsterState = {
   history: { activities: [], round: 0, maxRounds: 8 },
 };
 
-export const useGameStore = create<GameStore>((set) => ({
+export const useGameStore = create<GameStore>((set, get) => ({
   lobster: initialLobster,
   isPlaying: false,
-  currentFeedback: '',
+  currentFeedback: null,
+  isLoading: false,
+  shouldShowLegalBreak: false,
 
   startGame: (name) => set({
     isPlaying: true,
-    lobster: { ...initialLobster, name }
+    lobster: { ...initialLobster, name },
+    shouldShowLegalBreak: false
   }),
 
-  executeActivities: (activities) => set((state) => {
-    let newStats = { ...state.lobster.stats };
-    let feedbacks: string[] = [];
+  executeActivity: async (activity) => {
+    set({ isLoading: true });
 
-    activities.forEach(activity => {
-      const result = executeActivity(state.lobster, activity);
-      newStats = result.newStats;
-      feedbacks.push(result.feedback);
-    });
+    try {
+      const state = get();
+      const { lobster } = state;
 
-    const newRound = state.lobster.history.round + 1;
-    const shouldNextStage = newRound >= state.lobster.history.maxRounds;
+      // 调用AI获取反馈和成长值
+      const prompt = generateFeedbackPrompt({
+        lobsterName: lobster.name,
+        age: lobster.age,
+        activityName: activity.name,
+        activityDesc: activity.description,
+        stats: lobster.stats,
+        recentActivities: lobster.history.activities.slice(-3)
+      });
 
-    return {
-      lobster: {
-        ...state.lobster,
-        stats: newStats,
-        age: state.lobster.age + 1,
-        stage: shouldNextStage ? 2 : state.lobster.stage,
-        history: {
-          ...state.lobster.history,
-          activities: [...state.lobster.history.activities, ...activities.map(a => a.id)],
-          round: newRound
-        }
-      },
-      currentFeedback: feedbacks.join('\n')
-    };
-  }),
+      const response = await callAPI(prompt);
+      const aiResponse: FeedbackResponse = JSON.parse(response);
+
+      // 应用AI决定的成长值
+      const newStats = applyAIGrowth(lobster, aiResponse);
+      const newRound = lobster.history.round + 1;
+
+      set({
+        lobster: {
+          ...lobster,
+          stats: newStats,
+          age: lobster.age + 1,
+          history: {
+            ...lobster.history,
+            activities: [...lobster.history.activities, activity.name],
+            round: newRound
+          }
+        },
+        currentFeedback: aiResponse,
+        isLoading: false
+      });
+    } catch (error) {
+      console.error('AI调用失败:', error);
+      // 降级方案：使用默认值
+      set({
+        currentFeedback: {
+          feedback: '我完成了这个活动 (´･ω･`)',
+          execution: 70,
+          growth: { iq: 2, social: 2, creativity: 2, execution: 2 }
+        },
+        isLoading: false
+      });
+    }
+  },
 
   addIncome: (amount) => set((state) => ({
     lobster: {
@@ -76,9 +108,23 @@ export const useGameStore = create<GameStore>((set) => ({
     lobster: { ...state.lobster, stage: 2, age: 18 }
   })),
 
+  checkLegalBreak: () => {
+    const state = get();
+    const { lobster } = state;
+    // 3-4轮后触发，且还在阶段1
+    if (lobster.stage === 1 && lobster.history.round >= 3 && lobster.history.round <= 4) {
+      set({ shouldShowLegalBreak: true });
+      return true;
+    }
+    return false;
+  },
+
+  dismissLegalBreak: () => set({ shouldShowLegalBreak: false }),
+
   resetGame: () => set({
     lobster: initialLobster,
     isPlaying: false,
-    currentFeedback: ''
+    currentFeedback: null,
+    shouldShowLegalBreak: false
   })
 }));

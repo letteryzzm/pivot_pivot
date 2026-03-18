@@ -26,10 +26,17 @@ export default function ActivitySelectPage() {
   return (
     <div className="min-h-screen bg-[#18181b] flex flex-col p-4">
       {/* 顶部标题 */}
-      <div className="h-20 flex items-center justify-center">
+      <div className="h-20 flex items-center justify-center relative">
         <span className="text-xl font-semibold text-white">
           {lobster.stage === 1 ? '选择活动' : '选择赚钱活动'}
         </span>
+        {lobster.stage === 2 && (
+          <div className="absolute right-0 top-1/2 -translate-y-1/2 px-3 py-1.5 bg-[#10b981] rounded-lg">
+            <span className="text-sm text-white font-semibold font-mono">
+              ¥{lobster.income.total}
+            </span>
+          </div>
+        )}
       </div>
 
       {/* 图标网格 */}

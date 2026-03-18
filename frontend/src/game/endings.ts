@@ -7,6 +7,27 @@ export interface Ending {
   emoji: string;
 }
 
+// 计算创业成功概率
+export function calculateEntrepreneurScore(lobster: LobsterState): number {
+  const { iq, social, creativity, execution } = lobster.stats;
+  const income = lobster.income.total;
+
+  // 基础分数：四维属性平均值
+  const baseScore = (iq + social + creativity + execution) / 4;
+
+  // 收入加成（最多+20分）
+  const incomeBonus = Math.min(20, income / 500);
+
+  // 经验加成：成长节点数（最多+10分）
+  const experienceBonus = Math.min(10, lobster.history.round * 0.5);
+
+  // 总分
+  const totalScore = baseScore + incomeBonus + experienceBonus;
+
+  // 转换为百分比（0-100）
+  return Math.min(100, Math.max(0, totalScore));
+}
+
 // 根据属性组合判定结局
 export function determineEnding(lobster: LobsterState): Ending {
   const { iq, social, creativity, execution } = lobster.stats;
