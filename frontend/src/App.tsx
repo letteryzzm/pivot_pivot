@@ -11,19 +11,23 @@ import ForceLegalPage from './pages/ForceLegalPage';
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<StartPage />} />
-        <Route path="/game" element={<GamePage />} />
-        <Route path="/select" element={<ActivitySelectPage />} />
-        <Route path="/feedback" element={<FeedbackPage />} />
-        <Route path="/reflect" element={<ReflectPage />} />
-        <Route path="/transition" element={<TransitionPage />} />
-        <Route path="/legal-break" element={<LegalBreakPage />} />
-        <Route path="/force-legal" element={<ForceLegalPage />} />
-        <Route path="/result" element={<ResultPage />} />
-      </Routes>
-    </BrowserRouter>
+    <div className="min-h-screen bg-[#1a1a1a] flex items-center justify-center">
+      <div className="w-[402px] h-[874px] bg-white overflow-hidden shadow-2xl">
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<StartPage />} />
+            <Route path="/game" element={<GamePage />} />
+            <Route path="/select" element={<ActivitySelectPage />} />
+            <Route path="/feedback" element={<FeedbackPage />} />
+            <Route path="/reflect" element={<ReflectPage />} />
+            <Route path="/transition" element={<TransitionPage />} />
+            <Route path="/legal-break" element={<LegalBreakPage />} />
+            <Route path="/force-legal" element={<ForceLegalPage />} />
+            <Route path="/result" element={<ResultPage />} />
+          </Routes>
+        </BrowserRouter>
+      </div>
+    </div>
   );
 }
 
