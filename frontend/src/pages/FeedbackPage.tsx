@@ -18,13 +18,31 @@ export default function FeedbackPage() {
   ];
   const [placeholder] = useState(() => placeholders[Math.floor(Math.random() * placeholders.length)]);
 
+  // 获取龙虾动作图片
+  const getLobsterImage = () => {
+    const age = lobster.age;
+    let ageGroup = '婴儿';
+    if (age >= 18) ageGroup = '商务';
+    else if (age >= 12) ageGroup = '青少年';
+    else if (age >= 6) ageGroup = '儿童';
+
+    const actions = ['正面走', '侧面走', '奔跑'];
+    const action = actions[Math.floor(Math.random() * actions.length)];
+
+    return `/images/claw/${ageGroup}${action}1.png`;
+  };
+
   // 执行活动
   useEffect(() => {
     const activity = location.state?.activity;
-    if (activity && !currentFeedback) {
+    if (activity) {
+      console.log('反馈页：收到活动', activity);
       executeActivity(activity);
+    } else {
+      console.warn('反馈页：没有活动数据，返回选择页');
+      navigate('/select');
     }
-  }, []);
+  }, [location.state]);
 
   const handleSubmit = () => {
     const response = input.trim() || placeholder;
@@ -36,8 +54,12 @@ export default function FeedbackPage() {
     return (
       <div className="min-h-screen bg-[#fafafa] flex items-center justify-center">
         <div className="text-center">
-          <LobsterSprite age={lobster.age} action="idle" size={80} />
-          <p className="mt-4 text-sm text-[#71717a]">{lobster.name}正在思考...</p>
+          <img
+            src={getLobsterImage()}
+            alt="龙虾动作"
+            className="w-32 h-32 object-contain animate-bounce mx-auto"
+          />
+          <p className="mt-4 text-sm text-[#71717a]">{lobster.name}在行动中...</p>
         </div>
       </div>
     );

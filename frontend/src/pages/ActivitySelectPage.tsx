@@ -1,37 +1,66 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { stage1Activities, stage2Activities } from '../game/activities';
 import { useGameStore } from '../store/gameStore';
-import { calculateIncome } from '../game/gameEngine';
 
 export default function ActivitySelectPage() {
   const navigate = useNavigate();
-  const { lobster, executeActivity, addIncome } = useGameStore();
+  const { lobster } = useGameStore();
+  const [showAnimation, setShowAnimation] = useState(false);
+  const [selectedActivity, setSelectedActivity] = useState<any>(null);
 
   const activities = lobster.stage === 1 ? stage1Activities : stage2Activities;
   const backgroundImage = lobster.stage === 1
     ? "url('/images/背景/学校和街区背景_1.png')"
     : "url('/images/背景/虚拟工作空间_1.png')";
 
-  const handleSelect = async (activityId: string) => {
+  // 根据年龄选择龙虾形象
+  const getLobsterImage = () => {
+    const age = lobster.age;
+    let ageGroup = '婴儿';
+    if (age >= 18) ageGroup = '商务';
+    else if (age >= 12) ageGroup = '青少年';
+    else if (age >= 6) ageGroup = '儿童';
+
+    // 随机选择一个动作
+    const actions = ['正面走', '侧面走', '奔跑'];
+    const action = actions[Math.floor(Math.random() * actions.length)];
+
+    return `/images/claw/${ageGroup}${action}1.png`;
+  };
+
+  const handleSelect = (activityId: string) => {
     const activity = activities.find(a => a.id === activityId);
     if (!activity) return;
 
-    if (lobster.stage === 1) {
-      // 调用API获取反馈，等待完成后跳转
-      await executeActivity(activity);
-      navigate('/feedback');
-    } else {
-      // 阶段2：执行活动并计算收入
-      await executeActivity(activity);
-      navigate('/feedback');
-    }
+    setSelectedActivity(activity);
+    setShowAnimation(true);
+
+    // 1.5秒后跳转
+    setTimeout(() => {
+      navigate('/feedback', { state: { activity } });
+    }, 1500);
   };
 
   return (
     <div
-      className="min-h-screen flex flex-col p-4 bg-cover bg-center bg-no-repeat"
+      className="min-h-screen flex flex-col p-4 bg-cover bg-center bg-no-repeat relative"
       style={{ backgroundImage }}
     >
+      {/* 加载动画覆盖层 */}
+      {showAnimation && (
+        <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center z-50">
+          <img
+            src={getLobsterImage()}
+            alt="龙虾动作"
+            className="w-32 h-32 object-contain animate-bounce"
+          />
+          <p className="mt-4 text-white text-sm">
+            {lobster.name}去{selectedActivity?.name}了...
+          </p>
+        </div>
+      )}
+
       {/* 顶部标题 */}
       <div className="h-20 flex flex-col items-center justify-center relative">
         <span className="text-xl font-semibold text-white">

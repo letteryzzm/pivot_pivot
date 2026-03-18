@@ -56,7 +56,7 @@ export default function GamePage() {
       </div>
 
       {/* 能力面板 */}
-      <div className="flex flex-col gap-3">
+      <div className="grid grid-cols-2 gap-3">
         {Object.entries(lobster.stats).map(([key, value]) => (
           <div key={key} className="bg-white rounded-xl p-4 shadow-sm">
             <div className="flex justify-between items-center mb-2">

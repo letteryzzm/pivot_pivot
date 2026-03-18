@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGameStore } from '../store/gameStore';
 import { callAPI } from '../utils/api';
+import { getRandomReflection } from '../game/feedbackTemplates';
 import LobsterSprite from '../components/LobsterSprite';
 
 export default function ReflectPage() {
@@ -26,7 +27,14 @@ export default function ReflectPage() {
         console.log('龙虾反馈:', currentFeedback.feedback);
         console.log('用户回应:', userResponse);
 
-        const prompt = `你是${lobster.name}，${lobster.age}岁。
+        // 混合模式：20%概率调用API，80%使用预设模板
+        const useAI = Math.random() < 0.2;
+        console.log('使用AI:', useAI);
+
+        let reflectionText: string;
+
+        if (useAI) {
+          const prompt = `你是${lobster.name}，${lobster.age}岁。
 
 【核心人设】
 - 你是一个"人"，不是动物，只是用龙虾作为虚拟形象
@@ -50,29 +58,35 @@ export default function ReflectPage() {
 - 体现"喜欢反思、喜欢反驳"的人设
 - 不要说"我会努力" "我明白了"等顺从的话`;
 
-        console.log('========== 反思页完整Prompt ==========');
-        console.log(prompt);
-        console.log('====================================');
+          console.log('========== 反思页完整Prompt ==========');
+          console.log(prompt);
+          console.log('====================================');
 
-        const response = await callAPI(prompt);
-        console.log('反思页API响应:', response);
+          const response = await callAPI(prompt);
+          console.log('反思页API响应:', response);
+          reflectionText = response.trim();
+        } else {
+          // 使用预设模板
+          reflectionText = getRandomReflection();
+          console.log('使用预设反思模板:', reflectionText);
+        }
 
-        const cleanText = response.trim();
-        console.log('清理后文本:', cleanText);
-        setReflection(cleanText);
+        console.log('最终反思文本:', reflectionText);
+        setReflection(reflectionText);
 
         // 保存到对话历史
-        updateConversationWithReflection(cleanText);
+        updateConversationWithReflection(reflectionText);
       } catch (error) {
         console.error('反思生成失败:', error);
-        setReflection('我了解了，我再想想... (´･ω･`)');
+        const fallbackText = getRandomReflection();
+        setReflection(fallbackText);
       } finally {
         setIsLoading(false);
       }
     };
 
     generateReflection();
-  }, [currentFeedback, lobster.name, userResponse, updateConversationWithReflection]);
+  }, [currentFeedback, lobster.name, lobster.age, userResponse, updateConversationWithReflection]);
 
   if (isLoading) {
     return (

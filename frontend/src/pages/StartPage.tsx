@@ -54,7 +54,7 @@ export default function StartPage() {
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="w-full h-12 px-3 bg-white rounded-xl text-base"
-            placeholder="比如"小克劳德""
+            placeholder='比如"小克劳德"'
           />
         </div>
 

@@ -3,6 +3,7 @@ import type { LobsterState, Activity, FeedbackResponse } from '../types/game';
 import { applyAIGrowth, calculateIncome } from '../game/gameEngine';
 import { callAPI, safeParseJSON } from '../utils/api';
 import { generateFeedbackPrompt } from '../utils/prompts';
+import { getRandomFeedback, getActivityType } from '../game/feedbackTemplates';
 
 interface GameStore {
   lobster: LobsterState;
@@ -63,30 +64,42 @@ export const useGameStore = create<GameStore>((set, get) => ({
       const { lobster } = state;
       console.log('龙虾状态:', lobster);
 
-      // 调用AI获取反馈和成长值
-      const prompt = generateFeedbackPrompt({
-        lobsterName: lobster.name,
-        age: lobster.age,
-        activityName: activity.name,
-        activityDesc: activity.description,
-        stats: lobster.stats,
-        conversationHistory: lobster.conversationHistory
-      });
+      // 混合模式：30%概率调用API，70%使用预设模板
+      const useAI = Math.random() < 0.3;
+      console.log('使用AI:', useAI);
 
-      console.log('生成的prompt:', prompt.substring(0, 200) + '...');
-      console.log('开始调用API...');
+      let aiResponse: FeedbackResponse;
 
-      const response = await callAPI(prompt);
-      console.log('API原始响应:', response);
+      if (useAI) {
+        // 调用AI获取反馈
+        const prompt = generateFeedbackPrompt({
+          lobsterName: lobster.name,
+          age: lobster.age,
+          activityName: activity.name,
+          activityDesc: activity.description,
+          stats: lobster.stats,
+          conversationHistory: lobster.conversationHistory
+        });
 
-      const aiResponse: FeedbackResponse = safeParseJSON(response, {
-        feedback: '我完成了这个活动 (´･ω･`)',
-        execution: 70,
-        growth: { iq: 2, social: 2, creativity: 2, execution: 2 }
-      });
-      console.log('解析后的响应:', aiResponse);
+        console.log('开始调用API...');
+        const response = await callAPI(prompt);
+        console.log('API原始响应:', response);
 
-      // 应用AI决定的成长值
+        aiResponse = safeParseJSON(response, {
+          feedback: '我完成了这个活动 (´･ω･`)',
+          execution: 70,
+          growth: { iq: 2, social: 2, creativity: 2, execution: 2 }
+        });
+      } else {
+        // 使用预设模板
+        const activityType = getActivityType(activity.name);
+        aiResponse = getRandomFeedback(activityType);
+        console.log('使用预设模板:', activityType, aiResponse);
+      }
+
+      console.log('最终响应:', aiResponse);
+
+      // 应用成长值
       const newStats = applyAIGrowth(lobster, aiResponse);
       const newRound = lobster.history.round + 1;
 
@@ -124,16 +137,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
         isLoading: false
       });
     } catch (error) {
-      console.error('AI调用失败:', error);
+      console.error('执行失败:', error);
       const state = get();
       const { lobster } = state;
 
-      // 降级方案：使用默认值
-      const fallbackResponse: FeedbackResponse = {
-        feedback: '我完成了这个活动 (´･ω･`)',
-        execution: 70,
-        growth: { iq: 2, social: 2, creativity: 2, execution: 2 }
-      };
+      // 降级方案：使用预设模板
+      const activityType = getActivityType(activity.name);
+      const fallbackResponse = getRandomFeedback(activityType);
 
       const newStats = applyAIGrowth(lobster, fallbackResponse);
       const newRound = lobster.history.round + 1;
