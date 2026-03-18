@@ -38,15 +38,23 @@ export default function StartPage() {
           <LobsterSprite age={0} action="idle" size={100} />
         </div>
 
+        {/* 剧情文本 */}
+        <div className="flex flex-col gap-1 items-center text-center">
+          <p className="text-sm text-[#52525b]">这是一只刚出生的龙虾</p>
+          <p className="text-sm text-[#52525b]">它的大脑结构已经长好了</p>
+          <p className="text-sm text-[#52525b]">但还不知道怎么使用</p>
+          <p className="text-sm text-[#52525b]">它需要你的陪伴，才能成长</p>
+        </div>
+
         {/* 输入区域 */}
         <div className="flex flex-col gap-2">
-          <label className="text-sm text-[#18181b]">给你的龙虾取名</label>
+          <label className="text-sm text-[#18181b]">给它取个名字</label>
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="w-full h-12 px-3 bg-white rounded-xl text-base"
-            placeholder="输入名字"
+            placeholder="比如"小克劳德""
           />
         </div>
 
@@ -55,11 +63,11 @@ export default function StartPage() {
           onClick={handleStart}
           className="w-full h-12 bg-[#0ea5e9] text-white rounded-xl text-base font-medium"
         >
-          开始养虾！
+          开始陪伴
         </button>
 
         {/* 提示文字 */}
-        <p className="text-xs text-[#71717a] text-center">两条随机主线</p>
+        <p className="text-xs text-[#71717a] text-center">这不是速成游戏 · 成长需要真实的时间</p>
       </div>
     </div>
   );

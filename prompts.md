@@ -100,6 +100,51 @@ Set of 8 retro 8-bit pixel art icons for money-making: code brackets, shopping c
 
 ---
 
+### 4.6 活动卡片（成长期）
+
+**Prompt 4.6.1 - 学习类活动卡片**
+```
+Retro 8-bit pixel art activity card for learning, chunky pixel blocks, limited 5-color palette (blue #0ea5e9, white, cream #fafafa, gray text, black outline), vertical layout: icon at top (24x24px book/laptop/palette), activity name in pixel font below (e.g. "读书" "学编程" "学艺术"), short description text (12px pixel font), card size 170x120px, white background with 1px border, arcade game UI card style, flat 2D no gradients, retro selection card aesthetic
+```
+
+**Prompt 4.6.2 - 社交类活动卡片**
+```
+Retro 8-bit pixel art activity card for social, chunky pixel blocks, limited 5-color palette (blue #0ea5e9, white, cream #fafafa, gray text, black outline), vertical layout: icon at top (24x24px people/handshake/team), activity name in pixel font (e.g. "参加社团" "交朋友" "团队活动"), description text, card size 170x120px, white background with 1px border, arcade UI card style, flat 2D no gradients, retro friendly card aesthetic
+```
+
+**Prompt 4.6.3 - 创造类活动卡片**
+```
+Retro 8-bit pixel art activity card for creative work, chunky pixel blocks, limited 5-color palette (blue #0ea5e9, white, cream #fafafa, gray text, black outline), vertical layout: icon at top (24x24px lightbulb/folder/pen), activity name in pixel font (e.g. "独立思考" "做项目" "写作"), description text, card size 170x120px, white background with 1px border, arcade UI card style, flat 2D no gradients, retro creative card aesthetic
+```
+
+**Prompt 4.6.4 - 执行类活动卡片**
+```
+Retro 8-bit pixel art activity card for execution tasks, chunky pixel blocks, limited 5-color palette (blue #0ea5e9, white, cream #fafafa, gray text, black outline), vertical layout: icon at top (24x24px checkmark/target/calendar), activity name in pixel font (e.g. "完成任务" "坚持习惯" "解决问题"), description text, card size 170x120px, white background with 1px border, arcade UI card style, flat 2D no gradients, retro task card aesthetic
+```
+
+### 4.7 活动卡片（赚钱期）
+
+**Prompt 4.7.1 - 写代码活动卡片**
+```
+Retro 8-bit pixel art activity card for coding work, chunky pixel blocks, limited 5-color palette (green #10b981, white, cream #fafafa, gray text, black outline), vertical layout: code brackets icon at top (24x24px), activity name in pixel font (e.g. "接外包" "做产品"), expected income text in green (e.g. "¥500-1000"), card size 170x120px, white background with 1px border, arcade business UI card style, flat 2D no gradients, retro money-making card aesthetic
+```
+
+**Prompt 4.7.2 - 做电商活动卡片**
+```
+Retro 8-bit pixel art activity card for e-commerce, chunky pixel blocks, limited 5-color palette (green #10b981, white, cream #fafafa, gray text, black outline), vertical layout: shopping cart icon at top (24x24px), activity name in pixel font (e.g. "开店" "卖货"), expected income text in green (e.g. "¥300-800"), card size 170x120px, white background with 1px border, arcade business UI card style, flat 2D no gradients, retro shop card aesthetic
+```
+
+**Prompt 4.7.3 - 做科研活动卡片**
+```
+Retro 8-bit pixel art activity card for research work, chunky pixel blocks, limited 5-color palette (green #10b981, white, cream #fafafa, gray text, black outline), vertical layout: paper/document icon at top (24x24px), activity name in pixel font (e.g. "发论文" "申请专利"), expected income text in green (e.g. "¥200-600"), card size 170x120px, white background with 1px border, arcade academic UI card style, flat 2D no gradients, retro research card aesthetic
+```
+
+**Prompt 4.7.4 - 找工作活动卡片**
+```
+Retro 8-bit pixel art activity card for job hunting, chunky pixel blocks, limited 5-color palette (green #10b981, white, cream #fafafa, gray text, black outline), vertical layout: briefcase icon at top (24x24px), activity name in pixel font (e.g. "投简历" "面试" "打工"), expected income text in green (e.g. "¥400-900"), card size 170x120px, white background with 1px border, arcade work UI card style, flat 2D no gradients, retro job card aesthetic
+```
+
+
 ## 四、情感表达元素
 
 ### 5. 龙虾动作精灵集

@@ -9,6 +9,15 @@ export default function FeedbackPage() {
   const { lobster, currentFeedback, isLoading, setUserResponse, executeActivity } = useGameStore();
   const [input, setInput] = useState('');
 
+  const placeholders = [
+    '你可以这样想，但我更建议你再深度思考一下',
+    '嗯...我听到了，但你确定吗？',
+    '或许换个角度想想？',
+    '我理解，不过...',
+    '真的是这样吗？'
+  ];
+  const [placeholder] = useState(() => placeholders[Math.floor(Math.random() * placeholders.length)]);
+
   // 执行活动
   useEffect(() => {
     const activity = location.state?.activity;
@@ -18,7 +27,7 @@ export default function FeedbackPage() {
   }, []);
 
   const handleSubmit = () => {
-    const response = input.trim() || '你可以这样想，但我更建议你再深度思考一下';
+    const response = input.trim() || placeholder;
     setUserResponse(response);
     navigate('/reflect');
   };
@@ -28,7 +37,7 @@ export default function FeedbackPage() {
       <div className="min-h-screen bg-[#fafafa] flex items-center justify-center">
         <div className="text-center">
           <LobsterSprite age={lobster.age} action="idle" size={80} />
-          <p className="mt-4 text-sm text-[#71717a]">龙虾正在思考...</p>
+          <p className="mt-4 text-sm text-[#71717a]">{lobster.name}正在思考...</p>
         </div>
       </div>
     );
@@ -53,13 +62,14 @@ export default function FeedbackPage() {
       </div>
 
       <div className="flex flex-col gap-2">
-        <label className="text-sm text-[#71717a]">你的回应</label>
+        <label className="text-sm text-[#71717a]">你想对它说什么？</label>
         <textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="你可以这样想，但我更建议你再深度思考一下"
+          placeholder={placeholder}
           className="w-full h-20 px-3 py-3 bg-white rounded-xl text-sm leading-relaxed resize-none placeholder:text-gray-400"
         />
+        <p className="text-xs text-[#71717a]">它会思考你的话</p>
       </div>
 
       <button

@@ -16,8 +16,8 @@ export default function ResultPage() {
     >
       {/* 标题区域 */}
       <div className="bg-white rounded-2xl h-[120px] flex flex-col items-center justify-center gap-1">
-        <h1 className="text-2xl font-semibold text-[#18181b]">你养成的龙虾</h1>
-        <p className="text-sm text-[#71717a]">经过 {lobster.history.round} 次成长节点，{lobster.age} 岁的陪伴</p>
+        <h1 className="text-2xl font-semibold text-[#18181b]">{lobster.name}的成长报告</h1>
+        <p className="text-sm text-[#71717a]">一起经历的时间：{lobster.history.round} 个成长节点</p>
       </div>
 
       {/* 龙虾区域 */}
@@ -31,7 +31,7 @@ export default function ResultPage() {
       {/* 数据区域 */}
       <div className="flex gap-3">
         <div className="flex-1 bg-white rounded-xl p-3 flex flex-col gap-2">
-          <p className="text-xs text-[#71717a]">成长期数据</p>
+          <p className="text-xs text-[#71717a]">能力成长轨迹</p>
           <div className="flex flex-col gap-1 text-xs">
             <div className="flex justify-between">
               <span className="text-[#71717a]">学习能力</span>
@@ -44,7 +44,7 @@ export default function ResultPage() {
           </div>
         </div>
         <div className="flex-1 bg-white rounded-xl p-3 flex flex-col gap-2">
-          <p className="text-xs text-[#71717a]">赚钱期数据</p>
+          <p className="text-xs text-[#71717a]">&nbsp;</p>
           <div className="flex flex-col gap-1 text-xs">
             <div className="flex justify-between">
               <span className="text-[#71717a]">创造力</span>
@@ -60,38 +60,39 @@ export default function ResultPage() {
 
       {/* 收入显示 */}
       <div className="bg-white rounded-xl p-3 flex justify-between items-center">
-        <span className="text-sm text-[#71717a]">总收入</span>
+        <span className="text-sm text-[#71717a]">赚到的钱</span>
         <span className="text-xl font-semibold text-[#10b981] font-mono">¥{lobster.income.total}</span>
       </div>
 
       {/* 创业成功概率 */}
       <div className="bg-white rounded-xl p-4 flex flex-col items-center gap-2">
-        <p className="text-base font-medium text-[#18181b]">创业成功概率</p>
+        <p className="text-sm text-[#71717a]">如果它去创业...</p>
+        <p className="text-base font-medium text-[#18181b]">成功概率</p>
         <p className="text-5xl font-semibold text-[#0ea5e9] font-mono">{entrepreneurScore.toFixed(1)}%</p>
       </div>
 
       {/* 龙虾评价 */}
-      <div className="bg-white rounded-2xl p-4">
+      <div className="bg-white rounded-2xl p-4 flex flex-col gap-3">
         <p className="text-sm text-[#18181b] text-center leading-relaxed">
           {ending.description}
-          <br />
-          谢谢你 (๑•̀ㅂ•́)و✧
         </p>
+        <div className="w-full h-px bg-[#e5e7eb]"></div>
+        <div className="flex flex-col gap-2 text-xs text-[#71717a] text-center leading-relaxed">
+          <p>这段陪伴值得吗？</p>
+          <p>如果重来，你会做不同的选择吗？</p>
+          <p>AI的成长，真的需要人的时间吗？</p>
+        </div>
       </div>
 
       {/* 底部按钮 */}
-      <div className="flex gap-3">
+      <div className="flex flex-col gap-2">
         <button
           onClick={() => navigate('/')}
-          className="flex-1 h-12 bg-[#0ea5e9] text-white rounded-xl text-base font-medium"
+          className="w-full h-12 bg-[#0ea5e9] text-white rounded-xl text-base font-medium"
         >
-          重新开始
+          重新开始一段陪伴
         </button>
-        <button
-          className="flex-1 h-12 bg-transparent border border-[#e5e7eb] text-[#18181b] rounded-xl text-base font-medium"
-        >
-          分享结果
-        </button>
+        <p className="text-xs text-white/60 text-center">每一次陪伴都是独特的 · 因为时间不会重来</p>
       </div>
     </div>
   );

@@ -16,6 +16,7 @@ interface GameStore {
   startGame: (name: string) => void;
   executeActivity: (activity: Activity) => Promise<void>;
   setUserResponse: (response: string) => void;
+  updateConversationWithReflection: (reflection: string) => void;
   addIncome: (amount: number) => void;
   nextStage: () => void;
   checkLegalBreak: () => boolean;
@@ -31,6 +32,7 @@ const initialLobster: LobsterState = {
   stats: { iq: 50, social: 50, creativity: 50, execution: 50 },
   income: { total: 0, weekly: 0 },
   history: { activities: [], round: 0, maxRounds: 8 },
+  conversationHistory: [],
 };
 
 export const useGameStore = create<GameStore>((set, get) => ({
@@ -50,11 +52,16 @@ export const useGameStore = create<GameStore>((set, get) => ({
   }),
 
   executeActivity: async (activity) => {
-    set({ isLoading: true });
+    console.log('=== executeActivity 开始 ===');
+    console.log('活动:', activity);
+
+    // 清空旧的反馈数据
+    set({ isLoading: true, currentFeedback: null });
 
     try {
       const state = get();
       const { lobster } = state;
+      console.log('龙虾状态:', lobster);
 
       // 调用AI获取反馈和成长值
       const prompt = generateFeedbackPrompt({
@@ -63,15 +70,21 @@ export const useGameStore = create<GameStore>((set, get) => ({
         activityName: activity.name,
         activityDesc: activity.description,
         stats: lobster.stats,
-        recentActivities: lobster.history.activities.slice(-3)
+        conversationHistory: lobster.conversationHistory
       });
 
+      console.log('生成的prompt:', prompt.substring(0, 200) + '...');
+      console.log('开始调用API...');
+
       const response = await callAPI(prompt);
+      console.log('API原始响应:', response);
+
       const aiResponse: FeedbackResponse = safeParseJSON(response, {
         feedback: '我完成了这个活动 (´･ω･`)',
         execution: 70,
         growth: { iq: 2, social: 2, creativity: 2, execution: 2 }
       });
+      console.log('解析后的响应:', aiResponse);
 
       // 应用AI决定的成长值
       const newStats = applyAIGrowth(lobster, aiResponse);
@@ -87,6 +100,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
         };
       }
 
+      // 保存到对话历史
+      const newConversation = {
+        round: newRound,
+        activity: activity.name,
+        lobsterFeedback: aiResponse.feedback,
+      };
+
       set({
         lobster: {
           ...lobster,
@@ -97,7 +117,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
             ...lobster.history,
             activities: [...lobster.history.activities, activity.name],
             round: newRound
-          }
+          },
+          conversationHistory: [...lobster.conversationHistory, newConversation]
         },
         currentFeedback: aiResponse,
         isLoading: false
@@ -184,6 +205,28 @@ export const useGameStore = create<GameStore>((set, get) => ({
   dismissLegalBreak: () => set({ shouldShowLegalBreak: false }),
 
   setUserResponse: (response) => set({ userResponse: response }),
+
+  updateConversationWithReflection: (reflection: string) => {
+    const state = get();
+    const { lobster, userResponse } = state;
+    const lastIndex = lobster.conversationHistory.length - 1;
+
+    if (lastIndex >= 0) {
+      const updatedHistory = [...lobster.conversationHistory];
+      updatedHistory[lastIndex] = {
+        ...updatedHistory[lastIndex],
+        userResponse: userResponse,
+        lobsterReflection: reflection
+      };
+
+      set({
+        lobster: {
+          ...lobster,
+          conversationHistory: updatedHistory
+        }
+      });
+    }
+  },
 
   resetGame: () => set({
     lobster: initialLobster,

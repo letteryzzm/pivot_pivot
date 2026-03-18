@@ -29,9 +29,9 @@ export default function GamePage() {
 
       {/* 头部信息 */}
       <div className="flex flex-col gap-1 items-center">
-        <p className="text-sm text-[#71717a]">{lobster.name}</p>
+        <p className="text-sm text-[#71717a]">{lobster.name} · {lobster.age}岁</p>
         <p className="text-xl font-semibold text-[#18181b]">
-          第 {lobster.history.round + 1} 次成长节点
+          第 {lobster.history.round + 1} 个成长节点
         </p>
       </div>
 
@@ -48,7 +48,8 @@ export default function GamePage() {
       {/* 时间卡片 */}
       <div className="bg-white rounded-xl p-4 shadow-sm">
         <p className="text-xs text-[#71717a] mb-1">距离下次成长节点</p>
-        <p className="text-lg font-semibold text-[#18181b] mb-3">2 天 5 小时</p>
+        <p className="text-lg font-semibold text-[#18181b] mb-1">2 天 5 小时</p>
+        <p className="text-xs text-[#71717a] mb-3">时间在流逝，不能跳过 ⏳</p>
         <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
           <div className="w-1/3 h-2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"></div>
         </div>
@@ -73,13 +74,14 @@ export default function GamePage() {
       </div>
 
       {/* 底部按钮 */}
-      <div className="h-[72px] flex items-center justify-center">
+      <div className="h-[72px] flex flex-col items-center justify-center gap-2">
         <button
           onClick={() => navigate('/select')}
           className="w-full h-12 bg-[#0ea5e9] text-white rounded-xl text-base font-medium"
         >
-          {lobster.stage === 1 ? '选择培养活动' : '选择赚钱方式'}
+          {lobster.stage === 1 ? '选择今天的活动' : '选择赚钱方式'}
         </button>
+        <p className="text-xs text-[#71717a]">它会有自己的想法</p>
       </div>
     </div>
   );

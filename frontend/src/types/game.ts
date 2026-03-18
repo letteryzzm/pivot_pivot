@@ -22,8 +22,17 @@ export interface LobsterState {
   history: {
     activities: string[];
     round: number;
-    maxRounds: number; // 阶段1总轮数
+    maxRounds: number;
   };
+
+  // 对话历史
+  conversationHistory: Array<{
+    round: number;
+    activity: string;
+    lobsterFeedback: string;
+    userResponse?: string;
+    lobsterReflection?: string;
+  }>;
 }
 
 // 活动定义

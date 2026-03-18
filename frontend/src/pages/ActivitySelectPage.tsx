@@ -17,12 +17,13 @@ export default function ActivitySelectPage() {
     if (!activity) return;
 
     if (lobster.stage === 1) {
-      // 立刻跳转，不等待API
-      navigate('/feedback', { state: { activity } });
+      // 调用API获取反馈，等待完成后跳转
+      await executeActivity(activity);
+      navigate('/feedback');
     } else {
-      const income = calculateIncome(lobster, activity);
-      addIncome(income);
-      navigate('/result');
+      // 阶段2：执行活动并计算收入
+      await executeActivity(activity);
+      navigate('/feedback');
     }
   };
 
@@ -32,9 +33,12 @@ export default function ActivitySelectPage() {
       style={{ backgroundImage }}
     >
       {/* 顶部标题 */}
-      <div className="h-20 flex items-center justify-center relative">
+      <div className="h-20 flex flex-col items-center justify-center relative">
         <span className="text-xl font-semibold text-white">
-          {lobster.stage === 1 ? '选择活动' : '选择赚钱活动'}
+          {lobster.stage === 1 ? '今天做什么？' : '今天做什么能赚钱？'}
+        </span>
+        <span className="text-xs text-white/70 mt-1">
+          {lobster.stage === 1 ? '它可能不会完全按你说的做' : ''}
         </span>
         {lobster.stage === 2 && (
           <div className="absolute right-0 top-1/2 -translate-y-1/2 px-3 py-1.5 bg-[#10b981] rounded-lg">
@@ -60,6 +64,13 @@ export default function ActivitySelectPage() {
             />
           </button>
         ))}
+      </div>
+
+      {/* 底部提示 */}
+      <div className="h-12 flex items-center justify-center">
+        <p className="text-xs text-white/60">
+          {lobster.stage === 1 ? '有时候它会有自己的想法' : '从全面发展到只看钱'}
+        </p>
       </div>
     </div>
   );
