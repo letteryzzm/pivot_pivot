@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGameStore } from '../store/gameStore';
+import LobsterSprite from '../components/LobsterSprite';
 
 export default function StartPage() {
   const [name, setName] = useState('');
@@ -34,7 +35,7 @@ export default function StartPage() {
 
         {/* 龙虾区域 */}
         <div className="h-[120px] flex items-center justify-center">
-          <div className="text-[80px] leading-none">🦞</div>
+          <LobsterSprite age={0} action="idle" size={100} />
         </div>
 
         {/* 输入区域 */}
