@@ -23,9 +23,13 @@ interface GameStore {
   nextStage: () => void;
   checkLegalBreak: () => boolean;
   checkForceLegal: () => boolean;
+  checkGrowthTransition: () => boolean;
+  checkStage2Transition: () => boolean;
+  getGrowthStage: () => 'childhood' | 'teen' | 'adult' | null;
   canEnterEnding: () => boolean;
   getEndingTrigger: () => { stage: number; round: number; reason: string } | null;
   dismissLegalBreak: () => void;
+  dismissGrowthTransition: () => void;
   resetGame: () => void;
 }
 
@@ -236,6 +240,25 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   dismissGrowthTransition: () => set({ shouldShowGrowthTransition: false }),
+
+  // 获取当前成长阶段类型，用于跳转
+  getGrowthStage: (): 'childhood' | 'teen' | 'adult' | null => {
+    const { lobster } = get();
+    // 阶段1：婴儿→儿童 (round 3, age 6)
+    if (lobster.stage === 1 && lobster.history.round === 3) {
+      return 'childhood';
+    }
+    // 阶段1：儿童→青少年 (round 6, age 13)
+    if (lobster.stage === 1 && lobster.history.round === 6) {
+      return 'teen';
+    }
+    // 阶段1→2：青少年→商务 (round 8 或 stage 2 age 18)
+    if ((lobster.stage === 1 && lobster.history.round === 8) ||
+        (lobster.stage === 2 && lobster.age === 18)) {
+      return 'adult';
+    }
+    return null;
+  },
 
   dismissLegalBreak: () => set({ shouldShowLegalBreak: false }),
 

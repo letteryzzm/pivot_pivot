@@ -16,6 +16,7 @@ export default function ReflectPage() {
     checkForceLegal,
     checkGrowthTransition,
     checkStage2Transition,
+    getGrowthStage,
     updateConversationWithReflection,
   } = useGameStore();
 
@@ -118,6 +119,7 @@ ${guide.prompt}
 - 可以发现新的矛盾，可以延伸出新的疑问，但每一步都要有真实的思维重量
 
 输出要求：
+- 最多150字
 - 带1-2个颜文字
 - 语气像一个正在自言自语的哲学系的人，不是在辩论，是在真的想
 - 不要说"我会努力""我明白了""你说得对"等收尾的话
@@ -179,17 +181,20 @@ ${guide.prompt}
   };
 
   return (
-    <div className="min-h-screen bg-[#fafafa] flex flex-col gap-8 p-6">
-      <div className="h-[62px] flex items-center justify-center">
-        <span className="text-sm text-[#18181b]">9:41</span>
-      </div>
+    <div className="min-h-screen bg-[#fafafa] flex flex-col">
+      {/* 状态栏 */}
+      <div className="h-[62px]"></div>
 
-      <div className="flex flex-col items-center gap-2">
-        <p className="text-xs text-[#71717a]">{lobster.name}想了想...</p>
-        <LobsterSprite age={lobster.age} action="idle" size={80} />
+      {/* 主内容区 - flex-1 自动填充剩余空间 */}
+      <div className="flex-1 flex flex-col items-center gap-4 px-6 pb-6">
+        {/* 标题和龙虾 */}
+        <div className="flex flex-col items-center gap-2">
+          <p className="text-xs text-[#71717a]">{lobster.name}想了想...</p>
+          <LobsterSprite age={lobster.age} action="idle" size={80} />
+        </div>
 
-        {/* 用打字机效果显示流式输出的内容 */}
-        <div className="w-[340px] bg-white rounded-[20px] p-6 min-h-[80px]">
+        {/* 反思文本容器 - 自适应高度 */}
+        <div className="w-full bg-white rounded-[20px] p-6 min-h-[80px]">
           <TypewriterText
             text={reflectionText}
             speed={50}
@@ -197,42 +202,50 @@ ${guide.prompt}
             className="text-base text-[#18181b] text-center leading-relaxed whitespace-pre-line block"
           />
         </div>
-      </div>
 
-      <div className="flex flex-col gap-2">
-        <button
-          onClick={() => {
-            // 优先检查成长过渡（婴儿->儿童, 儿童->青少年, 青少年->成人）
-            if (checkGrowthTransition()) {
-              navigate("/growth-transition");
-              return;
-            }
+        {/* 按钮区域 - mt-auto 确保内容少时在底部 */}
+        <div className="mt-auto flex flex-col gap-2 pt-4 w-full">
+          <button
+            onClick={() => {
+              // 优先检查成长过渡（婴儿->儿童, 儿童->青少年, 青少年->成人）
+              if (checkGrowthTransition()) {
+                const stage = getGrowthStage();
+                if (stage === 'childhood') {
+                  navigate("/childhood-transition");
+                } else if (stage === 'teen') {
+                  navigate("/teen-transition");
+                } else if (stage === 'adult') {
+                  navigate("/adult-transition");
+                }
+                return;
+              }
 
-            // 检查阶段2开始时的成长过渡
-            if (checkStage2Transition()) {
-              navigate("/growth-transition");
-              return;
-            }
+              // 检查阶段2开始时的成长过渡
+              if (checkStage2Transition()) {
+                navigate("/adult-transition");
+                return;
+              }
 
-            // 优先检查24岁强制法人
-            if (checkForceLegal()) {
-              navigate("/force-legal");
-              return;
-            }
+              // 优先检查24岁强制法人
+              if (checkForceLegal()) {
+                navigate("/force-legal");
+                return;
+              }
 
-            // 检查是否应该触发法人突破
-            const shouldBreak = checkLegalBreak();
-            if (shouldBreak) {
-              navigate("/legal-break");
-            } else {
-              navigate("/select");
-            }
-          }}
-          className="w-full h-12 bg-[#0ea5e9] text-white rounded-xl text-base font-medium"
-        >
-          继续陪伴
-        </button>
-        <p className="text-xs text-[#71717a] text-center">{getBottomHint()}</p>
+              // 检查是否应该触发法人突破
+              const shouldBreak = checkLegalBreak();
+              if (shouldBreak) {
+                navigate("/legal-break");
+              } else {
+                navigate("/select");
+              }
+            }}
+            className="w-full h-12 bg-[#0ea5e9] text-white rounded-xl text-base font-medium"
+          >
+            继续陪伴
+          </button>
+          <p className="text-xs text-[#71717a] text-center">{getBottomHint()}</p>
+        </div>
       </div>
     </div>
   );
