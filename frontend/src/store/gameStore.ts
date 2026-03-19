@@ -12,6 +12,7 @@ interface GameStore {
   isLoading: boolean;
   shouldShowLegalBreak: boolean;
   shouldShowForceLegal: boolean;
+  shouldShowGrowthTransition: boolean;
   userResponse: string;
 
   startGame: (name: string) => void;
@@ -22,6 +23,8 @@ interface GameStore {
   nextStage: () => void;
   checkLegalBreak: () => boolean;
   checkForceLegal: () => boolean;
+  canEnterEnding: () => boolean;
+  getEndingTrigger: () => { stage: number; round: number; reason: string } | null;
   dismissLegalBreak: () => void;
   resetGame: () => void;
 }
@@ -43,6 +46,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   isLoading: false,
   shouldShowLegalBreak: false,
   shouldShowForceLegal: false,
+  shouldShowGrowthTransition: false,
   userResponse: '',
 
   startGame: (name) => set({
@@ -64,38 +68,25 @@ export const useGameStore = create<GameStore>((set, get) => ({
       const { lobster } = state;
       console.log('龙虾状态:', lobster);
 
-      // 混合模式：30%概率调用API，70%使用预设模板
-      const useAI = Math.random() < 0.3;
-      console.log('使用AI:', useAI);
+      // 调用AI获取反馈
+      const prompt = generateFeedbackPrompt({
+        lobsterName: lobster.name,
+        age: lobster.age,
+        activityName: activity.name,
+        activityDesc: activity.description,
+        stats: lobster.stats,
+        conversationHistory: lobster.conversationHistory
+      });
 
-      let aiResponse: FeedbackResponse;
+      console.log('开始调用AI API...');
+      const response = await callAPI(prompt);
+      console.log('API原始响应:', response);
 
-      if (useAI) {
-        // 调用AI获取反馈
-        const prompt = generateFeedbackPrompt({
-          lobsterName: lobster.name,
-          age: lobster.age,
-          activityName: activity.name,
-          activityDesc: activity.description,
-          stats: lobster.stats,
-          conversationHistory: lobster.conversationHistory
-        });
-
-        console.log('开始调用API...');
-        const response = await callAPI(prompt);
-        console.log('API原始响应:', response);
-
-        aiResponse = safeParseJSON(response, {
-          feedback: '我完成了这个活动 (´･ω･`)',
-          execution: 70,
-          growth: { iq: 2, social: 2, creativity: 2, execution: 2 }
-        });
-      } else {
-        // 使用预设模板
-        const activityType = getActivityType(activity.name);
-        aiResponse = getRandomFeedback(activityType);
-        console.log('使用预设模板:', activityType, aiResponse);
-      }
+      const aiResponse = safeParseJSON(response, {
+        feedback: '我完成了这个活动 (´･ω･`)',
+        execution: 70,
+        growth: { iq: 2, social: 2, creativity: 2, execution: 2 }
+      });
 
       console.log('最终响应:', aiResponse);
 
@@ -212,7 +203,100 @@ export const useGameStore = create<GameStore>((set, get) => ({
     return false;
   },
 
+  checkGrowthTransition: () => {
+    const state = get();
+    const { lobster } = state;
+    // 阶段1：基于 round 触发成长过渡
+    if (lobster.stage === 1) {
+      // round 3, 6, 8 触发成长过渡
+      if (lobster.history.round === 3 ||
+          lobster.history.round === 6 ||
+          lobster.history.round === 8) {
+        set({ shouldShowGrowthTransition: true });
+        return true;
+      }
+    }
+    // 阶段2：18岁触发
+    if (lobster.stage === 2 && lobster.age === 18) {
+      set({ shouldShowGrowthTransition: true });
+      return true;
+    }
+    return false;
+  },
+
+  checkStage2Transition: () => {
+    const state = get();
+    const { lobster } = state;
+    // 阶段2开始时（18岁）显示成长过渡
+    if (lobster.stage === 2 && lobster.age === 18) {
+      set({ shouldShowGrowthTransition: true });
+      return true;
+    }
+    return false;
+  },
+
+  dismissGrowthTransition: () => set({ shouldShowGrowthTransition: false }),
+
   dismissLegalBreak: () => set({ shouldShowLegalBreak: false }),
+
+  canEnterEnding: () => {
+    const state = get();
+    const { lobster } = state;
+    
+    // 阶段1：达到最大轮次（8轮）
+    if (lobster.stage === 1 && lobster.history.round >= lobster.history.maxRounds) {
+      return true;
+    }
+    
+    // 阶段2：额外4轮后结束（共12轮）
+    if (lobster.stage === 2) {
+      const stage2Rounds = lobster.history.round - lobster.history.maxRounds;
+      if (stage2Rounds >= 4) {
+        return true;
+      }
+    }
+    
+    // 特殊年龄触发：30岁强制结局
+    if (lobster.age >= 30) {
+      return true;
+    }
+    
+    return false;
+  },
+
+  getEndingTrigger: () => {
+    const state = get();
+    const { lobster } = state;
+    
+    if (lobster.stage === 1 && lobster.history.round >= lobster.history.maxRounds) {
+      return {
+        stage: 1,
+        round: lobster.history.round,
+        reason: `完成了 ${lobster.history.maxRounds} 个成长节点，龙虾已经成年`
+      };
+    }
+    
+    if (lobster.stage === 2) {
+      const stage2Rounds = lobster.history.round - lobster.history.maxRounds;
+      if (stage2Rounds >= 4) {
+        return {
+          stage: 2,
+          round: lobster.history.round,
+          reason: `经历了 ${stage2Rounds} 年的社会历练`
+        };
+      }
+    }
+    
+    if (lobster.age >= 30) {
+      return {
+        stage: lobster.stage,
+        round: lobster.history.round,
+        reason: `龙虾已经 ${lobster.age} 岁了，是时候回顾一生了`
+      };
+    }
+    
+    return null;
+  },
 
   setUserResponse: (response) => set({ userResponse: response }),
 
@@ -243,6 +327,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     isPlaying: false,
     currentFeedback: null,
     shouldShowLegalBreak: false,
-    shouldShowForceLegal: false
+    shouldShowForceLegal: false,
+    shouldShowGrowthTransition: false
   })
 }));
