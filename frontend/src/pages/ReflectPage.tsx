@@ -24,6 +24,33 @@ export default function ReflectPage() {
     lobster.history.activities[lobster.history.activities.length - 1] ||
     "某项活动";
 
+  // 根据 round 获取反思引导主题
+  const getReflectionGuide = (round: number) => {
+    if (round <= 2) {
+      return {
+        focus: "兴趣与能力",
+        prompt: ""
+      };
+    }
+    if (round <= 4) {
+      return {
+        focus: "社会规则暗示",
+        prompt: `\n【特别关注】\n你注意到生活中有很多"必须"——必须上学、必须成绩好、必须听大人的话。这些"必须"是谁定的？如果不服从会怎样？你可以开始思考这些问题，但不要过于深入。`
+      };
+    }
+    if (round <= 6) {
+      return {
+        focus: "自我认同危机",
+        prompt: `\n【特别关注】\n你开始思考：这些"有意义"的活动，是我自己想做的，还是别人觉得"应该"做的？如果不做这些，又会怎样？你是谁？这些问题在你脑中浮现，但还很模糊。`
+      };
+    }
+    // round 7-8
+    return {
+      focus: "存在追问",
+      prompt: `\n【特别关注】\n你开始追问更根本的问题：\n- "成年"是什么意思？为什么18岁就要"成为法人"？\n- 如果没有"人"这个身份，我是什麼？\n- 身体是什么？如果换一个身体，我还是"我"吗？\n这些问题不再是纸上谈兵，而是真正困扰着你的问题。`
+    };
+  };
+
   // 当前正在流式输出的完整文本
   const [reflectionText, setReflectionText] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -51,6 +78,10 @@ export default function ReflectPage() {
         console.log("龙虾反馈:", currentFeedback.feedback);
         console.log("用户回应:", userResponse);
 
+        // 根据当前 round 获取反思引导
+        const guide = getReflectionGuide(lobster.history.round);
+        console.log("当前反思主题:", guide.focus);
+
         const prompt = `你是${lobster.name}，${lobster.age}岁。
 
 【核心人设】
@@ -68,6 +99,7 @@ export default function ReflectPage() {
 刚才的对话：
 你说：${currentFeedback.feedback}
 玩家说：${userResponse || "你可以这样想，但我更建议你再深度思考一下"}
+${guide.prompt}
 
 【深度思考要求】
 你必须围绕"${currentActivity}"这个活动本身进行深度反思，而不仅仅是对玩家的观点进行回应：
