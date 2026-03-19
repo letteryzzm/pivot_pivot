@@ -49,6 +49,67 @@ export async function callAPI(prompt: string): Promise<string> {
   return content;
 }
 
+// 流式API调用（用于反思页）
+export async function callAPIStream(
+  prompt: string,
+  onChunk: (text: string) => void
+): Promise<void> {
+  console.log('=== callAPIStream 开始 ===');
+
+  const response = await fetch(API_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${API_KEY}`,
+    },
+    body: JSON.stringify({
+      model: 'deepseek-ai/DeepSeek-V3.2',
+      messages: [{ role: 'user', content: prompt }],
+      max_tokens: 300,
+      stream: true,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`API调用失败: ${response.status}`);
+  }
+
+  const reader = response.body?.getReader();
+  const decoder = new TextDecoder();
+
+  if (!reader) {
+    throw new Error('无法读取响应流');
+  }
+
+  let buffer = '';
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+
+    buffer += decoder.decode(value, { stream: true });
+    const lines = buffer.split('\n');
+    buffer = lines.pop() || '';
+
+    for (const line of lines) {
+      if (line.startsWith('data: ')) {
+        const data = line.slice(6);
+        if (data === '[DONE]') continue;
+
+        try {
+          const json = JSON.parse(data);
+          const content = json.choices[0]?.delta?.content;
+          if (content) {
+            onChunk(content);
+          }
+        } catch (e) {
+          // 忽略解析错误
+        }
+      }
+    }
+  }
+}
+
 // 安全解析JSON
 export function safeParseJSON<T>(text: string, fallback: T): T {
   console.log('=== safeParseJSON 开始 ===');

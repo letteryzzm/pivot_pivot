@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGameStore } from '../store/gameStore';
-import { callAPI } from '../utils/api';
+import { callAPIStream } from '../utils/api';
 import { getRandomReflection } from '../game/feedbackTemplates';
 import LobsterSprite from '../components/LobsterSprite';
 
@@ -62,9 +62,15 @@ export default function ReflectPage() {
           console.log(prompt);
           console.log('====================================');
 
-          const response = await callAPI(prompt);
-          console.log('反思页API响应:', response);
-          reflectionText = response.trim();
+          setIsLoading(false);
+          setReflection('');
+
+          // 使用流式输出
+          await callAPIStream(prompt, (chunk) => {
+            setReflection(prev => prev + chunk);
+          });
+
+          reflectionText = reflection;
         } else {
           // 使用预设模板
           reflectionText = getRandomReflection();

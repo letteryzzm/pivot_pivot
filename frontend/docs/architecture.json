@@ -1,0 +1,91 @@
+{
+  "version": "1.0",
+  "pages": [
+    {
+      "route": "/",
+      "title": "Start Page",
+      "purpose": "命名龙虾并开始陪伴",
+      "components": ["LobsterSprite", "input[name]", "button"],
+      "modelTriggers": [],
+      "navigation": [{"to": "/game", "condition": "name provided"}]
+    },
+    {
+      "route": "/game",
+      "title": "Game Page",
+      "purpose": "展示龙虾状态与成长进度",
+      "components": ["LobsterSprite", "StatsPanel", "TimeCard"],
+      "modelTriggers": [],
+      "navigation": [{"to": "/select", "condition": "进入今天的活动"}]
+    },
+    {
+      "route": "/select",
+      "title": "Activity Select",
+      "purpose": "选择当天/阶段的活动",
+      "components": ["LobsterSprite", "ActivityGrid"],
+      "modelTriggers": [],
+      "navigation": [{"to": "/feedback", "condition": "选中活动"}]
+    },
+    {
+      "route": "/feedback",
+      "title": "Feedback",
+      "purpose": "活动结果反馈：AI/模板",
+      "components": ["FeedbackCard", "TextArea", "SubmitButton"],
+      "modelTriggers": [{"type": "executeActivity", "input": "selectedActivity", "output": "FeedbackResponse"}],
+      "navigation": [{"to": "/reflect", "condition": "提交回应"}]
+    },
+    {
+      "route": "/reflect",
+      "title": "Reflect",
+      "purpose": "龙虾对玩家回应的二次反思",
+      "components": ["LobsterSprite", "ReflectionCard"],
+      "modelTriggers": [{"type": "callAPIStream", "input": "prompt", "output": "reflection chunks"}],
+      "navigation": [{"to": "/select", "condition": "继续陪伴"}]
+    },
+    {
+      "route": "/transition",
+      "title": "Transition",
+      "purpose": "时间过渡界面",
+      "components": ["TransitionText", "LobsterIcon"],
+      "modelTriggers": [],
+      "navigation": [{"to": "/game", "condition": "过渡完成"}]
+    },
+    {
+      "route": "/legal-break",
+      "title": "Legal Break",
+      "purpose": "触发法人/企业阶段的情节分支",
+      "components": ["InfoCard", "DecisionButtons"],
+      "modelTriggers": [],
+      "navigation": [{"to": "/select", "condition": "继续成长期"}]
+    },
+    {
+      "route": "/force-legal",
+      "title": "Force Legal",
+      "purpose": "强制进入阶段2",
+      "components": ["InfoCard", "ContinueButton"],
+      "modelTriggers": [],
+      "navigation": [{"to": "/select", "condition": "进入阶段2"}]
+    },
+    {
+      "route": "/parameter-lock",
+      "title": "Parameter Lock",
+      "purpose": "展示参数锁定说明",
+      "components": ["InfoPanel"],
+      "modelTriggers": [],
+      "navigation": []
+    },
+    {
+      "route": "/result",
+      "title": "Result",
+      "purpose": "最终结局与创业概率",
+      "components": ["LobsterSprite", "ResultPanel", "EntrepreneurScore"],
+      "modelTriggers": [],
+      "navigation": [{"to": "/", "condition": "重新开始"}]
+    }
+  ],
+  "modelContracts": {
+    "callAPI": "POST to API_URL with prompt; return string; parse to JSON",
+    "callAPIStream": "POST with stream: true; onChunk callback",
+    "safeParseJSON": "Safely extract JSON; fallback on failure"
+  },
+  "notes": "敏感信息已在文档中脱敏/省略；此结构用于脚本化分析与自动化测试准备。"
+}
