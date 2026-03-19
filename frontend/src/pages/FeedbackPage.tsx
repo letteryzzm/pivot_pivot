@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useGameStore } from '../store/gameStore';
 import LobsterSprite from '../components/LobsterSprite';
+import TypewriterText from '../components/TypewriterText';
 
 export default function FeedbackPage() {
   const navigate = useNavigate();
@@ -67,16 +68,16 @@ export default function FeedbackPage() {
 
   return (
     <div className="min-h-screen bg-[#fafafa] flex flex-col gap-8 p-6">
-      <div className="h-[62px] flex items-center justify-center">
-        <span className="text-sm text-[#18181b]">9:41</span>
-      </div>
+      <div className="h-[62px]"></div>
 
       <div className="flex flex-col items-center gap-4">
         <LobsterSprite age={lobster.age} action="idle" size={80} />
         <div className="w-[340px] bg-white rounded-[20px] p-6 flex flex-col gap-3">
-          <p className="text-base text-[#18181b] text-center leading-relaxed">
-            {currentFeedback?.feedback || '我完成了活动...'}
-          </p>
+          <TypewriterText
+            text={currentFeedback?.feedback || '我完成了活动...'}
+            speed={55}
+            className="text-base text-[#18181b] text-center leading-relaxed block"
+          />
           <p className="text-sm text-[#71717a] text-center">
             执行程度: {currentFeedback?.execution || 0}%
           </p>

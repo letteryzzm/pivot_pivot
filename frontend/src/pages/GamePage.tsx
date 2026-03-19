@@ -23,9 +23,7 @@ export default function GamePage() {
   return (
     <div className="min-h-screen bg-[#fafafa] flex flex-col gap-4 p-4">
       {/* 状态栏 */}
-      <div className="h-[62px] flex items-center justify-center">
-        <span className="text-sm text-[#18181b]">9:41</span>
-      </div>
+      <div className="h-[62px]"></div>
 
       {/* 头部信息 */}
       <div className="flex flex-col gap-1 items-center">
