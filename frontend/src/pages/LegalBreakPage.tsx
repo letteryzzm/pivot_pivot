@@ -19,7 +19,10 @@ export default function LegalBreakPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#18181b] flex flex-col items-center justify-center gap-8 p-6">
+    <div
+      className="min-h-screen bg-cover bg-center bg-no-repeat flex flex-col items-center justify-center gap-8 p-6"
+      style={{ backgroundImage: "url('/images/背景/法人申请页.png')" }}
+    >
       <p className="text-sm text-white/60">一个重要的决定</p>
       <div className="w-40 h-40 flex items-center justify-center">
         <LobsterSprite age={lobster.age} stage={lobster.stage} action="idle" size={140} />
@@ -41,13 +44,13 @@ export default function LegalBreakPage() {
       <div className="flex gap-3">
         <button
           onClick={handleAgree}
-          className="w-40 h-12 bg-[#0ea5e9] text-white rounded-xl text-base font-medium"
+          className="w-[140px] h-12 bg-[#0ea5e9] text-white rounded-xl text-base font-medium drop-shadow-lg hover:drop-shadow-xl transition-all"
         >
           好，我支持你
         </button>
         <button
           onClick={handleThink}
-          className="w-[140px] h-12 bg-transparent border border-white text-white rounded-xl text-base font-medium"
+          className="w-[140px] h-12 bg-white/10 text-white/80 rounded-xl text-base font-medium drop-shadow-lg hover:drop-shadow-xl transition-all"
         >
           再想想，不着急
         </button>
