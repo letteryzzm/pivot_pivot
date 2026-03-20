@@ -28,7 +28,6 @@ export function generateFeedbackPrompt(context: {
 
   const stageText = context.stage === 1 ? "婴儿期（成长期）" : "商务期（赚钱期）";
   const isLastRound = context.stage === 2 && context.round === context.maxRounds;
-  const isStage2 = context.stage === 2;
   const isStage1 = context.stage === 1;
 
   // 阶段1彩蛋触发机制 - 每一轮都可能触发

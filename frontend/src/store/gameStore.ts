@@ -106,7 +106,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         backgroundImage: 1,
         reflectionBackground: 1,
         growUp: false,
-        ending: null
+        ending: undefined as any
       });
 
       console.log('========== 回合结果 ==========');
@@ -159,14 +159,15 @@ export const useGameStore = create<GameStore>((set, get) => ({
       // 检查AI是否返回了ending
       // 阶段1彩蛋：immediate=true 时立即结束，跳过阶段2
       // 阶段2：正常返回ending
-      if (aiResponse.ending && aiResponse.ending.type) {
-        const isImmediate = aiResponse.ending.immediate === true;
+      const ending = aiResponse.ending;
+      if (ending && ending.type) {
+        const isImmediate = ending.immediate === true;
 
         set({
           reflectionEnding: {
             trigger: true,
-            type: aiResponse.ending.type,
-            reason: aiResponse.ending.reason || 'AI总结的结局'
+            type: ending.type,
+            reason: ending.reason || 'AI总结的结局'
           }
         });
 
