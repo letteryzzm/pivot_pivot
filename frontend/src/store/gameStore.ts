@@ -92,7 +92,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
         activityName: activity.name,
         activityDesc: activity.description,
         stats: lobster.stats,
-        conversationHistory: lobster.conversationHistory
+        conversationHistory: lobster.conversationHistory,
+        round: lobster.history.round,
+        maxRounds: lobster.history.maxRounds
       });
 
       const response = await callAPI(prompt);
@@ -103,7 +105,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
         growth: { iq: 2, social: 2, creativity: 2, execution: 2 },
         backgroundImage: 1,
         reflectionBackground: 1,
-        growUp: false
+        growUp: false,
+        ending: null
       });
 
       console.log('========== 回合结果 ==========');
@@ -151,6 +154,17 @@ export const useGameStore = create<GameStore>((set, get) => ({
           newStage = 2; // 第2次成长 → 进入阶段2（6岁儿童）
           newAge = 6;
         }
+      }
+
+      // 检查AI是否返回了ending（阶段2最后一轮）
+      if (aiResponse.ending && aiResponse.ending.type) {
+        set({
+          reflectionEnding: {
+            trigger: true,
+            type: aiResponse.ending.type,
+            reason: aiResponse.ending.reason || 'AI总结的结局'
+          }
+        });
       }
 
       set({
@@ -287,19 +301,16 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   canEnterEnding: () => {
     const state = get();
-    const { lobster } = state;
+    const { lobster, reflectionEnding } = state;
 
-    // 阶段1：达到最大轮次（6轮，age 6后进入阶段2）
+    // 阶段1：达到最大轮次（6轮）→ 触发法人突破
     if (lobster.stage === 1 && lobster.history.round >= lobster.history.maxRounds) {
       return true;
     }
 
-    // 阶段2：额外4轮后结束（共10轮）
-    if (lobster.stage === 2) {
-      const stage2Rounds = lobster.history.round - lobster.history.maxRounds;
-      if (stage2Rounds >= 4) {
-        return true;
-      }
+    // 阶段2：AI返回了ending时触发结局
+    if (lobster.stage === 2 && reflectionEnding?.trigger && reflectionEnding.type) {
+      return true;
     }
 
     // 特殊年龄触发：30岁强制结局
@@ -307,6 +318,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return true;
     }
 
+    console.log('未触发结局');
     return false;
   },
 

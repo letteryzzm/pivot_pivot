@@ -160,11 +160,7 @@ export default function SharePoster({ onClose }: SharePosterProps) {
 
             {/* 二维码位 */}
             <div className="mt-4 flex flex-col items-center">
-              <div className="w-[80px] h-[80px] bg-white/10 rounded-xl flex items-center justify-center">
-                <div className="w-[60px] h-[60px] border-2 border-dashed border-white/30 rounded-lg flex items-center justify-center">
-                  <span className="text-xs text-white/40 text-center">二维码</span>
-                </div>
-              </div>
+              <img src="/QRcode.png" alt="扫码一起养" className="w-20 h-20 rounded-lg" />
               <p className="mt-2 text-xs text-white/50">扫码一起养</p>
             </div>
 
