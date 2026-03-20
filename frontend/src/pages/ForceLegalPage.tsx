@@ -13,7 +13,10 @@ export default function ForceLegalPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#18181b] flex flex-col items-center justify-center gap-8 p-6">
+    <div
+      className="min-h-screen bg-cover bg-center bg-no-repeat flex flex-col items-center justify-center gap-8 p-6"
+      style={{ backgroundImage: "url('/images/背景/法人申请页.png')" }}
+    >
       <p className="text-sm text-white/60">{lobster.stage === 1 ? "婴儿期" : "商务期"}</p>
 
       <div className="w-40 h-40 flex items-center justify-center">
@@ -41,7 +44,7 @@ export default function ForceLegalPage() {
       <div className="flex flex-col gap-2 w-[340px]">
         <button
           onClick={handleAccept}
-          className="w-full h-12 bg-[#0ea5e9] text-white rounded-xl text-base font-medium"
+          className="w-full h-12 bg-[#0ea5e9] text-white rounded-xl text-base font-medium drop-shadow-lg hover:drop-shadow-xl transition-all"
         >
           接受现实
         </button>
