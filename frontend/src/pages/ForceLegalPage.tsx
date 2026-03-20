@@ -44,9 +44,9 @@ export default function ForceLegalPage() {
       <div className="flex flex-col gap-2 w-[340px]">
         <button
           onClick={handleAccept}
-          className="w-full h-12 bg-[#0ea5e9] text-white rounded-xl text-base font-medium drop-shadow-lg hover:drop-shadow-xl transition-all"
+          className="w-full py-3 bg-[#0ea5e9] -skew-x-6 text-white text-base font-medium shadow-[0_4px_16px_rgba(0,0,0,0.08)] hover:bg-[#0284c7] transition-colors"
         >
-          接受现实
+          <span className="block skew-x-6">接受现实</span>
         </button>
         <p className="text-xs text-white/40 text-center">有些事情，时间到了就必须面对</p>
       </div>

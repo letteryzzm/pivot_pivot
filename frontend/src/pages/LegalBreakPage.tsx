@@ -44,15 +44,15 @@ export default function LegalBreakPage() {
       <div className="flex gap-3">
         <button
           onClick={handleAgree}
-          className="w-[140px] h-12 bg-[#0ea5e9] text-white rounded-xl text-base font-medium drop-shadow-lg hover:drop-shadow-xl transition-all"
+          className="w-[140px] py-3 bg-[#0ea5e9] -skew-x-6 text-white text-base font-medium shadow-[0_4px_16px_rgba(0,0,0,0.08)] hover:bg-[#0284c7] transition-colors"
         >
-          好，我支持你
+          <span className="block skew-x-6">好，我支持你</span>
         </button>
         <button
           onClick={handleThink}
-          className="w-[140px] h-12 bg-white/10 text-white/80 rounded-xl text-base font-medium drop-shadow-lg hover:drop-shadow-xl transition-all"
+          className="w-[140px] py-3 bg-white/15 -skew-x-6 text-white text-base font-medium shadow-[0_4px_16px_rgba(0,0,0,0.08)] hover:bg-white/25 transition-colors"
         >
-          再想想，不着急
+          <span className="block skew-x-6">再想想，不着急</span>
         </button>
       </div>
       <p className="text-xs text-white/40">这是它自己的决定 · 不是你安排的</p>
