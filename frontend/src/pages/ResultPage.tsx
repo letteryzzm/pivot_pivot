@@ -30,7 +30,7 @@ export default function ResultPage() {
 
   const entrepreneurScore = calculateEntrepreneurScore(lobster);
 
-  const isGrowthReport = lobster.stage === 1 || lobster.age < 18;
+  const isGrowthReport = lobster.stage === 1 || lobster.age < 6;
   const isAIEnding = !!aiEnding;
 
   // 获取背景图：优先使用AI触发的结局背景

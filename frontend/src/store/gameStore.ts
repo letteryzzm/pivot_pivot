@@ -42,7 +42,7 @@ const initialLobster: LobsterState = {
   stage: 1,
   stats: { iq: 50, social: 50, creativity: 50, execution: 50 },
   income: { total: 0, weekly: 0 },
-  history: { activities: [], round: 0, maxRounds: 18 },
+  history: { activities: [], round: 0, maxRounds: 6 },
   conversationHistory: [],
   growthCount: 0,
 };
@@ -140,8 +140,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
         if (newGrowthCount === 1) {
           newAge = 6;  // 第1次成长 → 6岁（婴儿）
         } else if (newGrowthCount >= 2) {
-          newStage = 2; // 第2次成长 → 进入阶段2（18岁成人）
-          newAge = 18;
+          newStage = 2; // 第2次成长 → 进入阶段2（6岁儿童）
+          newAge = 6;
         }
       }
 
@@ -221,15 +221,15 @@ export const useGameStore = create<GameStore>((set, get) => ({
   })),
 
   nextStage: () => set((state) => ({
-    lobster: { ...state.lobster, stage: 2, age: 18 }
+    lobster: { ...state.lobster, stage: 2, age: 6 }
   })),
 
   checkLegalBreak: () => {
     const state = get();
     const { lobster } = state;
-    // 阶段1后期（round 15-17，age 15-17）触发法人突破
+    // 阶段1后期（round 4-5，age 4-5）触发法人突破
     // 这是龙虾主动提出的，模拟"想要独立"的心理
-    if (lobster.stage === 1 && lobster.history.round >= 15 && lobster.history.round <= 17) {
+    if (lobster.stage === 1 && lobster.history.round >= 4 && lobster.history.round <= 5) {
       set({ shouldShowLegalBreak: true });
       return true;
     }
@@ -239,7 +239,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   checkForceLegal: () => {
     const state = get();
     const { lobster } = state;
-    // 阶段1结束时（18轮后）强制进入阶段2
+    // 阶段1结束时（6轮后）强制进入阶段2
     // 如果之前没有主动突破，就强制进入
     if (lobster.stage === 1 && lobster.history.round >= lobster.history.maxRounds) {
       return true;
@@ -281,7 +281,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const state = get();
     const { lobster } = state;
 
-    // 阶段1：达到最大轮次（18轮，age 17后进入阶段2）
+    // 阶段1：达到最大轮次（6轮，age 6后进入阶段2）
     if (lobster.stage === 1 && lobster.history.round >= lobster.history.maxRounds) {
       return true;
     }

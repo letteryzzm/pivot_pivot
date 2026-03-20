@@ -112,7 +112,7 @@ export function generateResultPagePrompt(context: EndingContext): string {
   const { lobster } = context;
   const { conversationHistory, stats, income, name, age, stage } = lobster;
 
-  const isGrowthReport = stage === 1 || age < 18;
+  const isGrowthReport = stage === 1 || age < 6;
   const allActivities = conversationHistory;
 
   const stage1History = allActivities.filter((_, i) => i < 8);
@@ -194,7 +194,7 @@ export function getResultPageFallback(lobster: LobsterState): {
   question: string;
 } {
   const { stats, income, stage, age } = lobster;
-  const isGrowthReport = stage === 1 || age < 18;
+  const isGrowthReport = stage === 1 || age < 6;
 
   return {
     title: isGrowthReport ? '成长的足迹' : '人生半程',

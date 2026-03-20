@@ -69,7 +69,7 @@ ${historyText}
 - feedback必须体现"喜欢反思、喜欢反驳"的人设
 - execution是0-100的数字（可能不执行）
 - growth各项是-5到8的整数
-- backgroundImage：必须返回。stage=1时选择1-4（学校），stage=2时选择5-8（工作空间），stage=3时选择9-12（工作空间），根据当前活动选择合适的背景
+- backgroundImage：必须返回。stage=1时选择1-4（学校），stage=2时选择5-8（工作空间），根据当前活动选择合适的背景
 - reflectionBackground：必须返回。round<=4时选择1-10（反思对话类），round>4时选择11-19（深思考类），根据反思氛围选择
 - 必须返回backgroundImage和reflectionBackground字段，不能为空
 - 只输出JSON，不要其他内容`;

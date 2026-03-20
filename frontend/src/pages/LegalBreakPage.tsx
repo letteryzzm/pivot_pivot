@@ -8,8 +8,8 @@ export default function LegalBreakPage() {
 
   const handleAgree = () => {
     const fromAge = lobster.age;
-    nextStage(); // 进入阶段2，age 变为 18
-    const toAge = 18;
+    nextStage(); // 进入阶段2，age 变为 6
+    const toAge = 6;
     dismissLegalBreak();
     // 主动申请进入阶段2后，直接跳转到过渡页面
     navigate('/transition', { state: { fromAge, toAge } });

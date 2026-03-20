@@ -90,17 +90,33 @@ export default function ActivityTransitionPage() {
     return { action: 'run' as const, frame: frameTick - 3 };
   }, [frameTick]);
 
-  // 计算位置 - 从左走到右
+  // 随机轨迹参数 - 只在组件挂载时计算一次
+  const trajectory = useMemo(() => {
+    const baseY = 65 + Math.random() * 10; // 65-75% 高度
+    const curveOffset = (Math.random() - 0.5) * 8; // -4% 到 +4% 的曲线偏移
+    const midPointY = baseY + curveOffset;
+    return { baseY, midPointY };
+  }, []);
+
+  // 计算位置 - 从左走到右，带曲线
   const { x, y } = useMemo(() => {
     const startX = 10;
     const endX = 90;
-    const baseY = 65 + Math.random() * 10; // 65-75% 高度
 
     const currentX = startX + (endX - startX) * progress;
-    const currentY = baseY;
+
+    // 使用二次贝塞尔曲线：先上升/下降再回到 baseY
+    let currentY: number;
+    if (progress < 0.5) {
+      // 前半段：从 baseY 过渡到 midPointY
+      currentY = trajectory.baseY + (trajectory.midPointY - trajectory.baseY) * (progress * 2);
+    } else {
+      // 后半段：从 midPointY 回到 baseY
+      currentY = trajectory.midPointY + (trajectory.baseY - trajectory.midPointY) * ((progress - 0.5) * 2);
+    }
 
     return { x: currentX, y: currentY };
-  }, [progress]);
+  }, [progress, trajectory]);
 
   // 根据年龄确定阶段
   const currentStage = useMemo(() => {
