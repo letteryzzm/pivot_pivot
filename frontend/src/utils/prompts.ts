@@ -1,6 +1,7 @@
 export function generateFeedbackPrompt(context: {
   lobsterName: string;
   age: number;
+  stage: 1 | 2;
   activityName: string;
   activityDesc: string;
   stats: { iq: number; social: number; creativity: number; execution: number };
@@ -95,7 +96,7 @@ export function generateEndingTypePrompt(context: {
     lobsterFeedback: string;
   }>;
 }): string {
-  const { lobsterName, age, stage, stats, income, conversationHistory } = context;
+  const { lobsterName, stage, stats, income, conversationHistory } = context;
 
   const stageText = stage === 1 ? '成长期（童年）' : '赚钱期（成年）';
   const activities = conversationHistory.map(h => `${h.round}. ${h.activity}`).join('\n');

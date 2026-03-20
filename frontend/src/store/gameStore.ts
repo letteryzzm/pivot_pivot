@@ -88,6 +88,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       const prompt = generateFeedbackPrompt({
         lobsterName: lobster.name,
         age: lobster.age,
+        stage: lobster.stage,
         activityName: activity.name,
         activityDesc: activity.description,
         stats: lobster.stats,
