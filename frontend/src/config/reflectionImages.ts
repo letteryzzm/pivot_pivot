@@ -24,7 +24,7 @@ export const reflectionDeepImages = [
   { id: 16, path: '/images/背景/暖色深思背景6.png', name: '暖色深思6' },
   { id: 17, path: '/images/背景/暖色深思背景7.png', name: '暖色深思7' },
   { id: 18, path: '/images/背景/暖色深思背景8.png', name: '暖色深思8' },
-  { id: 19, path: '/images/背景/深色深思背景1.png', name: '深色深思1' },
+  { id: 19, path: '/images/背景/深色深度思考背景2.png', name: '深色深度思考2' },
 ];
 
 // 所有图片
