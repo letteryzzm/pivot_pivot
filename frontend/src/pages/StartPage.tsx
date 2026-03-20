@@ -72,9 +72,9 @@ export default function StartPage() {
         {/* 开始按钮 */}
         <button
           onClick={handleStart}
-          className="w-full h-12 bg-[#0ea5e9] text-white rounded-xl text-base font-medium"
+          className="w-full py-3 text-base font-medium text-[#18181b] drop-shadow-lg hover:drop-shadow-xl transition-all"
         >
-          开始陪伴
+          开始陪伴 →
         </button>
 
         {/* 提示文字 */}
