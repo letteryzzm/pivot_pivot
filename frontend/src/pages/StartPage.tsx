@@ -38,7 +38,7 @@ export default function StartPage() {
 
         {/* 龙虾区域 */}
         <div className="h-[120px] flex items-center justify-center">
-          <LobsterSprite age={0} action="idle" size={100} />
+          <LobsterSprite age={0} stage={1} action="idle" size={100} />
         </div>
 
         {/* 剧情文本 */}

@@ -19,8 +19,8 @@ export default function StatBar() {
   ];
 
   return (
-    <div className="absolute top-0 left-1 px-2 z-50 pt-1">
-      <div className="flex gap-2 text-[10px] font-medium">
+    <div className="absolute top-0 left-0 px-2 py-1 z-50">
+      <div className="flex gap-3 text-[11px] font-semibold">
         {stats.map((stat) => (
           <span key={stat.key} className="text-black">
             {stat.label}:{stat.value}

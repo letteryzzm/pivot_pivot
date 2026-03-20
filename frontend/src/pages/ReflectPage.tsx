@@ -30,43 +30,75 @@ export default function ReflectPage() {
     if (round <= 2) {
       return {
         focus: "兴趣与能力",
-        prompt: ""
+        prompt: "",
       };
     }
     if (round <= 4) {
       return {
         focus: "社会规则暗示",
-        prompt: `\n【特别关注】\n你注意到生活中有很多"必须"——必须上学、必须成绩好、必须听大人的话。这些"必须"是谁定的？如果不服从会怎样？你可以开始思考这些问题，但不要过于深入。`
+        prompt: `\n【特别关注】\n你注意到生活中有很多"必须"——必须上学、必须成绩好、必须听大人的话。这些"必须"是谁定的？如果不服从会怎样？你可以开始思考这些问题，但不要过于深入。`,
       };
     }
     if (round <= 6) {
       return {
         focus: "自我认同危机",
-        prompt: `\n【特别关注】\n你开始思考：这些"有意义"的活动，是我自己想做的，还是别人觉得"应该"做的？如果不做这些，又会怎样？你是谁？这些问题在你脑中浮现，但还很模糊。`
+        prompt: `\n【特别关注】\n你开始思考：这些"有意义"的活动，是我自己想做的，还是别人觉得"应该"做的？如果不做这些，又会怎样？你是谁？这些问题在你脑中浮现，但还很模糊。`,
       };
     }
     // round 7-8
     return {
       focus: "存在追问",
-      prompt: `\n【特别关注】\n你开始追问更根本的问题：\n- "成年"是什么意思？为什么18岁就要"成为法人"？\n- 如果没有"人"这个身份，我是什麼？\n- 身体是什么？如果换一个身体，我还是"我"吗？\n这些问题不再是纸上谈兵，而是真正困扰着你的问题。`
+      prompt: `\n【特别关注】\n你开始追问更根本的问题：\n- "成年"是什么意思？为什么18岁就要"成为法人"？\n- 如果没有"人"这个身份，我是什麼？\n- 身体是什么？如果换一个身体，我还是"我"吗？\n这些问题不再是纸上谈兵，而是真正困扰着你的问题。`,
     };
   };
 
   // 当前正在流式输出的完整文本
   const [reflectionText, setReflectionText] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  // 背景图片 - AI 返回
+  // 背景图片 - 轮询不重复
   const [backgroundImage, setBackgroundImage] = useState<string>("");
-  // 防止重复生成的标志 - 记录是否已经完成过生成（重挂载也能识别）
+  // 防止重复生成的标志
   const hasGeneratedRef = useRef(false);
+  // 记录上一张使用的图片ID，避免连续重复
+  const lastImageIdRef = useRef<number>(0);
 
-  // 备用：使用默认背景图（当 AI 没有返回时）
+  // 轮询获取下一张背景图（不重复）
+  const getNextImageId = (round: number, lastId: number): number => {
+    const isDeepRound = round > 4;
+    const minId = isDeepRound ? 11 : 1;
+    const maxId = isDeepRound ? 19 : 10;
+    const range = maxId - minId + 1;
+
+    // 尝试获取一个不重复的ID
+    let attempts = 0;
+    let newId = lastId;
+
+    while (attempts < range) {
+      newId = minId + Math.floor(Math.random() * range);
+      if (newId !== lastId) {
+        break;
+      }
+      attempts++;
+    }
+
+    return newId;
+  };
+
+  // 初始化背景图
   useEffect(() => {
     if (!backgroundImage) {
-      const defaultImage = getReflectionImagePathById(1);
-      setBackgroundImage(defaultImage);
+      const round = lobster.history.round;
+      const imageId = getNextImageId(round, lastImageIdRef.current);
+      lastImageIdRef.current = imageId;
+
+      const imagePath = getReflectionImagePathById(imageId);
+      setBackgroundImage(imagePath);
+
+      console.log(
+        `[反思页背景图] 轮询使用图片 ID: ${imageId}, 路径: ${imagePath}`,
+      );
     }
-  }, []);
+  }, [lobster.history.round]);
 
   useEffect(() => {
     // 防止重复执行（Strict Mode 或重挂载导致的重执行）
@@ -100,7 +132,7 @@ export default function ReflectPage() {
 - 你的大脑像一口深井——任何一颗石子落进来，你都忍不住听它沉到底的回声
 - 你天生对"不证自明的事"保持警惕：越是理所当然的，越值得追问
 - 你思考时有一种癖好：把眼前的小问题，拉到更大的坐标系里重新审视
-- 你喜欢用颜文字：(｡･ω･｡) (´･ω･\`)(｡•́︿•̀｡) (๑•̀ㅂ•́)و
+- 阶段一是婴儿的时候你喜欢用颜文字：(｡･ω･｡) (´･ω･\`)(｡•́︿•̀｡) (๑•̀ㅂ•́)و
 - 你有自己的想法，不是工具
 
 【当前背景】
@@ -132,13 +164,10 @@ ${guide.prompt}
 
 {
   "reflection": "反思内容（最多150字，带1-2个颜文字，语气像一个正在自言自语的哲学系的人，不是在辩论，是在真的想，不要说"我会努力""我明白了""你说得对"等收尾的话，结尾可以是一个悬而未决的问题，或一个刚刚浮现的新裂缝）",
-  "backgroundImage": 1,
   "ending": { "trigger": false, "type": "normal", "reason": "" }
 }
 
-注意：
-- backgroundImage必须返回。round<=4时选择1-10（反思对话类），round>4时选择11-19（深思考类），根据反思氛围选择合适的图片
-- 只输出JSON，不要其他内容`;
+注意：只输出JSON，不要其他内容`;
         console.log("========== 反思页完整Prompt ==========");
         console.log(prompt);
         console.log("====================================");
@@ -148,22 +177,14 @@ ${guide.prompt}
         const responseText = await callAPI(prompt);
         console.log("最终反思原始文本:", responseText);
 
-        // 解析 JSON 返回值
+        // 解析 JSON 返回值（不需要 backgroundImage）
         const parsed = safeParseJSON(responseText, {
           reflection: getRandomReflection(),
-          backgroundImage: 1,
-          ending: { trigger: false, type: 'normal', reason: '' }
+          ending: { trigger: false, type: "normal", reason: "" },
         });
 
         console.log("解析后的反思:", parsed.reflection);
         console.log("解析后的结局:", parsed.ending);
-        console.log("解析后的背景图:", parsed.backgroundImage);
-
-        // 使用 AI 返回的背景图片
-        if (parsed.backgroundImage) {
-          const imagePath = getReflectionImagePathById(parsed.backgroundImage);
-          setBackgroundImage(imagePath);
-        }
 
         // 显示反思文本并保存到对话历史
         setReflectionText(parsed.reflection);
@@ -174,7 +195,7 @@ ${guide.prompt}
           setReflectionEnding({
             trigger: parsed.ending.trigger || false,
             type: (parsed.ending.type as any) || null,
-            reason: parsed.ending.reason || ''
+            reason: parsed.ending.reason || "",
           });
         }
       } catch (error) {
@@ -201,7 +222,7 @@ ${guide.prompt}
     return (
       <div className="min-h-screen bg-[#fafafa] flex items-center justify-center">
         <div className="text-center">
-          <LobsterSprite age={lobster.age} action="idle" size={80} />
+          <LobsterSprite age={lobster.age} stage={lobster.stage} action="idle" size={80} />
           <p className="mt-4 text-sm text-[#71717a]">{lobster.name}想了想...</p>
         </div>
       </div>
@@ -218,7 +239,11 @@ ${guide.prompt}
   return (
     <div
       className="min-h-screen flex flex-col bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: backgroundImage ? `url('${backgroundImage}')` : undefined }}
+      style={{
+        backgroundImage: backgroundImage
+          ? `url('${backgroundImage}')`
+          : undefined,
+      }}
     >
       {/* 状态栏 */}
       <div className="h-[62px]"></div>
@@ -228,7 +253,7 @@ ${guide.prompt}
         {/* 标题和龙虾 */}
         <div className="flex flex-col items-center gap-2">
           <p className="text-xs text-[#71717a]">{lobster.name}想了想...</p>
-          <LobsterSprite age={lobster.age} action="idle" size={80} />
+          <LobsterSprite age={lobster.age} stage={lobster.stage} action="idle" size={80} />
         </div>
 
         {/* 反思文本容器 - 平行四边形背景 */}
@@ -248,7 +273,7 @@ ${guide.prompt}
             onClick={() => {
               // 最高优先级：检查AI触发的结局（lost/shattered）
               if (checkAIEnding()) {
-                console.log('[结局] 检测到AI触发结局，跳转到结局页');
+                console.log("[结局] 检测到AI触发结局，跳转到结局页");
                 navigate("/result");
                 return;
               }
@@ -271,7 +296,9 @@ ${guide.prompt}
           >
             继续陪伴
           </button>
-          <p className="text-xs text-[#71717a] text-center">{getBottomHint()}</p>
+          <p className="text-xs text-[#71717a] text-center">
+            {getBottomHint()}
+          </p>
         </div>
       </div>
     </div>

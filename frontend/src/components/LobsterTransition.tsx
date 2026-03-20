@@ -1,23 +1,33 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useGameStore } from '../store/gameStore';
-import { getStageByAge } from '../config/transitionConfig';
 import {
   animationConfigs,
-  paramIdToConfig,
-  activityCategoryMap,
 } from '../config/animationConfig';
+import type { Activity } from '../types/game';
+
+// 婴儿阶段所有配置key
+const babyConfigs = [
+  '婴儿_idle1_学校和街区背景_1',
+  '婴儿_idle1_学校和街区背景_2',
+  '婴儿_idle1_学校和街区背景_3',
+  '婴儿_idle1_学校和街区背景_4',
+  '婴儿_idle1_图书馆场景_1',
+];
+
+// 商务阶段所有配置key
+const businessConfigs = [
+  '商务_idle1_虚拟工作空间_1',
+  '商务_idle1_虚拟工作空间_2',
+  '商务_idle1_虚拟工作空间_3',
+  '商务_idle1_虚拟工作空间_4',
+];
 
 interface LocationState {
-  activity?: {
-    id: string;
-    name: string;
-  };
+  activity?: Activity;
   // 成长过渡专用
   fromAge?: number;
   toAge?: number;
-  // AI返回的动画参数ID
-  animationId?: string;
 }
 
 export default function LobsterTransition() {
@@ -55,63 +65,37 @@ export default function LobsterTransition() {
     });
   }, [activity, isGrowthTransition]);
 
-  // 当前阶段
-  const currentStage = getStageByAge(lobster.age);
+  // 当前阶段 - 直接用 stage 判断，stage=1是婴儿，stage=2是商务
+  const currentStage = lobster.stage === 1 ? '婴儿' : '商务';
 
   // 动画时长 7秒
   const duration = 7000;
 
-  // 初始化动画配置
+  // 初始化动画配置 - 随机选择背景配置
   useEffect(() => {
-    // 优先使用AI返回的animationId
-    if (state?.animationId) {
-      const configKey = paramIdToConfig[state.animationId];
-      if (configKey && animationConfigs[configKey]) {
-        setConfig({
-          background: animationConfigs[configKey].background,
-          keypoints: animationConfigs[configKey].keypoints,
-        });
-        return;
-      }
+    // 根据阶段获取对应的配置列表
+    const configList = currentStage === '婴儿' ? babyConfigs : businessConfigs;
+    // 随机选择一个配置
+    const randomConfigKey = configList[Math.floor(Math.random() * configList.length)];
+    const selectedConfig = animationConfigs[randomConfigKey];
+
+    if (selectedConfig) {
+      setConfig({
+        background: selectedConfig.background,
+        keypoints: selectedConfig.keypoints,
+      });
+    } else {
+      // 默认配置
+      setConfig({
+        background: '/images/背景/学校和街区背景_1.png',
+        keypoints: [
+          { x: 10, y: 70 },
+          { x: 50, y: 65 },
+          { x: 90, y: 70 },
+        ],
+      });
     }
-
-    // 活动过渡：根据活动类型选择动画
-    if (activity) {
-      const category = activityCategoryMap[activity.id] || 'mental';
-      const prefix = currentStage === '婴儿' ? '婴儿' : '商务';
-      const configKey = prefix === '婴儿'
-        ? (category === 'social' ? '婴儿_idle1_图书馆场景_1' : '婴儿_idle1_学校和街区背景_1')
-        : (category === 'social' ? '商务_idle1_虚拟工作空间_3' : '商务_idle1_虚拟工作空间_2');
-
-      if (animationConfigs[configKey]) {
-        setConfig({
-          background: animationConfigs[configKey].background,
-          keypoints: animationConfigs[configKey].keypoints,
-        });
-      } else {
-        // 默认配置
-        setConfig({
-          background: '/images/背景/学校和街区背景_1.png',
-          keypoints: [
-            { x: 10, y: 70 },
-            { x: 50, y: 65 },
-            { x: 90, y: 70 },
-          ],
-        });
-      }
-      return;
-    }
-
-    // 成长过渡：使用默认配置
-    setConfig({
-      background: '/images/背景/学校和街区背景_1.png',
-      keypoints: [
-        { x: 10, y: 70 },
-        { x: 50, y: 65 },
-        { x: 90, y: 70 },
-      ],
-    });
-  }, [state?.animationId, activity, currentStage]);
+  }, [currentStage]);
 
   // 帧动画循环：每个动作完整播放2帧后再切换
   useEffect(() => {
@@ -146,7 +130,7 @@ export default function LobsterTransition() {
   }, [navigate, activity, isGrowthTransition]);
 
   // 根据帧tick确定当前动作和帧
-  // X轴移动用奔跑，Y轴移动用正面走
+  // 每两个tick为一个动作，frame在1-2之间循环
   const { action, frame } = useMemo(() => {
     if (!config) return { action: 'idle' as const, frame: 1 };
 
@@ -155,15 +139,16 @@ export default function LobsterTransition() {
     const yDiff = Math.abs(kp[2].y - kp[0].y);
 
     // X轴变化大用run，Y轴变化大用walk，变化都小用idle
-    // 帧数只在1-2之间循环
+    // 每两个tick循环一次frame（1→2→1→2）
     if (xDiff > 30) {
-      if (frameTick < 2) return { action: 'walk' as const, frame: frameTick + 1 };
-      return { action: 'run' as const, frame: frameTick <= 3 ? 2 : 1 };
+      if (frameTick < 2) return { action: 'walk' as const, frame: (frameTick % 2) + 1 };
+      if (frameTick < 4) return { action: 'run' as const, frame: (frameTick % 2) + 1 };
+      return { action: 'run' as const, frame: (frameTick % 2) + 1 };
     } else if (yDiff > 15) {
-      if (frameTick < 2) return { action: 'idle' as const, frame: frameTick + 1 };
-      return { action: 'walk' as const, frame: frameTick <= 3 ? 2 : 1 };
+      if (frameTick < 2) return { action: 'idle' as const, frame: (frameTick % 2) + 1 };
+      return { action: 'walk' as const, frame: (frameTick % 2) + 1 };
     }
-    return { action: 'idle' as const, frame: frameTick < 2 ? 1 : 2 };
+    return { action: 'idle' as const, frame: (frameTick % 2) + 1 };
   }, [frameTick, config]);
 
   // 根据进度计算当前位置（使用3个关键点插值）

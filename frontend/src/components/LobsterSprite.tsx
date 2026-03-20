@@ -3,11 +3,12 @@ import { getStageByAge } from '../config/transitionConfig';
 
 interface LobsterSpriteProps {
   age: number;
+  stage: 1 | 2;
   action?: 'idle' | 'walk' | 'run';
   size?: number;
 }
 
-export default function LobsterSprite({ age, action = 'idle', size = 80 }: LobsterSpriteProps) {
+export default function LobsterSprite({ age, stage, action = 'idle', size = 80 }: LobsterSpriteProps) {
   const [frame, setFrame] = useState(1);
 
   // 根据动作和阶段映射文件名
@@ -19,9 +20,9 @@ export default function LobsterSprite({ age, action = 'idle', size = 80 }: Lobst
     return actionNameMap[stage]?.[action] || '待机';
   };
 
-  const stage = getStageByAge(age);
-  const actionName = getActionName(stage, action);
-  const imagePath = `/images/claw/${stage}${actionName}${frame}.png`;
+  const lobsterStage = getStageByAge(age, stage);
+  const actionName = getActionName(lobsterStage, action);
+  const imagePath = `/images/claw/${lobsterStage}${actionName}${frame}.png`;
 
   // 两帧动画切换
   useEffect(() => {
@@ -34,7 +35,7 @@ export default function LobsterSprite({ age, action = 'idle', size = 80 }: Lobst
   return (
     <img
       src={imagePath}
-      alt={`${stage}龙虾`}
+      alt={`${lobsterStage}龙虾`}
       style={{ width: size, height: size }}
       className="object-contain"
     />

@@ -82,8 +82,8 @@ export const stageOrder: StageType[] = [
   "商务",
 ];
 
-// 根据年龄获取阶段（2个阶段）
-export function getStageByAge(age: number): StageType {
-  if (age <= 17) return "婴儿";
+// 根据阶段获取显示用的阶段类型
+export function getStageByAge(_age: number, stage: 1 | 2): StageType {
+  if (stage === 1) return "婴儿";
   return "商务";
 }
