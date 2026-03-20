@@ -100,7 +100,7 @@ export default function ResultPage() {
               ? `在第 ${lobster.history.round} 轮，它意识到了...`
               : (isGrowthReport
                   ? `一起度过了 ${lobster.history.round} 个成长节点`
-                  : `共同经历 ${lobster.age} 年的人生旅程`)
+                  : `共同经历 ${lobster.history.round} 轮选择的人生旅程`)
             }
           </p>
           {isAIEnding && reflectionEnding?.reason && (
@@ -113,7 +113,7 @@ export default function ResultPage() {
 
         {/* 龙虾区域 */}
         <div className="flex flex-col items-center gap-2">
-          <LobsterSprite age={lobster.age} action="idle" size={120} />
+          <LobsterSprite age={lobster.age} stage={lobster.stage} action="idle" size={120} />
           <div className="px-3 py-1.5 bg-[#10b981]/80 backdrop-blur-sm rounded-full">
             <span className="text-sm text-white font-medium">
               {isAILoading ? (isAIEnding ? ending.title : '思考中...') : (aiContent?.title || ending.title)}

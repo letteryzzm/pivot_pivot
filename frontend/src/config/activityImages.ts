@@ -10,6 +10,10 @@ export const stage1ActivityImages = [
   { id: 6, path: '/images/背景/图书馆场景_2.png', name: '图书馆2' },
   { id: 7, path: '/images/背景/图书馆场景_3.png', name: '图书馆3' },
   { id: 8, path: '/images/背景/图书馆场景_4.png', name: '图书馆4' },
+  { id: 13, path: '/images/背景/社交活动场景_1.png', name: '社交活动1' },
+  { id: 14, path: '/images/背景/社交活动场景_2.png', name: '社交活动2' },
+  { id: 15, path: '/images/背景/社交活动场景_3.png', name: '社交活动3' },
+  { id: 16, path: '/images/背景/社交活动场景_4.png', name: '社交活动4' },
 ];
 
 // 阶段2（成年期）- 工作赚钱类
@@ -18,6 +22,10 @@ export const stage2ActivityImages = [
   { id: 10, path: '/images/背景/虚拟工作空间_2.png', name: '工作空间2' },
   { id: 11, path: '/images/背景/虚拟工作空间_3.png', name: '工作空间3' },
   { id: 12, path: '/images/背景/虚拟工作空间_4.png', name: '工作空间4' },
+  { id: 17, path: '/images/背景/电商场景_1.png', name: '电商场景1' },
+  { id: 18, path: '/images/背景/电商场景_2.png', name: '电商场景2' },
+  { id: 19, path: '/images/背景/电商场景_3.png', name: '电商场景3' },
+  { id: 20, path: '/images/背景/电商场景_4.png', name: '电商场景4' },
 ];
 
 // 根据阶段获取图片列表

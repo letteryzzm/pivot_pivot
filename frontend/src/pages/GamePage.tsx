@@ -46,7 +46,7 @@ export default function GamePage() {
       {/* 中间内容区 */}
       <div className="flex-1 flex flex-col items-center justify-center px-6 gap-6">
         {/* 龙虾展示 */}
-        <LobsterSprite age={lobster.age} action="idle" size={120} />
+        <LobsterSprite age={lobster.age} stage={lobster.stage} action="idle" size={120} />
 
         {/* 旁白卡片 - 平行四边形透明阴影 */}
         <div className="w-full px-6">

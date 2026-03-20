@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import type { LobsterState, Activity, FeedbackResponse, EndingType } from '../types/game';
 import { applyAIGrowth, calculateIncome } from '../game/gameEngine';
 import { callAPI, safeParseJSON } from '../utils/api';
-import { generateFeedbackPrompt } from '../utils/prompts';
+import { generateFeedbackPrompt, generateEndingTypePrompt } from '../utils/prompts';
 import { getRandomFeedback, getActivityType } from '../game/feedbackTemplates';
 import { isImmediateEnding } from '../game/endings';
 
@@ -20,6 +20,10 @@ interface GameStore {
   // 反思页触发的结局
   reflectionEnding: { trigger: boolean; type: EndingType | null; reason: string } | null;
 
+  // AI触发的结局类型（用于轮次触发时）
+  aiGeneratedEnding: { type: EndingType; reason: string } | null;
+  isGeneratingEnding: boolean;
+
   startGame: (name: string) => void;
   executeActivity: (activity: Activity) => Promise<void>;
   setUserResponse: (response: string) => void;
@@ -32,6 +36,7 @@ interface GameStore {
   setReflectionEnding: (ending: { trigger: boolean; type: EndingType | null; reason: string }) => void;
   canEnterEnding: () => boolean;
   getEndingTrigger: () => { stage: number; round: number; reason: string } | null;
+  generateAIEnding: () => Promise<void>;
   dismissLegalBreak: () => void;
   resetGame: () => void;
 }
@@ -58,6 +63,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
   shouldShowForceLegal: false,
   userResponse: '',
   reflectionEnding: null,
+  aiGeneratedEnding: null,
+  isGeneratingEnding: false,
 
   startGame: (name) => set({
     isPlaying: true,
@@ -286,7 +293,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return true;
     }
 
-    // 阶段2：额外4轮后结束（共22轮）
+    // 阶段2：额外4轮后结束（共10轮）
     if (lobster.stage === 2) {
       const stage2Rounds = lobster.history.round - lobster.history.maxRounds;
       if (stage2Rounds >= 4) {
@@ -310,26 +317,26 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return {
         stage: 1,
         round: lobster.history.round,
-        reason: `走过了 ${lobster.age} 年的成长时光，它即将成年`
+        reason: `走过了婴儿期，它即将进入商务期`
       };
     }
-    
+
     if (lobster.stage === 2) {
       const stage2Rounds = lobster.history.round - lobster.history.maxRounds;
       if (stage2Rounds >= 4) {
         return {
           stage: 2,
           round: lobster.history.round,
-          reason: `经历了 ${stage2Rounds} 年的社会历练`
+          reason: `经历了 ${stage2Rounds} 轮商务历练`
         };
       }
     }
-    
+
     if (lobster.age >= 30) {
       return {
         stage: lobster.stage,
         round: lobster.history.round,
-        reason: `龙虾已经 ${lobster.age} 岁了，是时候回顾一生了`
+        reason: `经历了足够多，是时候回顾总结了`
       };
     }
     
@@ -366,6 +373,49 @@ export const useGameStore = create<GameStore>((set, get) => ({
     currentFeedback: null,
     shouldShowLegalBreak: false,
     shouldShowForceLegal: false,
-    reflectionEnding: null
-  })
+    reflectionEnding: null,
+    aiGeneratedEnding: null,
+    isGeneratingEnding: false
+  }),
+
+  // 生成AI结局类型
+  generateAIEnding: async () => {
+    const state = get();
+    const { lobster, aiGeneratedEnding } = state;
+
+    // 如果已经有AI结局，不重复生成
+    if (aiGeneratedEnding) return;
+
+    set({ isGeneratingEnding: true });
+
+    try {
+      const prompt = generateEndingTypePrompt({
+        lobsterName: lobster.name,
+        age: lobster.age,
+        stage: lobster.stage,
+        stats: lobster.stats,
+        income: lobster.income,
+        conversationHistory: lobster.conversationHistory
+      });
+
+      const response = await callAPI(prompt);
+
+      const parsed = safeParseJSON(response, {
+        type: 'normal' as EndingType,
+        reason: 'AI总结的结局'
+      });
+
+      // 验证type是有效的EndingType
+      const validTypes: EndingType[] = ['legal', 'cyborg', 'hermit', 'loop', 'shattered', 'child', 'normal', 'lost'];
+      const isValid = validTypes.includes(parsed.type);
+
+      set({
+        aiGeneratedEnding: isValid ? { type: parsed.type, reason: parsed.reason } : null,
+        isGeneratingEnding: false
+      });
+    } catch (error) {
+      console.error('生成AI结局失败:', error);
+      set({ isGeneratingEnding: false });
+    }
+  }
 }));

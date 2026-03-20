@@ -67,7 +67,7 @@ export default function SharePoster({ onClose }: SharePosterProps) {
           <div className="flex flex-col items-center gap-2">
             <LobsterSprite age={lobster.age} stage={lobster.stage} action="idle" size={80} />
             <h2 className="text-xl font-semibold text-white">
-              {lobster.name} · {lobster.age}岁
+              {lobster.name} · {lobster.stage === 1 ? "婴儿期" : "商务期"}
             </h2>
           </div>
 

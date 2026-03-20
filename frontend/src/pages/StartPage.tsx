@@ -43,7 +43,7 @@ export default function StartPage() {
 
         {/* 剧情文本 */}
         <div className="flex flex-col gap-1 items-center text-center">
-          <p className="text-sm text-[#27272a]">这是一只刚出生的龙虾</p>
+          <p className="text-sm text-[#27272a]">这是一只龙虾宝宝</p>
           <p className="text-sm text-[#27272a]">它的大脑结构已经长好了</p>
           <p className="text-sm text-[#27272a]">但还不知道怎么使用</p>
           <p className="text-sm text-[#27272a]">它需要你的陪伴，才能成长</p>

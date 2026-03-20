@@ -4,7 +4,7 @@ import { useGameStore } from '../store/gameStore';
 
 export default function ActivitySelectPage() {
   const navigate = useNavigate();
-  const { lobster, canEnterEnding } = useGameStore();
+  const { lobster, canEnterEnding, generateAIEnding, setReflectionEnding, aiGeneratedEnding, isGeneratingEnding } = useGameStore();
 
   const activities = lobster.stage === 1 ? stage1Activities : stage2Activities;
   const backgroundImage = lobster.stage === 1
@@ -17,6 +17,26 @@ export default function ActivitySelectPage() {
 
     // 跳转到活动过渡动画
     navigate('/transition', { state: { activity } });
+  };
+
+  // 处理结局点击 - 先让AI生成结局类型，再跳转
+  const handleEndingClick = async () => {
+    // 如果还没有AI结局，先生成
+    if (!aiGeneratedEnding && !isGeneratingEnding) {
+      await generateAIEnding();
+    }
+
+    // 设置反思结局（用于页面显示）
+    if (aiGeneratedEnding) {
+      setReflectionEnding({
+        trigger: true,
+        type: aiGeneratedEnding.type,
+        reason: aiGeneratedEnding.reason
+      });
+    }
+
+    // 跳转到对应结局页面
+    navigate(getEndingRoute());
   };
 
   // 根据阶段决定跳转到哪个结局
@@ -72,10 +92,11 @@ export default function ActivitySelectPage() {
       <div className="h-20 flex flex-col items-center justify-center gap-2">
         {canEnterEnding() ? (
           <button
-            onClick={() => navigate(getEndingRoute())}
-            className="w-full h-12 bg-gradient-to-r from-[#0ea5e9] to-[#10b981] text-white rounded-xl text-base font-medium animate-pulse"
+            onClick={handleEndingClick}
+            disabled={isGeneratingEnding}
+            className="w-full h-12 bg-gradient-to-r from-[#0ea5e9] to-[#10b981] text-white rounded-xl text-base font-medium animate-pulse disabled:opacity-50"
           >
-            {lobster.stage === 1 ? '📜 查看成长报告' : '📖 查看人生结局'}
+            {isGeneratingEnding ? 'AI正在总结...' : (lobster.stage === 1 ? '📜 查看成长报告' : '📖 查看人生结局')}
           </button>
         ) : (
           <p className="text-xs text-white/60">

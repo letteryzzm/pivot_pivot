@@ -10,7 +10,7 @@ interface EndingContext {
 // 生成结局页面的prompt
 export function generateEndingPrompt(context: EndingContext): string {
   const { lobster } = context;
-  const { conversationHistory, stats, income, name, age } = lobster;
+  const { conversationHistory, stats, income, name, stage } = lobster;
 
   // 从对话历史中获取活动信息
   const allActivities = conversationHistory;
@@ -18,8 +18,9 @@ export function generateEndingPrompt(context: EndingContext): string {
   // 阶段1和阶段2的划分
   const stage1History = allActivities.filter((_, i) => i < 8);
   const stage2History = allActivities.filter((_, i) => i >= 8);
+  const stageText = stage === 1 ? "婴儿期" : "商务期";
 
-  const prompt = `你是${name}，${age}岁。你的人生刚刚结束。
+  const prompt = `你是${name}，现在是${stageText}。你的人生刚刚结束。
 
 【核心人设】
 - 你是一个"人"，不是动物，只是用龙虾作为虚拟形象
@@ -110,15 +111,16 @@ export function parseEndingResponse(text: string): {
 // 生成 ResultPage 简短内容的 prompt
 export function generateResultPagePrompt(context: EndingContext): string {
   const { lobster } = context;
-  const { conversationHistory, stats, income, name, age, stage } = lobster;
+  const { conversationHistory, stats, income, name, stage } = lobster;
 
-  const isGrowthReport = stage === 1 || age < 6;
+  const isGrowthReport = stage === 1;
   const allActivities = conversationHistory;
 
   const stage1History = allActivities.filter((_, i) => i < 8);
   const stage2History = allActivities.filter((_, i) => i >= 8);
+  const stageText = stage === 1 ? "婴儿期" : "商务期";
 
-  const prompt = `你是${name}，${age}岁。你刚刚结束了人生的一个阶段。
+  const prompt = `你是${name}，现在是${stageText}。你刚刚结束了这个阶段。
 
 【核心人设】
 - 你是一个"人"，不是动物，只是用龙虾作为虚拟形象
@@ -193,14 +195,15 @@ export function getResultPageFallback(lobster: LobsterState): {
   feeling: string;
   question: string;
 } {
-  const { stats, income, stage, age } = lobster;
-  const isGrowthReport = stage === 1 || age < 6;
+  const { stats, income, stage, history } = lobster;
+  const isGrowthReport = stage === 1;
+  const roundCount = history.round;
 
   return {
     title: isGrowthReport ? '成长的足迹' : '人生半程',
     description: isGrowthReport
-      ? `从0岁到${age}岁，你陪它走过了童年。IQ${stats.iq}、社交${stats.social}、创造${stats.creativity}、执行${stats.execution}...这些数字背后是共同的回忆。`
-      : `到${age}岁，它赚了¥${income.total}。IQ${stats.iq}、社交${stats.social}、创造${stats.creativity}、执行${stats.execution}...这是属于你们的人生。`,
+      ? `一起经历了${roundCount}轮成长选择，你陪它走过了婴儿期。IQ${stats.iq}、社交${stats.social}、创造${stats.creativity}、执行${stats.execution}...这些数字背后是共同的回忆。`
+      : `经历了${roundCount}轮选择，它赚了¥${income.total}。IQ${stats.iq}、社交${stats.social}、创造${stats.creativity}、执行${stats.execution}...这是属于你们的人生。`,
     feeling: isGrowthReport
       ? '谢谢你陪它长大 (｡･ω･｡)'
       : '这一路走来，有你陪...(´･ω･`)',

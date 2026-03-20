@@ -50,7 +50,7 @@ export default function FeedbackPage() {
       <div className="h-[62px]"></div>
 
       <div className="flex flex-col items-center gap-4">
-        <LobsterSprite age={lobster.age} action="idle" size={80} />
+        <LobsterSprite age={lobster.age} stage={lobster.stage} action="idle" size={80} />
         <div className="w-full px-6">
           <div className="bg-white/25 -skew-x-6 p-6 flex flex-col gap-3 drop-shadow-xl">
             <TypewriterText

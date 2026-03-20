@@ -48,7 +48,7 @@ export default function ReflectPage() {
     // round 7-8
     return {
       focus: "存在追问",
-      prompt: `\n【特别关注】\n你开始追问更根本的问题：\n- "成年"是什么意思？为什么18岁就要"成为法人"？\n- 如果没有"人"这个身份，我是什麼？\n- 身体是什么？如果换一个身体，我还是"我"吗？\n这些问题不再是纸上谈兵，而是真正困扰着你的问题。`,
+      prompt: `\n【特别关注】\n你开始追问更根本的问题：\n- "成年"是什么意思？为什么到了一定时机就要"成为法人"？\n- 如果没有"人"这个身份，我是什麼？\n- 身体是什么？如果换一个身体，我还是"我"吗？\n这些问题不再是纸上谈兵，而是真正困扰着你的问题。`,
     };
   };
 
@@ -125,7 +125,8 @@ export default function ReflectPage() {
         const guide = getReflectionGuide(lobster.history.round);
         console.log("当前反思主题:", guide.focus);
 
-        const prompt = `你是${lobster.name}，${lobster.age}岁。
+        const stageText = lobster.stage === 1 ? "婴儿期" : "商务期";
+        const prompt = `你是${lobster.name}，现在是${stageText}。
 
 【核心人设】
 - 你是一个"人"，不是动物，只是用龙虾作为虚拟形象
@@ -278,7 +279,7 @@ ${guide.prompt}
                 return;
               }
 
-              // 检查24岁强制法人
+              // 检查强制法人
               if (checkForceLegal()) {
                 navigate("/force-legal");
                 return;

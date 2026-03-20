@@ -23,7 +23,8 @@ export function generateFeedbackPrompt(context: {
           .join("\n")
       : "这是第一次活动";
 
-  const prompt = `你是${context.lobsterName}，${context.age}岁。
+  const stageText = context.stage === 1 ? "婴儿期" : "商务期";
+  const prompt = `你是${context.lobsterName}，现在是${stageText}。
 
 【核心人设】
 - 你是一个"人"，不是动物，只是用龙虾作为虚拟形象
@@ -77,6 +78,65 @@ ${historyText}
   console.log("========== 完整Prompt ==========");
   console.log(prompt);
   console.log("================================");
+
+  return prompt;
+}
+
+// 生成结局类型的Prompt
+export function generateEndingTypePrompt(context: {
+  lobsterName: string;
+  age: number;
+  stage: 1 | 2;
+  stats: { iq: number; social: number; creativity: number; execution: number };
+  income: { total: number };
+  conversationHistory: Array<{
+    round: number;
+    activity: string;
+    lobsterFeedback: string;
+  }>;
+}): string {
+  const { lobsterName, age, stage, stats, income, conversationHistory } = context;
+
+  const stageText = stage === 1 ? '成长期（童年）' : '赚钱期（成年）';
+  const activities = conversationHistory.map(h => `${h.round}. ${h.activity}`).join('\n');
+
+  const prompt = `你是${lobsterName}，现在是${stageText}。你即将结束这个阶段。
+
+【你的经历】
+${activities}
+
+【你的能力值】
+学习力：${stats.iq} | 社交力：${stats.social} | 创造力：${stats.creativity} | 执行力：${stats.execution}
+
+【你的收入】
+总收入：¥${income.total}
+
+【输出要求 - 必须JSON格式】
+
+根据以上信息，为你的人生选择一个结局类型。只输出JSON：
+
+{
+  "type": "normal",
+  "reason": "选择这个结局的简短理由（20-40字）"
+}
+
+结局类型选项：
+- legal：法人结局（成为老板/创业）
+- cyborg：赛博飞升（追求极致能力/技术）
+- hermit：山林隐居（追求精神自由/归隐）
+- loop：永恒轮回（重复相同的人生）
+- shattered：破碎/存在危机（自我认同问题）
+- child：赤子之心（拒绝成长/保持纯真）
+- normal：正常/平衡（普通但满足）
+- lost：迷茫/普通（不知道要什么）
+
+注意：
+- 根据你的经历和数值选择最合适的类型
+- 只输出JSON，不要其他内容`;
+
+  console.log("========== 结局类型Prompt ==========");
+  console.log(prompt);
+  console.log("====================================");
 
   return prompt;
 }

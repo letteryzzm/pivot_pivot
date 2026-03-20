@@ -153,7 +153,7 @@ export default function FinalEndingPage() {
         className="min-h-screen flex flex-col items-center justify-center gap-6 p-6 bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: "url('/images/背景/欢迎屏幕背景_4.png')" }}
       >
-        <LobsterSprite age={lobster.age} action="idle" size={100} />
+        <LobsterSprite age={lobster.age} stage={lobster.stage} action="idle" size={100} />
         <p className="text-sm text-white/80 animate-pulse">
           {lobster.name}正在回忆这一生...
         </p>
@@ -168,9 +168,9 @@ export default function FinalEndingPage() {
     >
       {/* 顶部龙虾 */}
       <div className="flex flex-col items-center gap-2">
-        <LobsterSprite age={lobster.age} action="idle" size={80} />
+        <LobsterSprite age={lobster.age} stage={lobster.stage} action="idle" size={80} />
         <div className="px-3 py-1.5 bg-black/30 rounded-full">
-          <span className="text-xs text-white/80">age {lobster.age}</span>
+          <span className="text-xs text-white/80">{lobster.stage === 1 ? "婴儿期" : "商务期"}</span>
         </div>
       </div>
 

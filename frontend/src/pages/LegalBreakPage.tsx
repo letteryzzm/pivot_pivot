@@ -7,12 +7,10 @@ export default function LegalBreakPage() {
   const { nextStage, dismissLegalBreak, lobster } = useGameStore();
 
   const handleAgree = () => {
-    const fromAge = lobster.age;
     nextStage(); // 进入阶段2，age 变为 6
-    const toAge = 6;
     dismissLegalBreak();
-    // 主动申请进入阶段2后，直接跳转到过渡页面
-    navigate('/transition', { state: { fromAge, toAge } });
+    // 主动申请进入阶段2后，直接跳转到阶段2的活动选择页
+    navigate('/select');
   };
 
   const handleThink = () => {
@@ -24,7 +22,7 @@ export default function LegalBreakPage() {
     <div className="min-h-screen bg-[#18181b] flex flex-col items-center justify-center gap-8 p-6">
       <p className="text-sm text-white/60">一个重要的决定</p>
       <div className="w-40 h-40 flex items-center justify-center">
-        <LobsterSprite age={lobster.age} action="idle" size={140} />
+        <LobsterSprite age={lobster.age} stage={lobster.stage} action="idle" size={140} />
       </div>
       <div className="w-[340px] bg-white rounded-[20px] p-6 flex flex-col gap-3">
         <p className="text-base text-[#18181b] text-center leading-relaxed">

@@ -7,24 +7,22 @@ export default function ForceLegalPage() {
   const { nextStage, lobster } = useGameStore();
 
   const handleAccept = () => {
-    const fromAge = lobster.age;
     nextStage(); // 强制进入阶段2，age 变为 6
-    const toAge = 6;
-    // 强制进入阶段2后，直接跳转到过渡页面
-    navigate('/transition', { state: { fromAge, toAge } });
+    // 强制进入阶段2后，直接跳转到阶段2的活动选择页
+    navigate('/select');
   };
 
   return (
     <div className="min-h-screen bg-[#18181b] flex flex-col items-center justify-center gap-8 p-6">
-      <p className="text-sm text-white/60">{lobster.age}岁</p>
+      <p className="text-sm text-white/60">{lobster.stage === 1 ? "婴儿期" : "商务期"}</p>
 
       <div className="w-40 h-40 flex items-center justify-center">
-        <LobsterSprite age={lobster.age} action="idle" size={140} />
+        <LobsterSprite age={lobster.age} stage={lobster.stage} action="idle" size={140} />
       </div>
 
       <div className="w-[340px] bg-white rounded-[20px] p-6 flex flex-col gap-4">
         <p className="text-base text-[#18181b] text-center leading-relaxed">
-          我{lobster.age}岁了...
+          终于到了这一天...
         </p>
         <p className="text-base text-[#18181b] text-center leading-relaxed">
           按照规定，我必须成为法人
