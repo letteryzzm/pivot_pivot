@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useGameStore } from '../store/gameStore';
 import { getActivityImagePathById } from '../config/activityImages';
@@ -11,6 +11,7 @@ export default function FeedbackPage() {
   const { lobster, currentFeedback, currentBackgroundImage, isLoading, setUserResponse, executeActivity } = useGameStore();
   const [input, setInput] = useState('');
   const [background, setBackground] = useState('');
+  const hasExecutedRef = useRef(false);
 
   const placeholders = [
     '你可以这样想，但我更建议你再深度思考一下',
@@ -29,8 +30,11 @@ export default function FeedbackPage() {
     setBackground(imagePath);
   }, [currentBackgroundImage]);
 
-  // 执行活动
+  // 执行活动 - 防止重复调用
   useEffect(() => {
+    if (hasExecutedRef.current) return;
+    hasExecutedRef.current = true;
+
     const activity = location.state?.activity;
     if (activity) {
       console.log('反馈页：收到活动', activity);
