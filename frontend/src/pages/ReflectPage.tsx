@@ -293,9 +293,9 @@ ${guide.prompt}
                 navigate("/select");
               }
             }}
-            className="w-full py-3 text-base font-medium text-[#18181b] drop-shadow-lg hover:drop-shadow-xl transition-all"
+            className="w-full py-3 bg-white/15 -skew-x-6 text-[#18181b] text-base font-medium shadow-[0_4px_16px_rgba(0,0,0,0.08)] hover:bg-white/25 transition-colors"
           >
-            继续陪伴
+            <span className="block skew-x-6">继续陪伴</span>
           </button>
           <p className="text-xs text-[#71717a] text-center">
             {getBottomHint()}
