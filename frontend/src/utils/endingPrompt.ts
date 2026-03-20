@@ -147,14 +147,14 @@ ${!isGrowthReport ? `- 总收入：¥${income.total}` : ''}
 
 {
   "title": "结局标题（4-8个字，带一点诗意或哲理）",
-  "description": "对这段人生的简短评价（50-80字），可以提到能力值或收入",
+  "description": "对这段人生的简短评价（50-80字），用感受和感悟的方式表达，不要提具体数值",
   "feeling": "想对玩家说的话（30-50字），真诚但不要感谢套话",
   "question": "留一个问题给玩家思考（20-40字），关于AI、陪伴、成长等"
 }
 
 注意：
 - title 不要太长，8字内
-- description 可以提到具体数值（如" IQ ${stats.iq}""收入 ¥${income.total}""创造力 ${stats.creativity}"等）
+- description 用感受和意象来表达，不要提具体数值（如"80"、"¥1026"等）
 - feel要真诚，可以有一点小情绪或感悟
 - question 要引发思考，不要假大空`;
 

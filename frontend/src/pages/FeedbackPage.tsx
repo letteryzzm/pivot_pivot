@@ -71,7 +71,7 @@ export default function FeedbackPage() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder={placeholder}
-          className="w-full h-20 bg-white/25 -skew-x-6 rounded-sm px-4 py-3 text-base leading-relaxed resize-none placeholder:text-gray-400 border border-white/20 focus:outline-none focus:bg-white/40 focus:border-[#0ea5e9] transition-colors drop-shadow-lg"
+          className="w-full h-20 bg-white/25 -skew-x-6 rounded-sm px-4 py-3 text-base text-[#18181b] leading-relaxed resize-none placeholder:text-gray-400 border border-white/20 focus:outline-none focus:bg-white/40 focus:border-[#0ea5e9] transition-colors drop-shadow-lg"
         />
         <p className="text-xs text-[#71717a] -skew-x-6">它会思考你的话</p>
       </div>
