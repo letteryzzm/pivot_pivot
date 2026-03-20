@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useGameStore } from "../store/gameStore";
 import { callAPIStream } from "../utils/api";
 import { getRandomReflection } from "../game/feedbackTemplates";
+import { getReflectionImagePathById } from "../config/reflectionImages";
 import LobsterSprite from "../components/LobsterSprite";
 import TypewriterText from "../components/TypewriterText";
 
@@ -11,12 +12,11 @@ export default function ReflectPage() {
   const {
     lobster,
     currentFeedback,
+    currentBackgroundImage,
     userResponse,
     checkLegalBreak,
     checkForceLegal,
-    checkGrowthTransition,
-    checkStage2Transition,
-    getGrowthStage,
+    checkAIEnding,
     updateConversationWithReflection,
   } = useGameStore();
 
@@ -55,8 +55,18 @@ export default function ReflectPage() {
   // 当前正在流式输出的完整文本
   const [reflectionText, setReflectionText] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  // 背景图片 - 从 store 读取
+  const [backgroundImage, setBackgroundImage] = useState<string>("");
   // 防止重复生成的标志 - 记录是否已经完成过生成（重挂载也能识别）
   const hasGeneratedRef = useRef(false);
+
+  // 从 store 读取背景图片
+  useEffect(() => {
+    // 使用 AI 返回的 backgroundImage，如果没有则使用默认值 1
+    const imageId = currentBackgroundImage || 1;
+    const imagePath = getReflectionImagePathById(imageId);
+    setBackgroundImage(imagePath);
+  }, [currentBackgroundImage]);
 
   useEffect(() => {
     // 防止重复执行（Strict Mode 或重挂载导致的重执行）
@@ -181,12 +191,15 @@ ${guide.prompt}
   };
 
   return (
-    <div className="min-h-screen bg-[#fafafa] flex flex-col">
+    <div
+      className="min-h-screen flex flex-col bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: backgroundImage ? `url('${backgroundImage}')` : undefined }}
+    >
       {/* 状态栏 */}
       <div className="h-[62px]"></div>
 
-      {/* 主内容区 - flex-1 自动填充剩余空间 */}
-      <div className="flex-1 flex flex-col items-center gap-4 px-6 pb-6">
+      {/* 主内容区 - 自然流式布局，按钮跟随内容弹性伸缩 */}
+      <div className="flex flex-col items-center gap-4 px-6 pb-6">
         {/* 标题和龙虾 */}
         <div className="flex flex-col items-center gap-2">
           <p className="text-xs text-[#71717a]">{lobster.name}想了想...</p>
@@ -198,35 +211,22 @@ ${guide.prompt}
           <TypewriterText
             text={reflectionText}
             speed={50}
-            showThinkingWhenEmpty
             className="text-base text-[#18181b] text-center leading-relaxed whitespace-pre-line block"
           />
         </div>
 
-        {/* 按钮区域 - mt-auto 确保内容少时在底部 */}
-        <div className="mt-auto flex flex-col gap-2 pt-4 w-full">
+        {/* 按钮区域 - 自然流式布局 */}
+        <div className="flex flex-col gap-2 pt-4 w-full">
           <button
             onClick={() => {
-              // 优先检查成长过渡（婴儿->儿童, 儿童->青少年, 青少年->成人）
-              if (checkGrowthTransition()) {
-                const stage = getGrowthStage();
-                if (stage === 'childhood') {
-                  navigate("/childhood-transition");
-                } else if (stage === 'teen') {
-                  navigate("/teen-transition");
-                } else if (stage === 'adult') {
-                  navigate("/adult-transition");
-                }
+              // 最高优先级：检查AI触发的结局（lost/shattered）
+              if (checkAIEnding()) {
+                console.log('[结局] 检测到AI触发结局，跳转到结局页');
+                navigate("/result");
                 return;
               }
 
-              // 检查阶段2开始时的成长过渡
-              if (checkStage2Transition()) {
-                navigate("/adult-transition");
-                return;
-              }
-
-              // 优先检查24岁强制法人
+              // 检查24岁强制法人
               if (checkForceLegal()) {
                 navigate("/force-legal");
                 return;

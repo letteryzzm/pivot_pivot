@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { getStageByAge } from '../config/transitionConfig';
 
 interface LobsterSpriteProps {
   age: number;
@@ -9,31 +10,25 @@ interface LobsterSpriteProps {
 export default function LobsterSprite({ age, action = 'idle', size = 80 }: LobsterSpriteProps) {
   const [frame, setFrame] = useState(1);
 
-  // 根据年龄映射阶段
-  const getStage = (age: number) => {
-    if (age <= 5) return '婴儿';
-    if (age <= 12) return '儿童';
-    if (age <= 17) return '青少年';
-    return '商务';
+  // 根据动作和阶段映射文件名
+  const getActionName = (stage: string, action: string) => {
+    const actionNameMap: Record<string, Record<string, string>> = {
+      '婴儿': { idle: '待机', walk: '正面走', run: '奔跑' },
+      '青少年': { idle: '待机', walk: '正面走', run: '奔跑' },
+      '商务': { idle: '待机', walk: '正面走', run: '奔跑' },
+    };
+    return actionNameMap[stage]?.[action] || '待机';
   };
 
-  // 根据动作映射文件名
-  const getActionName = (action: string) => {
-    if (action === 'idle') return '待机';
-    if (action === 'walk') return '侧面走';
-    if (action === 'run') return '奔跑';
-    return '待机';
-  };
-
-  const stage = getStage(age);
-  const actionName = getActionName(action);
+  const stage = getStageByAge(age);
+  const actionName = getActionName(stage, action);
   const imagePath = `/images/claw/${stage}${actionName}${frame}.png`;
 
   // 两帧动画切换
   useEffect(() => {
     const interval = setInterval(() => {
       setFrame(prev => prev === 1 ? 2 : 1);
-    }, 500);
+    }, 600);
     return () => clearInterval(interval);
   }, []);
 

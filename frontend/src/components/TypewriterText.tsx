@@ -51,7 +51,7 @@ export default function TypewriterText({
   onComplete,
 }: TypewriterTextProps) {
   const [len, setLen] = useState(0);
-  const timerRef = useRef<ReturnType<typeof setTimeout>>();
+  const timerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const completedRef = useRef(false);
   // 用 ref 跟踪上一次 text 长度，解决快速更新时的同步问题
   const prevTextLenRef = useRef(0);
@@ -110,13 +110,13 @@ export default function TypewriterText({
       {text.slice(0, len)}
       {showCursor && !isDone && (
         <span
-          className="inline-block align-middle animate-pulse"
+          className="inline-block align-middle"
           style={{
             width: '2px',
             height: '1em',
             backgroundColor: 'currentColor',
             marginLeft: '2px',
-            opacity: 0.7,
+            animation: 'blink 1s infinite',
           }}
         />
       )}

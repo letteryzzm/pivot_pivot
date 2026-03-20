@@ -4,82 +4,94 @@ import LobsterSprite from '../components/LobsterSprite';
 
 export default function GamePage() {
   const navigate = useNavigate();
-  const { lobster, currentFeedback } = useGameStore();
+  const { lobster } = useGameStore();
 
-  const statLabels = {
-    iq: '学习能力',
-    social: '社交能力',
-    creativity: '创造力',
-    execution: '执行力'
+  // 判断是否是第一次进入（出生时）
+  const isFirstVisit = lobster.history.round === 0 && lobster.age === 0;
+
+  // 出生时的旁白文案
+  const getBirthNarrative = () => {
+    if (isFirstVisit) {
+      return [
+        "它出生了。",
+        "大脑结构已经长好，但还不知道怎么使用。",
+        "它需要你的陪伴，才能成长。"
+      ];
+    }
+    // 每次返回时的旁白
+    return [
+      "时间在流逝。",
+      "它无法跳跃成长，每一步都需要真实的时间。",
+      "每一次互动，都将成为它的一部分。"
+    ];
   };
 
-  const statColors = {
-    iq: { bg: 'bg-blue-500', text: 'text-blue-600' },
-    social: { bg: 'bg-green-500', text: 'text-green-600' },
-    creativity: { bg: 'bg-purple-500', text: 'text-purple-600' },
-    execution: { bg: 'bg-orange-500', text: 'text-orange-600' }
-  };
+  const narrative = getBirthNarrative();
 
   return (
-    <div className="min-h-screen bg-[#fafafa] flex flex-col gap-4 p-4">
+    <div
+      className="min-h-screen flex flex-col bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: "url('/images/背景/欢迎屏幕背景_2.png')" }}
+    >
       {/* 状态栏 */}
       <div className="h-[62px]"></div>
 
-      {/* 头部信息 */}
-      <div className="flex flex-col gap-1 items-center">
-        <p className="text-sm text-[#71717a]">{lobster.name} · {lobster.age}岁</p>
-        <p className="text-xl font-semibold text-[#18181b]">
-          第 {lobster.history.round + 1} 个成长节点
-        </p>
+      {/* 顶部标题 */}
+      <div className="flex flex-col items-center px-6 pt-8">
+        <h1 className="text-3xl font-semibold text-white text-center drop-shadow-lg">
+          {isFirstVisit ? "它出生了" : "时间在流逝"}
+        </h1>
       </div>
 
-      {/* 龙虾区域 */}
-      <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-6 shadow-sm flex flex-col items-center justify-center gap-4">
+      {/* 中间内容区 */}
+      <div className="flex-1 flex flex-col items-center justify-center px-6 gap-6">
+        {/* 龙虾展示 */}
         <LobsterSprite age={lobster.age} action="idle" size={120} />
-        {currentFeedback && (
-          <div className="bg-white/80 backdrop-blur rounded-xl p-4 w-full">
-            <p className="text-sm text-[#18181b] whitespace-pre-line">{currentFeedback}</p>
-          </div>
-        )}
-      </div>
 
-      {/* 时间卡片 */}
-      <div className="bg-white rounded-xl p-4 shadow-sm">
-        <p className="text-xs text-[#71717a] mb-1">距离下次成长节点</p>
-        <p className="text-lg font-semibold text-[#18181b] mb-1">2 天 5 小时</p>
-        <p className="text-xs text-[#71717a] mb-3">时间在流逝，不能跳过 ⏳</p>
-        <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-          <div className="w-1/3 h-2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"></div>
+        {/* 旁白卡片 */}
+        <div className="w-full bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
+          <div className="flex flex-col gap-3">
+            {narrative.map((text, index) => (
+              <p
+                key={index}
+                className="text-base text-[#18181b] text-center leading-relaxed"
+              >
+                {text}
+              </p>
+            ))}
+          </div>
         </div>
-      </div>
 
-      {/* 能力面板 */}
-      <div className="grid grid-cols-2 gap-3">
-        {Object.entries(lobster.stats).map(([key, value]) => (
-          <div key={key} className="bg-white rounded-xl p-4 shadow-sm">
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-sm font-medium text-[#18181b]">{statLabels[key as keyof typeof statLabels]}</span>
-              <span className={`text-lg font-bold ${statColors[key as keyof typeof statColors].text}`}>{value}</span>
-            </div>
-            <div className="w-full h-2.5 bg-gray-100 rounded-full overflow-hidden">
-              <div
-                className={`h-2.5 ${statColors[key as keyof typeof statColors].bg} rounded-full transition-all duration-500`}
-                style={{ width: `${value}%` }}
-              />
-            </div>
+        {/* 当前参数展示 - 简洁版 */}
+        <div className="w-full grid grid-cols-4 gap-2">
+          <div className="bg-white/80 backdrop-blur-sm rounded-lg p-2 flex flex-col items-center">
+            <span className="text-xs text-[#71717a]">年龄</span>
+            <span className="text-lg font-semibold text-[#18181b]">{lobster.age}</span>
           </div>
-        ))}
-      </div>
+          <div className="bg-white/80 backdrop-blur-sm rounded-lg p-2 flex flex-col items-center">
+            <span className="text-xs text-[#71717a]">轮次</span>
+            <span className="text-lg font-semibold text-[#18181b]">{lobster.history.round}</span>
+          </div>
+          <div className="bg-white/80 backdrop-blur-sm rounded-lg p-2 flex flex-col items-center">
+            <span className="text-xs text-[#71717a]">收入</span>
+            <span className="text-lg font-semibold text-[#10b981]">{lobster.income.total}</span>
+          </div>
+          <div className="bg-white/80 backdrop-blur-sm rounded-lg p-2 flex flex-col items-center">
+            <span className="text-xs text-[#71717a]">阶段</span>
+            <span className="text-lg font-semibold text-[#0ea5e9]">{lobster.stage === 1 ? '童年' : '成人'}</span>
+          </div>
+        </div>
 
-      {/* 底部按钮 */}
-      <div className="h-[72px] flex flex-col items-center justify-center gap-2">
+        {/* 开始按钮 */}
         <button
           onClick={() => navigate('/select')}
-          className="w-full h-12 bg-[#0ea5e9] text-white rounded-xl text-base font-medium"
+          className="w-full h-12 bg-[#0ea5e9] text-white rounded-xl text-base font-medium shadow-lg"
         >
-          {lobster.stage === 1 ? '选择今天的活动' : '选择赚钱方式'}
+          {isFirstVisit ? "开始陪伴" : "继续陪伴"}
         </button>
-        <p className="text-xs text-[#71717a]">它会有自己的想法</p>
+        <p className="text-xs text-white/60 text-center">
+          {lobster.stage === 1 ? "它会有自己的想法" : "从全面发展到只看钱"}
+        </p>
       </div>
     </div>
   );

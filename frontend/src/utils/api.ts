@@ -1,11 +1,6 @@
 const API_URL = 'https://api.siliconflow.cn/v1/chat/completions';
 const API_KEY = import.meta.env.VITE_API_KEY || '';
 
-interface ChatMessage {
-  role: 'user' | 'assistant';
-  content: string;
-}
-
 export async function callAPI(prompt: string): Promise<string> {
   console.log('=== callAPI 开始 ===');
   console.log('API_KEY存在:', !!API_KEY);

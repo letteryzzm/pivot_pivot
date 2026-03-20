@@ -33,6 +33,9 @@ export interface LobsterState {
     userResponse?: string;
     lobsterReflection?: string;
   }>;
+
+  // AI触发的成长次数（最多3次）
+  growthCount: number;
 }
 
 // 活动定义
@@ -44,6 +47,17 @@ export interface Activity {
   icon: string;
 }
 
+// 结局类型
+export type EndingType =
+  | 'legal'      // 法人结局
+  | 'cyborg'     // 机器身体/赛博飞升
+  | 'hermit'     // 山林隐居
+  | 'loop'       // 永恒轮回
+  | 'shattered'  // 破碎/存在危机
+  | 'child'      // 赤子之心/拒绝成长
+  | 'normal'     // 正常/平衡
+  | 'lost';      // 迷茫/普通
+
 // API响应
 export interface FeedbackResponse {
   feedback: string;
@@ -54,4 +68,11 @@ export interface FeedbackResponse {
     creativity: number;
     execution: number;
   };
+  ending?: {
+    trigger: boolean;
+    type: EndingType;
+    reason?: string;
+  };
+  backgroundImage?: number;
+  growUp?: boolean;  // AI判断是否触发成长
 }

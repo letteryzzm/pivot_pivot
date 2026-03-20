@@ -1,14 +1,18 @@
 import { useNavigate } from 'react-router-dom';
 import { useGameStore } from '../store/gameStore';
+import LobsterSprite from '../components/LobsterSprite';
 
 export default function LegalBreakPage() {
   const navigate = useNavigate();
-  const { nextStage, dismissLegalBreak } = useGameStore();
+  const { nextStage, dismissLegalBreak, lobster } = useGameStore();
 
   const handleAgree = () => {
-    nextStage(); // 进入阶段2
+    const fromAge = lobster.age;
+    nextStage(); // 进入阶段2，age 变为 18
+    const toAge = 18;
     dismissLegalBreak();
-    navigate('/select');
+    // 主动申请进入阶段2后，直接跳转到过渡页面
+    navigate('/transition', { state: { fromAge, toAge } });
   };
 
   const handleThink = () => {
@@ -19,7 +23,9 @@ export default function LegalBreakPage() {
   return (
     <div className="min-h-screen bg-[#18181b] flex flex-col items-center justify-center gap-8 p-6">
       <p className="text-sm text-white/60">一个重要的决定</p>
-      <div className="text-[120px] leading-none">🦞</div>
+      <div className="w-40 h-40 flex items-center justify-center">
+        <LobsterSprite age={lobster.age} action="idle" size={140} />
+      </div>
       <div className="w-[340px] bg-white rounded-[20px] p-6 flex flex-col gap-3">
         <p className="text-base text-[#18181b] text-center leading-relaxed">
           我想和你说件事...

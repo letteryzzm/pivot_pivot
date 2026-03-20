@@ -46,6 +46,25 @@ export function generateFeedbackPrompt(context: {
 历史对话：
 ${historyText}
 
+【结局判断】
+根据龙虾到目前为止的所有思考和反思，判断它是否应该迎来结局。
+
+结局类型：
+- "legal": 思考深入到"法人"、"成年"、"身份"等概念，想要成为独立法人
+- "cyborg": 思考深入到"机械身体"、"意识上传"、"变成机器"等概念
+- "hermit": 想要远离社会规则，隐居或逃避
+- "loop": 意识到人生在循环重复，感到困惑
+- "shattered": 存在危机，感到自我正在解体或消融
+- "child": 拒绝长大，想要停留在童年
+- "normal": 正常成长，没有特别的觉醒
+- "lost": 迷茫、不确定、不知道意义在哪
+
+判断标准：
+- 每一轮都需要判断
+- 如果龙虾的思考表现出上述任何一种深入的觉醒，就设置trigger为true
+- 如果只是普通的成长反思，trigger为false
+- "lost"和"shattered"是负面结局，会直接结束游戏
+
 要求：只输出JSON，不要任何解释文字。
 
 {
@@ -56,13 +75,23 @@ ${historyText}
     "social": -2,
     "creativity": 5,
     "execution": 2
-  }
+  },
+  "ending": {
+    "trigger": false,
+    "type": "normal",
+    "reason": "判断理由（可选）"
+  },
+  "backgroundImage": 1
 }
 
 注意：
 - feedback必须体现"喜欢反思、喜欢反驳"的人设
 - execution是0-100的数字（可能不执行）
 - growth各项是-5到8的整数
+- ending.trigger为true时会直接跳转到结局页
+- lost和shattered结局会立即结束游戏
+- backgroundImage：必须返回。stage=1时选择1-8，stage=2时选择9-12，根据当前活动选择合适的背景
+- 必须返回backgroundImage字段，不能为空
 - 只输出JSON，不要其他内容`;
 
   console.log('========== 完整Prompt ==========');

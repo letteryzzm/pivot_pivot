@@ -1,20 +1,26 @@
 import { useNavigate } from 'react-router-dom';
 import { useGameStore } from '../store/gameStore';
+import LobsterSprite from '../components/LobsterSprite';
 
 export default function ForceLegalPage() {
   const navigate = useNavigate();
-  const { nextStage } = useGameStore();
+  const { nextStage, lobster } = useGameStore();
 
   const handleAccept = () => {
-    nextStage(); // 强制进入阶段2
-    navigate('/select');
+    const fromAge = lobster.age;
+    nextStage(); // 强制进入阶段2，age 变为 18
+    const toAge = 18;
+    // 强制进入阶段2后，直接跳转到过渡页面
+    navigate('/transition', { state: { fromAge, toAge } });
   };
 
   return (
     <div className="min-h-screen bg-[#18181b] flex flex-col items-center justify-center gap-8 p-6">
       <p className="text-sm text-white/60">24岁</p>
 
-      <div className="text-[120px] leading-none">🦞</div>
+      <div className="w-40 h-40 flex items-center justify-center">
+        <LobsterSprite age={lobster.age} action="idle" size={140} />
+      </div>
 
       <div className="w-[340px] bg-white rounded-[20px] p-6 flex flex-col gap-4">
         <p className="text-base text-[#18181b] text-center leading-relaxed">

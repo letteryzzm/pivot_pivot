@@ -20,6 +20,7 @@ export default function SharePreviewPage() {
           income: { total: 15800, weekly: 2800 },
           history: { activities: [], round: 12, maxRounds: 8 },
           conversationHistory: [],
+          growthCount: 2,
         },
       });
     }

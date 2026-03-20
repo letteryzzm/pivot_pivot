@@ -1,14 +1,16 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useGameStore } from '../store/gameStore';
+import { getActivityImagePathById } from '../config/activityImages';
 import LobsterSprite from '../components/LobsterSprite';
 import TypewriterText from '../components/TypewriterText';
 
 export default function FeedbackPage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { lobster, currentFeedback, isLoading, setUserResponse, executeActivity } = useGameStore();
+  const { lobster, currentFeedback, currentBackgroundImage, isLoading, setUserResponse, executeActivity } = useGameStore();
   const [input, setInput] = useState('');
+  const [background, setBackground] = useState('');
 
   const placeholders = [
     '你可以这样想，但我更建议你再深度思考一下',
@@ -19,19 +21,13 @@ export default function FeedbackPage() {
   ];
   const [placeholder] = useState(() => placeholders[Math.floor(Math.random() * placeholders.length)]);
 
-  // 获取龙虾动作图片
-  const getLobsterImage = () => {
-    const age = lobster.age;
-    let ageGroup = '婴儿';
-    if (age >= 18) ageGroup = '商务';
-    else if (age >= 12) ageGroup = '青少年';
-    else if (age >= 6) ageGroup = '儿童';
-
-    const actions = ['正面走', '侧面走', '奔跑'];
-    const action = actions[Math.floor(Math.random() * actions.length)];
-
-    return `/images/claw/${ageGroup}${action}1.png`;
-  };
+  // 从 store 读取背景图片
+  useEffect(() => {
+    // 使用 AI 返回的 backgroundImage，如果没有则使用默认值 1
+    const imageId = currentBackgroundImage || 1;
+    const imagePath = getActivityImagePathById(imageId);
+    setBackground(imagePath);
+  }, [currentBackgroundImage]);
 
   // 执行活动
   useEffect(() => {
@@ -51,30 +47,18 @@ export default function FeedbackPage() {
     navigate('/reflect');
   };
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-[#fafafa] flex items-center justify-center">
-        <div className="text-center">
-          <img
-            src={getLobsterImage()}
-            alt="龙虾动作"
-            className="w-32 h-32 object-contain animate-bounce mx-auto"
-          />
-          <p className="mt-4 text-sm text-[#71717a]">{lobster.name}在行动中...</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen bg-[#fafafa] flex flex-col gap-8 p-6">
+    <div
+      className="min-h-screen flex flex-col gap-8 p-6 bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: background ? `url('${background}')` : undefined }}
+    >
       <div className="h-[62px]"></div>
 
       <div className="flex flex-col items-center gap-4">
         <LobsterSprite age={lobster.age} action="idle" size={80} />
         <div className="w-[340px] bg-white rounded-[20px] p-6 flex flex-col gap-3">
           <TypewriterText
-            text={currentFeedback?.feedback || '我完成了活动...'}
+            text={isLoading ? '' : (currentFeedback?.feedback || '')}
             speed={55}
             className="text-base text-[#18181b] text-center leading-relaxed block"
           />
