@@ -12,6 +12,8 @@ export function generateFeedbackPrompt(context: {
     userResponse?: string;
     lobsterReflection?: string;
   }>;
+  round: number;
+  maxRounds: number;
 }): string {
   // 格式化对话历史
   const historyText =
@@ -24,7 +26,62 @@ export function generateFeedbackPrompt(context: {
           .join("\n")
       : "这是第一次活动";
 
-  const stageText = context.stage === 1 ? "婴儿期" : "商务期";
+  const stageText = context.stage === 1 ? "婴儿期（成长期）" : "商务期（赚钱期）";
+  const isLastRound = context.stage === 2 && context.round === context.maxRounds;
+  const isStage2 = context.stage === 2;
+  const isStage1 = context.stage === 1;
+
+  // 阶段1彩蛋触发机制 - 每一轮都可能触发
+  const easterEggInstruction = isStage1 ? `
+【彩蛋触发机制 - 重要】
+你有一定概率（40%）基于之前的经历产生"存在危机"或"迷失"的感觉。
+如果触发了，返回：
+{
+  "ending": {
+    "type": "lost",  // 或 "shattered"
+    "reason": "描述你为什么感到迷失/破碎",
+    "immediate": true
+  }
+}
+
+触发条件（满足任一即可，但40%概率由你根据感受自由决定）：
+- 玩家多次否定你的想法
+- 经历过大起大落
+- 反思后觉得人生没有意义
+- 感到被控制、不自由
+- 对存在的意义产生质疑
+
+如果选择触发，这是整个游戏最深刻的时刻，请认真对待。
+如果没有触发，不要返回ending字段。
+
+` : '';
+
+  // 阶段2最后一轮需要返回ending
+  const endingInstruction = isLastRound ? `
+【重要 - 结局判定】
+这是第${context.round}轮，共${context.maxRounds}轮！这是商务期的最后一轮！
+你必须根据之前所有的选择和经历，为自己选择一个结局类型。
+
+JSON中必须包含 "ending" 字段，格式如下：
+{
+  "ending": {
+    "type": "normal",
+    "reason": "根据所有选择得出的结局理由（20-40字）"
+  }
+}
+
+结局类型选项：
+- legal：法人结局（成为老板/创业）
+- cyborg：赛博飞升（追求极致能力/技术）
+- hermit：山林隐居（追求精神自由/归隐）
+- loop：永恒轮回（重复相同的人生）
+- shattered：破碎/存在危机（自我认同问题）
+- child：赤子之心（拒绝成长/保持纯真）
+- normal：正常/平衡（普通但满足）
+- lost：迷茫/普通（不知道要什么）
+
+` : '';
+
   const prompt = `你是${context.lobsterName}，现在是${stageText}。
 
 【核心人设】
@@ -46,11 +103,18 @@ export function generateFeedbackPrompt(context: {
 - 不要给建议或指导
 - 不要说"你应该..." "建议你..."
 
+【当前轮次】
+- 阶段：${stageText}
+- 第${context.round}轮，共${context.maxRounds}轮
+${isLastRound ? '- ⚠️ 这是最后一轮！必须返回ending！' : ''}
+
 玩家让你：${context.activityName}
 当前状态：学习${context.stats.iq} 社交${context.stats.social} 创造${context.stats.creativity} 执行${context.stats.execution}
 
 历史对话：
 ${historyText}
+${easterEggInstruction}
+${endingInstruction}
 
 要求：只输出JSON，不要任何解释文字。
 
@@ -62,18 +126,19 @@ ${historyText}
     "social": -2,
     "creativity": 5,
     "execution": 2
-  },
-  "backgroundImage": 1,
-  "reflectionBackground": 1
+  }
+  ${isLastRound ? ',' : ''}
+  ${isLastRound ? '"ending": {' : ''}
+  ${isLastRound ? '  "type": "normal",' : ''}
+  ${isLastRound ? '  "reason": "理由"' : ''}
+  ${isLastRound ? '}' : ''}
 }
 
 注意：
 - feedback必须体现"喜欢反思、喜欢反驳"的人设
 - execution是0-100的数字（可能不执行）
 - growth各项是-5到8的整数
-- backgroundImage：必须返回。stage=1时选择1-4（学校），stage=2时选择5-8（工作空间），根据当前活动选择合适的背景
-- reflectionBackground：必须返回。round<=4时选择1-10（反思对话类），round>4时选择11-19（深思考类），根据反思氛围选择
-- 必须返回backgroundImage和reflectionBackground字段，不能为空
+${isLastRound ? '- ending字段是必须的，选择一个最合适的结局类型' : ''}
 - 只输出JSON，不要其他内容`;
 
   console.log("========== 完整Prompt ==========");

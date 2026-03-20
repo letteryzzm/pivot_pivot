@@ -156,8 +156,12 @@ export const useGameStore = create<GameStore>((set, get) => ({
         }
       }
 
-      // 检查AI是否返回了ending（阶段2最后一轮）
+      // 检查AI是否返回了ending
+      // 阶段1彩蛋：immediate=true 时立即结束，跳过阶段2
+      // 阶段2：正常返回ending
       if (aiResponse.ending && aiResponse.ending.type) {
+        const isImmediate = aiResponse.ending.immediate === true;
+
         set({
           reflectionEnding: {
             trigger: true,
@@ -165,6 +169,12 @@ export const useGameStore = create<GameStore>((set, get) => ({
             reason: aiResponse.ending.reason || 'AI总结的结局'
           }
         });
+
+        // 如果是彩蛋触发（immediate=true），跳过阶段2，直接设置为阶段1最终状态
+        if (isImmediate && lobster.stage === 1) {
+          newStage = 1; // 保持在阶段1
+          newAge = 6;   // 设置为6岁（最终年龄）
+        }
       }
 
       set({
@@ -302,6 +312,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
   canEnterEnding: () => {
     const state = get();
     const { lobster, reflectionEnding } = state;
+
+    // 阶段1彩蛋触发：lost/shattered 类型立即结束
+    if (lobster.stage === 1 && reflectionEnding?.trigger && reflectionEnding.type) {
+      if (isImmediateEnding(reflectionEnding.type)) {
+        return true;
+      }
+    }
 
     // 阶段1：达到最大轮次（6轮）→ 触发法人突破
     if (lobster.stage === 1 && lobster.history.round >= lobster.history.maxRounds) {

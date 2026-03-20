@@ -72,6 +72,7 @@ export interface FeedbackResponse {
     trigger: boolean;
     type: EndingType;
     reason?: string;
+    immediate?: boolean;  // 彩蛋触发：立即结束，跳过后续阶段
   };
   backgroundImage?: number;        // 反馈页背景 (1-8)
   reflectionBackground?: number;   // 反思页背景 (1-19)
