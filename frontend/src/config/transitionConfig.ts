@@ -1,17 +1,11 @@
 // 阶段类型
-export type StageType = "婴儿" | "青少年" | "商务";
+export type StageType = "婴儿" | "商务";
 
 // 背景配置
 export const stageBackgrounds: Record<StageType, string[]> = {
   婴儿: [
     "/images/背景/学校和街区背景_1.png",
     "/images/背景/学校和街区背景_2.png",
-  ],
-  青少年: [
-    "/images/背景/图书馆场景_1.png",
-    "/images/背景/图书馆场景_2.png",
-    "/images/背景/图书馆场景_3.png",
-    "/images/背景/图书馆场景_4.png",
   ],
   商务: [
     "/images/背景/虚拟工作空间_1.png",
@@ -47,10 +41,10 @@ export function getRandomBackground(stage: StageType): string {
 
 // 过渡动画配置
 export const transitionConfigs: Record<string, TransitionConfig> = {
-  // 婴儿 → 青少年（跳过儿童和少年）
-  "婴儿-青少年": {
+  // 婴儿 → 商务
+  "婴儿-商务": {
     fromStage: "婴儿",
-    toStage: "青少年",
+    toStage: "商务",
     duration: 3000,
     waypoints: [
       { x: 10, y: 70, action: "idle" },
@@ -58,19 +52,6 @@ export const transitionConfigs: Record<string, TransitionConfig> = {
       { x: 50, y: 65, action: "walk" },
       { x: 70, y: 70, action: "walk" },
       { x: 90, y: 70, action: "run" },
-    ],
-  },
-  // 青少年 → 商务
-  "青少年-商务": {
-    fromStage: "青少年",
-    toStage: "商务",
-    duration: 3000,
-    waypoints: [
-      { x: 10, y: 75, action: "idle" },
-      { x: 30, y: 70, action: "walk" },
-      { x: 50, y: 65, action: "walk" },
-      { x: 70, y: 70, action: "walk" },
-      { x: 90, y: 75, action: "run" },
     ],
   },
 };
@@ -98,13 +79,11 @@ export function getTransitionConfig(
 // 阶段顺序
 export const stageOrder: StageType[] = [
   "婴儿",
-  "青少年",
   "商务",
 ];
 
-// 根据年龄获取阶段（3个阶段）
+// 根据年龄获取阶段（2个阶段）
 export function getStageByAge(age: number): StageType {
-  if (age <= 5) return "婴儿";
-  if (age <= 17) return "青少年";
+  if (age <= 17) return "婴儿";
   return "商务";
 }

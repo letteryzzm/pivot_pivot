@@ -5,6 +5,7 @@ export async function callAPI(prompt: string): Promise<string> {
   console.log('=== callAPI 开始 ===');
   console.log('API_KEY存在:', !!API_KEY);
   console.log('API_KEY长度:', API_KEY.length);
+  console.log('API_URL:', API_URL);
 
   const response = await fetch(API_URL, {
     method: 'POST',

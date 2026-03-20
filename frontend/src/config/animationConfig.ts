@@ -22,6 +22,33 @@ export const animationConfigs: Record<string, AnimationConfig> = {
       { x: 67, y: 93 }, // 结束
     ],
   },
+  '婴儿_idle1_学校和街区背景_2': {
+    paramId: '婴儿_idle_1',
+    background: '/images/背景/学校和街区背景_2.png',
+    keypoints: [
+      { x: 76, y: 96 }, // 开始
+      { x: 42, y: 96 }, // 中间
+      { x: 73, y: 95 }, // 结束
+    ],
+  },
+  '婴儿_idle1_学校和街区背景_3': {
+    paramId: '婴儿_idle_1',
+    background: '/images/背景/学校和街区背景_3.png',
+    keypoints: [
+      { x: 87, y: 96 }, // 开始
+      { x: 63, y: 95 }, // 中间
+      { x: 38, y: 95 }, // 结束
+    ],
+  },
+  '婴儿_idle1_学校和街区背景_4': {
+    paramId: '婴儿_idle_1',
+    background: '/images/背景/学校和街区背景_4.png',
+    keypoints: [
+      { x: 72, y: 95 }, // 开始
+      { x: 40, y: 96 }, // 中间
+      { x: 66, y: 94 }, // 结束
+    ],
+  },
   '婴儿_idle1_图书馆场景_1': {
     paramId: '婴儿_idle_1',
     background: '/images/背景/图书馆场景_1.png',
@@ -31,24 +58,23 @@ export const animationConfigs: Record<string, AnimationConfig> = {
       { x: 15, y: 74 }, // 结束
     ],
   },
-  // 青少年 - idle (社交/艺术类)
-  '青少年_idle1_图书馆场景_2': {
-    paramId: '青少年_idle_1',
-    background: '/images/背景/图书馆场景_2.png',
+  // 商务 - idle (社交/艺术类)
+  '商务_idle1_虚拟工作空间_1': {
+    paramId: '商务_idle_1',
+    background: '/images/背景/虚拟工作空间_1.png',
     keypoints: [
-      { x: 90, y: 84 }, // 开始
-      { x: 31, y: 79 }, // 中间
-      { x: 27, y: 65 }, // 结束
+      { x: 14, y: 83 }, // 开始
+      { x: 60, y: 84 }, // 中间
+      { x: 62, y: 65 }, // 结束
     ],
   },
-  // 商务 - idle (社交/艺术类)
   '商务_idle1_虚拟工作空间_2': {
     paramId: '商务_idle_1',
     background: '/images/背景/虚拟工作空间_2.png',
     keypoints: [
-      { x: 9, y: 87 },  // 开始
-      { x: 64, y: 88 }, // 中间
-      { x: 73, y: 70 }, // 结束
+      { x: 50, y: 65 }, // 开始
+      { x: 63, y: 85 }, // 中间
+      { x: 69, y: 69 }, // 结束
     ],
   },
   '商务_idle1_虚拟工作空间_3': {
@@ -60,20 +86,28 @@ export const animationConfigs: Record<string, AnimationConfig> = {
       { x: 29, y: 60 }, // 结束
     ],
   },
+  '商务_idle1_虚拟工作空间_4': {
+    paramId: '商务_idle_1',
+    background: '/images/背景/虚拟工作空间_4.png',
+    keypoints: [
+      { x: 8, y: 87 }, // 开始
+      { x: 52, y: 87 }, // 中间
+      { x: 50, y: 69 }, // 结束
+    ],
+  },
 };
 
 // paramId 映射表 - AI返回paramId即可触发对应动画
 export const paramIdToConfig: Record<string, string> = {
-  '婴儿_idle_1': '婴儿_idle1_图书馆场景_1',
-  '青少年_idle_1': '青少年_idle1_图书馆场景_2',
-  '商务_idle_1': '商务_idle1_虚拟工作空间_3',
+  '婴儿_idle_1': '婴儿_idle1_学校和街区背景_4',
+  '商务_idle_1': '商务_idle1_虚拟工作空间_2',
 };
 
 // 活动类型分组
 export type ActivityCategory = 'mental' | 'social' | 'action';
 
 // 阶段类型
-export type StageType = '婴儿' | '儿童' | '青少年' | '商务';
+export type StageType = '婴儿' | '商务';
 
 // 活动分类映射
 export const activityCategoryMap: Record<string, ActivityCategory> = {
@@ -102,27 +136,18 @@ export const activityCategoryMap: Record<string, ActivityCategory> = {
 
 // 根据阶段和动画类型获取配置ID
 export function getAnimationConfigId(stage: StageType, category: ActivityCategory): string {
-  // 根据阶段确定前缀
-  let prefix = stage;
-  if (stage === '婴儿') prefix = '婴儿';
-  else if (stage === '儿童' || stage === '青少年') prefix = '青少年';
-  else if (stage === '商务') prefix = '商务';
-
   // 查找匹配的已配置
   const matchedKey = Object.keys(animationConfigs).find(key =>
-    key.startsWith(prefix) && key.includes(category === 'social' ? 'idle' : category === 'mental' ? 'walk' : 'run')
+    key.startsWith(stage) && key.includes(category === 'social' ? 'idle' : category === 'mental' ? 'walk' : 'run')
   );
 
   if (matchedKey) return matchedKey;
 
   // 返回默认配置
   if (stage === '婴儿') {
-    return category === 'social' ? '婴儿_idle1_图书馆场景_1' : '婴儿_idle1_学校和街区背景_1';
+    return '婴儿_idle1_学校和街区背景_4';
   }
-  if (stage === '儿童' || stage === '青少年') {
-    return '青少年_idle1_图书馆场景_2';
-  }
-  return '商务_idle1_虚拟工作空间_3';
+  return '商务_idle1_虚拟工作空间_2';
 }
 
 // 根据paramId获取动画配置

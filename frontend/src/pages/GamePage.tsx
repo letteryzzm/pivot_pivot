@@ -48,47 +48,31 @@ export default function GamePage() {
         {/* 龙虾展示 */}
         <LobsterSprite age={lobster.age} action="idle" size={120} />
 
-        {/* 旁白卡片 */}
-        <div className="w-full bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
-          <div className="flex flex-col gap-3">
-            {narrative.map((text, index) => (
-              <p
-                key={index}
-                className="text-base text-[#18181b] text-center leading-relaxed"
-              >
-                {text}
-              </p>
-            ))}
+        {/* 旁白卡片 - 平行四边形透明阴影 */}
+        <div className="w-full px-6">
+          <div className="bg-white/15 backdrop-blur-sm -skew-x-6 p-6 shadow-[0_8px_32px_rgba(0,0,0,0.1)]">
+            <div className="flex flex-col gap-3">
+              {narrative.map((text, index) => (
+                <p
+                  key={index}
+                  className="text-base text-[#18181b] text-center leading-relaxed"
+                >
+                  {text}
+                </p>
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* 当前参数展示 - 简洁版 */}
-        <div className="w-full grid grid-cols-4 gap-2">
-          <div className="bg-white/80 backdrop-blur-sm rounded-lg p-2 flex flex-col items-center">
-            <span className="text-xs text-[#71717a]">年龄</span>
-            <span className="text-lg font-semibold text-[#18181b]">{lobster.age}</span>
-          </div>
-          <div className="bg-white/80 backdrop-blur-sm rounded-lg p-2 flex flex-col items-center">
-            <span className="text-xs text-[#71717a]">轮次</span>
-            <span className="text-lg font-semibold text-[#18181b]">{lobster.history.round}</span>
-          </div>
-          <div className="bg-white/80 backdrop-blur-sm rounded-lg p-2 flex flex-col items-center">
-            <span className="text-xs text-[#71717a]">收入</span>
-            <span className="text-lg font-semibold text-[#10b981]">{lobster.income.total}</span>
-          </div>
-          <div className="bg-white/80 backdrop-blur-sm rounded-lg p-2 flex flex-col items-center">
-            <span className="text-xs text-[#71717a]">阶段</span>
-            <span className="text-lg font-semibold text-[#0ea5e9]">{lobster.stage === 1 ? '童年' : '成人'}</span>
-          </div>
+        {/* 开始按钮 - 平行四边形透明 */}
+        <div className="w-full px-6">
+          <button
+            onClick={() => navigate('/select')}
+            className="w-full py-3 bg-white/15 backdrop-blur-sm -skew-x-6 text-[#18181b] text-base font-medium shadow-[0_4px_16px_rgba(0,0,0,0.08)] hover:bg-white/25 transition-colors"
+          >
+            {isFirstVisit ? "开始陪伴 →" : "继续陪伴 →"}
+          </button>
         </div>
-
-        {/* 开始按钮 */}
-        <button
-          onClick={() => navigate('/select')}
-          className="w-full h-12 bg-[#0ea5e9] text-white rounded-xl text-base font-medium shadow-lg"
-        >
-          {isFirstVisit ? "开始陪伴" : "继续陪伴"}
-        </button>
         <p className="text-xs text-white/60 text-center">
           {lobster.stage === 1 ? "它会有自己的想法" : "从全面发展到只看钱"}
         </p>

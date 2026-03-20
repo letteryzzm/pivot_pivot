@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 
 // 测试用阶段列表
-const STAGES = ['婴儿', '青少年', '商务'] as const;
+const STAGES = ['婴儿', '商务'] as const;
 const ACTIONS = ['idle', 'walk', 'run'] as const;
 const FRAMES = [1, 2] as const;
 const KEYPOINTS = ['开始', '中间', '结束'] as const;
@@ -187,7 +187,6 @@ export default function AnimationTestPage() {
   const imagePath = useMemo(() => {
     const actionNameMap: Record<string, Record<string, string>> = {
       '婴儿': { idle: '待机', walk: '正面走', run: '奔跑' },
-      '青少年': { idle: '待机', walk: '正面走', run: '奔跑' },
       '商务': { idle: '待机', walk: '正面走', run: '奔跑' },
     };
     const actionName = actionNameMap[stage]?.[action] || '待机';

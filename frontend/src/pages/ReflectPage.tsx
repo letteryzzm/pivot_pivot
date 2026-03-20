@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGameStore } from "../store/gameStore";
-import { callAPIStream } from "../utils/api";
+import { callAPI, safeParseJSON } from "../utils/api";
 import { getRandomReflection } from "../game/feedbackTemplates";
 import { getReflectionImagePathById } from "../config/reflectionImages";
 import LobsterSprite from "../components/LobsterSprite";
@@ -12,12 +12,12 @@ export default function ReflectPage() {
   const {
     lobster,
     currentFeedback,
-    currentBackgroundImage,
     userResponse,
     checkLegalBreak,
     checkForceLegal,
     checkAIEnding,
     updateConversationWithReflection,
+    setReflectionEnding,
   } = useGameStore();
 
   // 获取当前进行的活动
@@ -55,18 +55,18 @@ export default function ReflectPage() {
   // 当前正在流式输出的完整文本
   const [reflectionText, setReflectionText] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  // 背景图片 - 从 store 读取
+  // 背景图片 - AI 返回
   const [backgroundImage, setBackgroundImage] = useState<string>("");
   // 防止重复生成的标志 - 记录是否已经完成过生成（重挂载也能识别）
   const hasGeneratedRef = useRef(false);
 
-  // 从 store 读取背景图片
+  // 备用：使用默认背景图（当 AI 没有返回时）
   useEffect(() => {
-    // 使用 AI 返回的 backgroundImage，如果没有则使用默认值 1
-    const imageId = currentBackgroundImage || 1;
-    const imagePath = getReflectionImagePathById(imageId);
-    setBackgroundImage(imagePath);
-  }, [currentBackgroundImage]);
+    if (!backgroundImage) {
+      const defaultImage = getReflectionImagePathById(1);
+      setBackgroundImage(defaultImage);
+    }
+  }, []);
 
   useEffect(() => {
     // 防止重复执行（Strict Mode 或重挂载导致的重执行）
@@ -128,30 +128,55 @@ ${guide.prompt}
 - 允许自己说出"我不确定"——真正的思考不急着收尾
 - 可以发现新的矛盾，可以延伸出新的疑问，但每一步都要有真实的思维重量
 
-输出要求：
-- 最多150字
-- 带1-2个颜文字
-- 语气像一个正在自言自语的哲学系的人，不是在辩论，是在真的想
-- 不要说"我会努力""我明白了""你说得对"等收尾的话
-- 结尾可以是一个悬而未决的问题，或一个刚刚浮现的新裂缝
-- 反思内容必须和你刚才做的"${currentActivity}"活动相关联`;
+输出要求：只输出JSON，不要任何解释文字。
+
+{
+  "reflection": "反思内容（最多150字，带1-2个颜文字，语气像一个正在自言自语的哲学系的人，不是在辩论，是在真的想，不要说"我会努力""我明白了""你说得对"等收尾的话，结尾可以是一个悬而未决的问题，或一个刚刚浮现的新裂缝）",
+  "backgroundImage": 1,
+  "ending": { "trigger": false, "type": "normal", "reason": "" }
+}
+
+注意：
+- backgroundImage必须返回。round<=4时选择1-10（反思对话类），round>4时选择11-19（深思考类），根据反思氛围选择合适的图片
+- 只输出JSON，不要其他内容`;
         console.log("========== 反思页完整Prompt ==========");
         console.log(prompt);
         console.log("====================================");
 
-        // 流式输出：实时更新文本
+        // 一次性调用 API 获取完整响应
         setIsLoading(false);
-        let fullText = "";
+        const responseText = await callAPI(prompt);
+        console.log("最终反思原始文本:", responseText);
 
-        await callAPIStream(prompt, (chunk) => {
-          fullText += chunk;
-          setReflectionText(fullText);
+        // 解析 JSON 返回值
+        const parsed = safeParseJSON(responseText, {
+          reflection: getRandomReflection(),
+          backgroundImage: 1,
+          ending: { trigger: false, type: 'normal', reason: '' }
         });
 
-        console.log("最终反思文本:", fullText);
+        console.log("解析后的反思:", parsed.reflection);
+        console.log("解析后的结局:", parsed.ending);
+        console.log("解析后的背景图:", parsed.backgroundImage);
 
-        // 保存到对话历史
-        updateConversationWithReflection(fullText);
+        // 使用 AI 返回的背景图片
+        if (parsed.backgroundImage) {
+          const imagePath = getReflectionImagePathById(parsed.backgroundImage);
+          setBackgroundImage(imagePath);
+        }
+
+        // 显示反思文本并保存到对话历史
+        setReflectionText(parsed.reflection);
+        updateConversationWithReflection(parsed.reflection);
+
+        // 保存结局触发到store
+        if (parsed.ending) {
+          setReflectionEnding({
+            trigger: parsed.ending.trigger || false,
+            type: (parsed.ending.type as any) || null,
+            reason: parsed.ending.reason || ''
+          });
+        }
       } catch (error) {
         console.error("反思生成失败:", error);
         const fallbackText = getRandomReflection();
@@ -206,13 +231,15 @@ ${guide.prompt}
           <LobsterSprite age={lobster.age} action="idle" size={80} />
         </div>
 
-        {/* 反思文本容器 - 自适应高度 */}
-        <div className="w-full bg-white rounded-[20px] p-6 min-h-[80px]">
-          <TypewriterText
-            text={reflectionText}
-            speed={50}
-            className="text-base text-[#18181b] text-center leading-relaxed whitespace-pre-line block"
-          />
+        {/* 反思文本容器 - 平行四边形背景 */}
+        <div className="w-full px-6">
+          <div className="bg-white/25 -skew-x-6 p-6 flex flex-col gap-3 drop-shadow-xl min-h-[80px]">
+            <TypewriterText
+              text={reflectionText}
+              speed={50}
+              className="text-base text-[#18181b] text-center leading-relaxed whitespace-pre-line block"
+            />
+          </div>
         </div>
 
         {/* 按钮区域 - 自然流式布局 */}
@@ -240,7 +267,7 @@ ${guide.prompt}
                 navigate("/select");
               }
             }}
-            className="w-full h-12 bg-[#0ea5e9] text-white rounded-xl text-base font-medium"
+            className="w-full py-3 text-base font-medium text-[#18181b] drop-shadow-lg hover:drop-shadow-xl transition-all"
           >
             继续陪伴
           </button>

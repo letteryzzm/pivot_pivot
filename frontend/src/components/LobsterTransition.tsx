@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useGameStore } from '../store/gameStore';
 import { getStageByAge } from '../config/transitionConfig';
@@ -24,7 +24,7 @@ export default function LobsterTransition() {
   const navigate = useNavigate();
   const location = useLocation();
   const state = location.state as LocationState | null;
-  const { lobster } = useGameStore();
+  const { lobster, executeActivity } = useGameStore();
 
   // 状态
   const [progress, setProgress] = useState(0);
@@ -34,9 +34,26 @@ export default function LobsterTransition() {
     keypoints: { x: number; y: number }[];
   } | null>(null);
 
+  // 防止重复调用API
+  const hasCalledApiRef = useRef(false);
+
   // 判断是成长过渡还是活动过渡
   const isGrowthTransition = state?.fromAge !== undefined && state?.toAge !== undefined;
   const activity = state?.activity;
+
+  // 并行调用API（动画开始时同时调用）
+  useEffect(() => {
+    if (isGrowthTransition || !activity) return;
+    if (hasCalledApiRef.current) return;
+    hasCalledApiRef.current = true;
+
+    console.log('过渡页：开始调用API', activity);
+    executeActivity(activity).then(() => {
+      console.log('过渡页：API调用完成');
+    }).catch(err => {
+      console.error('过渡页：API调用失败', err);
+    });
+  }, [activity, isGrowthTransition]);
 
   // 当前阶段
   const currentStage = getStageByAge(lobster.age);
@@ -138,14 +155,15 @@ export default function LobsterTransition() {
     const yDiff = Math.abs(kp[2].y - kp[0].y);
 
     // X轴变化大用run，Y轴变化大用walk，变化都小用idle
+    // 帧数只在1-2之间循环
     if (xDiff > 30) {
       if (frameTick < 2) return { action: 'walk' as const, frame: frameTick + 1 };
-      return { action: 'run' as const, frame: frameTick - 1 };
+      return { action: 'run' as const, frame: frameTick <= 3 ? 2 : 1 };
     } else if (yDiff > 15) {
       if (frameTick < 2) return { action: 'idle' as const, frame: frameTick + 1 };
-      return { action: 'walk' as const, frame: frameTick - 1 };
+      return { action: 'walk' as const, frame: frameTick <= 3 ? 2 : 1 };
     }
-    return { action: 'idle' as const, frame: frameTick < 2 ? frameTick + 1 : 1 };
+    return { action: 'idle' as const, frame: frameTick < 2 ? 1 : 2 };
   }, [frameTick, config]);
 
   // 根据进度计算当前位置（使用3个关键点插值）
@@ -173,8 +191,6 @@ export default function LobsterTransition() {
   const imagePath = useMemo(() => {
     const actionNameMap: Record<string, Record<string, string>> = {
       '婴儿': { idle: '待机', walk: '正面走', run: '侧面走' },
-      
-      '青少年': { idle: '待机', walk: '正面走', run: '奔跑' },
       '商务': { idle: '待机', walk: '正面走', run: '奔跑' },
     };
     const actionName = actionNameMap[currentStage]?.[action] || '待机';

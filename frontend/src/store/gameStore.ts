@@ -10,15 +10,15 @@ interface GameStore {
   lobster: LobsterState;
   isPlaying: boolean;
   currentFeedback: FeedbackResponse | null;
-  currentBackgroundImage: number; // 当前轮次的背景图片ID
+  feedbackBackgroundImage: number;    // 反馈页背景 (1-8)
+  reflectionBackgroundImage: number;   // 反思页背景 (1-19)
   isLoading: boolean;
   shouldShowLegalBreak: boolean;
   shouldShowForceLegal: boolean;
   userResponse: string;
 
-  // AI触发的结局
-  aiEndingTrigger: EndingType | null;
-  aiEndingReason: string;
+  // 反思页触发的结局
+  reflectionEnding: { trigger: boolean; type: EndingType | null; reason: string } | null;
 
   startGame: (name: string) => void;
   executeActivity: (activity: Activity) => Promise<void>;
@@ -29,12 +29,11 @@ interface GameStore {
   checkLegalBreak: () => boolean;
   checkForceLegal: () => boolean;
   checkAIEnding: () => boolean;
-  setAIEnding: (type: EndingType, reason?: string) => void;
+  setReflectionEnding: (ending: { trigger: boolean; type: EndingType | null; reason: string }) => void;
   canEnterEnding: () => boolean;
   getEndingTrigger: () => { stage: number; round: number; reason: string } | null;
   dismissLegalBreak: () => void;
   resetGame: () => void;
-  clearAIEnding: () => void;
 }
 
 const initialLobster: LobsterState = {
@@ -52,21 +51,22 @@ export const useGameStore = create<GameStore>((set, get) => ({
   lobster: initialLobster,
   isPlaying: false,
   currentFeedback: null,
-  currentBackgroundImage: 0,
+  feedbackBackgroundImage: 0,
+  reflectionBackgroundImage: 0,
   isLoading: false,
   shouldShowLegalBreak: false,
   shouldShowForceLegal: false,
   userResponse: '',
-  aiEndingTrigger: null,
-  aiEndingReason: '',
+  reflectionEnding: null,
 
   startGame: (name) => set({
     isPlaying: true,
     lobster: { ...initialLobster, name },
     shouldShowLegalBreak: false,
     shouldShowForceLegal: false,
-    aiEndingTrigger: null,
-    aiEndingReason: ''
+    reflectionEnding: null,
+    feedbackBackgroundImage: 0,
+    reflectionBackgroundImage: 0,
   }),
 
   executeActivity: async (activity) => {
@@ -93,8 +93,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
         feedback: '我完成了这个活动 (´･ω･`)',
         execution: 70,
         growth: { iq: 2, social: 2, creativity: 2, execution: 2 },
-        ending: { trigger: false, type: 'normal' as const, reason: '' },
         backgroundImage: 1,
+        reflectionBackground: 1,
         growUp: false
       });
 
@@ -104,7 +104,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
       console.log(`执行度: ${aiResponse.execution}`);
       console.log(`成长: IQ+${aiResponse.growth.iq} 社交+${aiResponse.growth.social} 创造+${aiResponse.growth.creativity} 执行+${aiResponse.growth.execution}`);
       console.log(`反馈: ${aiResponse.feedback}`);
-      console.log(`结局触发: ${aiResponse.ending?.trigger} | 类型: ${aiResponse.ending?.type} | 理由: ${aiResponse.ending?.reason || '无'}`);
       console.log('================================');
 
       // 应用成长值
@@ -128,16 +127,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
         lobsterFeedback: aiResponse.feedback,
       };
 
-      // 检测AI触发的结局
-      let aiEndingState = { aiEndingTrigger: null as EndingType | null, aiEndingReason: '' };
-      if (aiResponse.ending?.trigger && aiResponse.ending.type) {
-        console.log(`⚠️ AI触发结局: ${aiResponse.ending.type}`);
-        aiEndingState = {
-          aiEndingTrigger: aiResponse.ending.type as EndingType,
-          aiEndingReason: aiResponse.ending.reason || ''
-        };
-      }
-
       // AI触发的成长：growUp=true 时直接更新阶段
       let newGrowthCount = lobster.growthCount;
       let newAge = lobster.age + 1;
@@ -149,11 +138,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
         // 根据成长次数更新阶段
         if (newGrowthCount === 1) {
-          newAge = 6;  // 第1次成长 → 6岁（儿童）
-        } else if (newGrowthCount === 2) {
-          newAge = 12; // 第2次成长 → 12岁（青少年）
-        } else if (newGrowthCount >= 3) {
-          newStage = 2; // 第3次成长 → 进入阶段2（18岁成人）
+          newAge = 6;  // 第1次成长 → 6岁（婴儿）
+        } else if (newGrowthCount >= 2) {
+          newStage = 2; // 第2次成长 → 进入阶段2（18岁成人）
           newAge = 18;
         }
       }
@@ -174,9 +161,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
           conversationHistory: [...lobster.conversationHistory, newConversation]
         },
         currentFeedback: aiResponse,
-        currentBackgroundImage: aiResponse.backgroundImage || 1,
-        isLoading: false,
-        ...aiEndingState
+        feedbackBackgroundImage: aiResponse.backgroundImage || 1,
+        reflectionBackgroundImage: aiResponse.reflectionBackground || 1,
+        isLoading: false
       });
     } catch (error) {
       console.error('执行失败:', error);
@@ -187,7 +174,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
       const activityType = getActivityType(activity.name);
       const fallbackResponse = {
         ...getRandomFeedback(activityType),
-        ending: { trigger: false, type: 'normal' as const, reason: '' },
         backgroundImage: 1
       };
 
@@ -217,7 +203,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
           }
         },
         currentFeedback: fallbackResponse,
-        currentBackgroundImage: fallbackResponse.backgroundImage || 1,
+        feedbackBackgroundImage: fallbackResponse.backgroundImage || 1,
+        reflectionBackgroundImage: fallbackResponse.reflectionBackground || 1,
         isLoading: false
       });
     }
@@ -260,24 +247,32 @@ export const useGameStore = create<GameStore>((set, get) => ({
     return false;
   },
 
-  // 检测AI触发的结局
+  // 检测反思触发的结局
   checkAIEnding: () => {
     const state = get();
-    const { aiEndingTrigger } = state;
-    // 如果AI触发了立即结局（lost/shattered），返回true
-    if (aiEndingTrigger && isImmediateEnding(aiEndingTrigger)) {
-      return true;
+    const { reflectionEnding, lobster } = state;
+
+    // 没有结局触发
+    if (!reflectionEnding?.trigger || !reflectionEnding.type) {
+      return false;
     }
-    return false;
+
+    // 阶段1（婴儿）：只有 lost/shattered 才立即跳转
+    if (lobster.stage === 1) {
+      if (isImmediateEnding(reflectionEnding.type)) {
+        return true;
+      }
+      return false;
+    }
+
+    // 阶段2（商务/成年）：所有结局类型都立即跳转
+    return true;
   },
 
-  // 设置AI触发的结局（反思页用）
-  setAIEnding: (type: EndingType, reason = '') => {
-    console.log(`⚠️ 反思页AI触发结局: ${type}`);
-    set({
-      aiEndingTrigger: type,
-      aiEndingReason: reason
-    });
+  // 设置反思触发的结局（反思页用）
+  setReflectionEnding: (ending) => {
+    console.log(`⚠️ 反思触发结局: ${ending.type} | trigger: ${ending.trigger}`);
+    set({ reflectionEnding: ending });
   },
 
   dismissLegalBreak: () => set({ shouldShowLegalBreak: false }),
@@ -371,9 +366,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
     currentFeedback: null,
     shouldShowLegalBreak: false,
     shouldShowForceLegal: false,
-    aiEndingTrigger: null,
-    aiEndingReason: ''
-  }),
-
-  clearAIEnding: () => set({ aiEndingTrigger: null, aiEndingReason: '' })
+    reflectionEnding: null
+  })
 }));

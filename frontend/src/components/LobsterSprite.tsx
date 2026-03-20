@@ -14,7 +14,6 @@ export default function LobsterSprite({ age, action = 'idle', size = 80 }: Lobst
   const getActionName = (stage: string, action: string) => {
     const actionNameMap: Record<string, Record<string, string>> = {
       '婴儿': { idle: '待机', walk: '正面走', run: '奔跑' },
-      '青少年': { idle: '待机', walk: '正面走', run: '奔跑' },
       '商务': { idle: '待机', walk: '正面走', run: '奔跑' },
     };
     return actionNameMap[stage]?.[action] || '待机';

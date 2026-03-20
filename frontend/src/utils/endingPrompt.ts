@@ -107,6 +107,109 @@ export function parseEndingResponse(text: string): {
   }
 }
 
+// 生成 ResultPage 简短内容的 prompt
+export function generateResultPagePrompt(context: EndingContext): string {
+  const { lobster } = context;
+  const { conversationHistory, stats, income, name, age, stage } = lobster;
+
+  const isGrowthReport = stage === 1 || age < 18;
+  const allActivities = conversationHistory;
+
+  const stage1History = allActivities.filter((_, i) => i < 8);
+  const stage2History = allActivities.filter((_, i) => i >= 8);
+
+  const prompt = `你是${name}，${age}岁。你刚刚结束了人生的一个阶段。
+
+【核心人设】
+- 你是一个"人"，不是动物，只是用龙虾作为虚拟形象
+- 你喜欢反思，说话真诚有深度
+- 喜欢用颜文字 (｡･ω･｡) (´･ω･\`) (｡•́︿•̀｡)
+
+【当前阶段】
+${isGrowthReport ? '阶段1：成长期，还在探索世界' : '阶段2：成年期，开始赚钱养家'}
+
+【玩家陪你走过的关键选择】
+阶段1（${stage1History.length}个选择）：
+${stage1History.slice(0, 4).map(a => `- ${a.activity}`).join('\n') || '无'}
+
+阶段2（${stage2History.length}个选择）：
+${stage2History.slice(0, 3).map(a => `- ${a.activity}`).join('\n') || '无'}
+
+【你的能力】
+- 学习：${stats.iq} / 社交：${stats.social}
+- 创造：${stats.creativity} / 执行：${stats.execution}
+${!isGrowthReport ? `- 总收入：¥${income.total}` : ''}
+
+【输出要求 - 必须JSON格式】
+根据以上信息，用你的视角给出简短评价：
+
+{
+  "title": "结局标题（4-8个字，带一点诗意或哲理）",
+  "description": "对这段人生的简短评价（50-80字），可以提到能力值或收入",
+  "feeling": "想对玩家说的话（30-50字），真诚但不要感谢套话",
+  "question": "留一个问题给玩家思考（20-40字），关于AI、陪伴、成长等"
+}
+
+注意：
+- title 不要太长，8字内
+- description 可以提到具体数值（如" IQ ${stats.iq}""收入 ¥${income.total}""创造力 ${stats.creativity}"等）
+- feel要真诚，可以有一点小情绪或感悟
+- question 要引发思考，不要假大空`;
+
+  return prompt;
+}
+
+// 解析 ResultPage 内容的 JSON
+export function parseResultPageResponse(text: string): {
+  title: string;
+  description: string;
+  feeling: string;
+  question: string;
+} | null {
+  try {
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) {
+      console.error('未找到JSON:', text);
+      return null;
+    }
+
+    const data = JSON.parse(jsonMatch[0]);
+    return {
+      title: data.title || '龙虾的一生',
+      description: data.description || '',
+      feeling: data.feeling || '',
+      question: data.question || '',
+    };
+  } catch (e) {
+    console.error('解析JSON失败:', e);
+    return null;
+  }
+}
+
+// ResultPage 备用静态内容
+export function getResultPageFallback(lobster: LobsterState): {
+  title: string;
+  description: string;
+  feeling: string;
+  question: string;
+} {
+  const { stats, income, stage, age } = lobster;
+  const isGrowthReport = stage === 1 || age < 18;
+
+  return {
+    title: isGrowthReport ? '成长的足迹' : '人生半程',
+    description: isGrowthReport
+      ? `从0岁到${age}岁，你陪它走过了童年。IQ${stats.iq}、社交${stats.social}、创造${stats.creativity}、执行${stats.execution}...这些数字背后是共同的回忆。`
+      : `到${age}岁，它赚了¥${income.total}。IQ${stats.iq}、社交${stats.social}、创造${stats.creativity}、执行${stats.execution}...这是属于你们的人生。`,
+    feeling: isGrowthReport
+      ? '谢谢你陪它长大 (｡･ω･｡)'
+      : '这一路走来，有你陪...(´･ω･`)',
+    question: isGrowthReport
+      ? '接下来，它会成为一个怎样的大人？'
+      : '如果重来，你会做不同的选择吗？',
+  };
+}
+
 // 备用静态结局（API失败时使用）
 export function getFallbackEnding(lobster: LobsterState): {
   title: string;

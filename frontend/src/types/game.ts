@@ -73,6 +73,7 @@ export interface FeedbackResponse {
     type: EndingType;
     reason?: string;
   };
-  backgroundImage?: number;
+  backgroundImage?: number;        // 反馈页背景 (1-8)
+  reflectionBackground?: number;   // 反思页背景 (1-19)
   growUp?: boolean;  // AI判断是否触发成长
 }
