@@ -151,34 +151,20 @@ export default function ResultPage() {
           </div>
         </div>
 
-        {/* 能力展示 - 无容器 */}
-        <div className="flex gap-4">
-          <div className="flex-1 flex flex-col gap-1">
-            <p className="text-xs text-white/70">{isGrowthReport ? '能力成长轨迹' : '能力值'}</p>
-            <div className="flex flex-col gap-1 text-sm">
-              <div className="flex justify-between">
-                <span className="text-white/70">学习</span>
-                <span className="text-white font-semibold">{lobster.stats.iq}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-white/70">社交</span>
-                <span className="text-white font-semibold">{lobster.stats.social}</span>
-              </div>
-            </div>
-          </div>
-          <div className="flex-1 flex flex-col gap-1">
-            <p className="text-xs text-white/70">&nbsp;</p>
-            <div className="flex flex-col gap-1 text-sm">
-              <div className="flex justify-between">
-                <span className="text-white/70">创造</span>
-                <span className="text-white font-semibold">{lobster.stats.creativity}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-white/70">执行</span>
-                <span className="text-white font-semibold">{lobster.stats.execution}</span>
-              </div>
-            </div>
-          </div>
+        {/* 能力展示 - 胶囊标签样式 */}
+        <div className="flex flex-wrap justify-center gap-2">
+          <span className="px-3 py-1 bg-white/10 backdrop-blur-sm rounded-lg text-xs text-white/80">
+            学习 {lobster.stats.iq}
+          </span>
+          <span className="px-3 py-1 bg-white/10 backdrop-blur-sm rounded-lg text-xs text-white/80">
+            社交 {lobster.stats.social}
+          </span>
+          <span className="px-3 py-1 bg-white/10 backdrop-blur-sm rounded-lg text-xs text-white/80">
+            创造 {lobster.stats.creativity}
+          </span>
+          <span className="px-3 py-1 bg-white/10 backdrop-blur-sm rounded-lg text-xs text-white/80">
+            执行 {lobster.stats.execution}
+          </span>
         </div>
 
         {/* 阶段2额外显示收入 - 无容器 */}
