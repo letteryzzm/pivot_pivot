@@ -11,9 +11,9 @@ import ForceLegalPage from './pages/ForceLegalPage';
 import ParameterLockPage from './pages/ParameterLockPage';
 import LobsterTransition from './components/LobsterTransition';
 import SharePreviewPage from './pages/SharePreviewPage';
-import FinalEndingPage from './pages/FinalEndingPage';
 import AnimationTestPage from './pages/AnimationTestPage';
 import EndingDebugPage from './pages/EndingDebugPage';
+import EndingTestPage from './pages/EndingTestPage';
 
 function App() {
   return (
@@ -32,10 +32,10 @@ function App() {
             <Route path="/parameter-lock" element={<ParameterLockPage />} />
             <Route path="/transition" element={<LobsterTransition />} />
             <Route path="/result" element={<ResultPage />} />
-            <Route path="/final-ending" element={<FinalEndingPage />} />
             <Route path="/share-preview" element={<SharePreviewPage />} />
             <Route path="/animation-test" element={<AnimationTestPage />} />
             <Route path="/ending-debug" element={<EndingDebugPage />} />
+            <Route path="/ending/:type" element={<EndingTestPage />} />
           </Routes>
         </BrowserRouter>
       </div>

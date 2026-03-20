@@ -4,7 +4,7 @@ import { useGameStore } from '../store/gameStore';
 
 export default function ActivitySelectPage() {
   const navigate = useNavigate();
-  const { lobster, canEnterEnding, generateAIEnding, setReflectionEnding, aiGeneratedEnding, isGeneratingEnding } = useGameStore();
+  const { lobster, canEnterEnding } = useGameStore();
 
   const activities = lobster.stage === 1 ? stage1Activities : stage2Activities;
   const backgroundImage = lobster.stage === 1
@@ -19,32 +19,11 @@ export default function ActivitySelectPage() {
     navigate('/transition', { state: { activity } });
   };
 
-  // 处理结局点击 - 先让AI生成结局类型，再跳转
-  const handleEndingClick = async () => {
-    // 如果还没有AI结局，先生成
-    if (!aiGeneratedEnding && !isGeneratingEnding) {
-      await generateAIEnding();
-    }
-
-    // 设置反思结局（用于页面显示）
-    if (aiGeneratedEnding) {
-      setReflectionEnding({
-        trigger: true,
-        type: aiGeneratedEnding.type,
-        reason: aiGeneratedEnding.reason
-      });
-    }
-
-    // 跳转到对应结局页面
-    navigate(getEndingRoute());
-  };
-
-  // 根据阶段决定跳转到哪个结局
-  const getEndingRoute = () => {
-    if (lobster.stage === 2) {
-      return '/final-ending';
-    }
-    return '/result';
+  // 处理结局点击
+  const handleEndingClick = () => {
+    // 阶段1：法人突破页面
+    // 阶段2：结果页面
+    navigate('/result');
   };
 
   return (
@@ -93,10 +72,9 @@ export default function ActivitySelectPage() {
         {canEnterEnding() ? (
           <button
             onClick={handleEndingClick}
-            disabled={isGeneratingEnding}
-            className="w-full h-12 bg-gradient-to-r from-[#0ea5e9] to-[#10b981] text-white rounded-xl text-base font-medium animate-pulse disabled:opacity-50"
+            className="w-full h-12 bg-gradient-to-r from-[#0ea5e9] to-[#10b981] text-white rounded-xl text-base font-medium animate-pulse"
           >
-            {isGeneratingEnding ? 'AI正在总结...' : (lobster.stage === 1 ? '📜 查看成长报告' : '📖 查看人生结局')}
+            {lobster.stage === 1 ? '📜 查看成长报告' : '📖 查看人生结局'}
           </button>
         ) : (
           <p className="text-xs text-white/60">
