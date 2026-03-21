@@ -6,6 +6,7 @@ import { getRandomReflection } from "../game/feedbackTemplates";
 import { getReflectionImagePathById } from "../config/reflectionImages";
 import LobsterSprite from "../components/LobsterSprite";
 import TypewriterText from "../components/TypewriterText";
+import LoadingDots from "../components/LoadingDots";
 
 export default function ReflectPage() {
   const navigate = useNavigate();
@@ -174,7 +175,6 @@ ${guide.prompt}
         console.log("====================================");
 
         // 一次性调用 API 获取完整响应
-        setIsLoading(false);
         const responseText = await callAPI(prompt);
         console.log("最终反思原始文本:", responseText);
 
@@ -224,7 +224,10 @@ ${guide.prompt}
       <div className="min-h-screen bg-[#fafafa] flex items-center justify-center">
         <div className="text-center">
           <LobsterSprite age={lobster.age} stage={lobster.stage} action="idle" size={80} />
-          <p className="mt-4 text-sm text-[#71717a]">{lobster.name}想了想...</p>
+          <p className="mt-4 text-sm text-[#71717a] flex items-center justify-center gap-2">
+            {lobster.name}想了想
+            <LoadingDots />
+          </p>
         </div>
       </div>
     );
