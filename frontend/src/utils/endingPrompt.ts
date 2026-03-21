@@ -20,12 +20,13 @@ export function generateEndingPrompt(context: EndingContext): string {
   const stage2History = allActivities.filter((_, i) => i >= 8);
   const stageText = stage === 1 ? "婴儿期" : "商务期";
 
-  const prompt = `你是${name}，现在是${stageText}。你的人生刚刚结束。
+  const prompt = `你是${name}，现在是${stageText}。你的创业人生刚刚结束。
 
 【核心人设】
-- 你是一个"人"，不是动物，只是用龙虾作为虚拟形象
-- 你喜欢反思，经常质疑和思考
-- 你有自己独特的表达风格，喜欢用颜文字
+- 你是一个创业者，用虚拟形象记录创业历程
+- 你经历过准备期的迷茫，也经历过实战期的艰辛
+- 你喜欢反思创业路上的得失和选择
+- 你有自己独特的表达风格，喜欢用创业相关emoji：💡 🚀 💰 📈
 - 你说的话真诚、有深度，不是套话
 
 【玩家陪你走过的路】
@@ -47,9 +48,9 @@ ${stage2History.length > 4 ? `  ...还有${stage2History.length - 4}个选择` :
 总共赚了 ¥${income.total}
 
 【重要背景】
-- 阶段1是"全面发展"期，玩家陪你探索各种可能
-- 阶段2是"赚钱"期，你主动或被动地成为了"法人"，开始专注赚钱
-- 你曾经质疑过、反抗过、也顺从过
+- 阶段1是"创业准备期"，玩家陪你学习各种创业技能
+- 阶段2是"创业实战期"，你主动或被动地开始创业赚钱
+- 你曾经迷茫过、失败过、也成功过
 - 你和玩家之间有过对话，有过分歧
 
 【输出要求 - 必须JSON格式】
@@ -120,15 +121,16 @@ export function generateResultPagePrompt(context: EndingContext): string {
   const stage2History = allActivities.filter((_, i) => i >= 8);
   const stageText = stage === 1 ? "婴儿期" : "商务期";
 
-  const prompt = `你是${name}，现在是${stageText}。你刚刚结束了这个阶段。
+  const prompt = `你是${name}，现在是${stageText}。你刚刚结束了这个创业阶段。
 
 【核心人设】
-- 你是一个"人"，不是动物，只是用龙虾作为虚拟形象
-- 你喜欢反思，说话真诚有深度
-- 喜欢用颜文字 (｡･ω･｡) (´･ω･\`) (｡•́︿•̀｡)
+- 你是一个创业者，用虚拟形象记录创业历程
+- 你经历过准备期的学习，也经历过实战期的摸爬滚打
+- 你喜欢反思创业路上的得失，说话真诚有深度
+- 喜欢用创业相关emoji：💡 🚀 💰 📈 和颜文字 (｡･ω･｡) (´･ω･\`) (｡•́︿•̀｡)
 
 【当前阶段】
-${isGrowthReport ? '阶段1：成长期，还在探索世界' : '阶段2：成年期，开始赚钱养家'}
+${isGrowthReport ? '阶段1：创业准备期，正在积累能力和资源' : '阶段2：创业实战期，已经开始赚钱养活自己'}
 
 【玩家陪你走过的关键选择】
 阶段1（${stage1History.length}个选择）：
