@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import type { PlayerStats, GameResult } from '../types/game.ts'
+import { getImagePath } from '../utils/imageUtils.ts'
 
 interface ShareCardProps {
   readonly playerName: string
@@ -11,6 +12,27 @@ interface ShareCardProps {
     readonly beatCount: number
   } | null
   readonly onClose: () => void
+}
+
+const SHARE_BACKGROUNDS: readonly string[] = [
+  '/images/背景/深色反思背景1.png',
+  '/images/背景/深色反思背景2.png',
+  '/images/背景/深色反思背景3.png',
+  '/images/背景/深色反思背景4.png',
+  '/images/背景/深色反思背景5.png',
+  '/images/背景/深色反思背景6.png',
+  '/images/背景/深色反思背景7.png',
+  '/images/背景/深色反思背景8.png',
+  '/images/背景/深色反思背景9.png',
+  '/images/背景/深色深度思考背景1.png',
+  '/images/背景/深色深度思考背景2.png',
+  '/images/背景/深色深度思考背景3.png',
+  '/images/背景/深色深度思考背景4.png',
+]
+
+function pickRandomBackground(): string {
+  const index = Math.floor(Math.random() * SHARE_BACKGROUNDS.length)
+  return getImagePath(SHARE_BACKGROUNDS[index])
 }
 
 const CANVAS_WIDTH = 750
@@ -52,23 +74,26 @@ function drawRoundedRect(
   ctx.closePath()
 }
 
-function drawBackground(ctx: CanvasRenderingContext2D) {
-  const gradient = ctx.createLinearGradient(0, 0, 0, CANVAS_HEIGHT)
-  gradient.addColorStop(0, '#0f0f1a')
-  gradient.addColorStop(0.3, '#1a1a2e')
-  gradient.addColorStop(0.7, '#16213e')
-  gradient.addColorStop(1, '#0f0f1a')
-  ctx.fillStyle = gradient
-  ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
+function drawBackground(ctx: CanvasRenderingContext2D, bgImage: HTMLImageElement) {
+  // Draw the background image, covering the canvas (cover mode)
+  const imgRatio = bgImage.width / bgImage.height
+  const canvasRatio = CANVAS_WIDTH / CANVAS_HEIGHT
 
-  // Subtle radial glow
-  const radial = ctx.createRadialGradient(
-    CANVAS_WIDTH / 2, 400, 50,
-    CANVAS_WIDTH / 2, 400, 400,
-  )
-  radial.addColorStop(0, 'rgba(99, 102, 241, 0.08)')
-  radial.addColorStop(1, 'rgba(99, 102, 241, 0)')
-  ctx.fillStyle = radial
+  let sx = 0, sy = 0, sw = bgImage.width, sh = bgImage.height
+  if (imgRatio > canvasRatio) {
+    // Image is wider — crop sides
+    sw = bgImage.height * canvasRatio
+    sx = (bgImage.width - sw) / 2
+  } else {
+    // Image is taller — crop top/bottom
+    sh = bgImage.width / canvasRatio
+    sy = (bgImage.height - sh) / 2
+  }
+
+  ctx.drawImage(bgImage, sx, sy, sw, sh, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
+
+  // Dark overlay for text readability
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.55)'
   ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
 }
 
@@ -83,7 +108,6 @@ function drawPlayerInfo(
   ctx: CanvasRenderingContext2D,
   playerName: string,
   resultTitle: string,
-  isHidden: boolean,
 ) {
   const centerX = CANVAS_WIDTH / 2
 
@@ -99,38 +123,14 @@ function drawPlayerInfo(
   ctx.fillStyle = '#ffffff'
   ctx.font = `bold 52px ${FONT_FAMILY}`
   ctx.fillText(resultTitle, centerX, 270)
-
-  // Hidden ending badge
-  if (isHidden) {
-    const badgeText = '隐藏结局'
-    ctx.font = `500 22px ${FONT_FAMILY}`
-    const textWidth = ctx.measureText(badgeText).width
-    const badgeW = textWidth + 32
-    const badgeH = 36
-    const badgeX = centerX - badgeW / 2
-    const badgeY = 285
-
-    ctx.fillStyle = 'rgba(245, 158, 11, 0.2)'
-    drawRoundedRect(ctx, badgeX, badgeY, badgeW, badgeH, 18)
-    ctx.fill()
-    ctx.strokeStyle = 'rgba(251, 191, 36, 0.3)'
-    ctx.lineWidth = 1
-    ctx.stroke()
-
-    ctx.fillStyle = '#fbbf24'
-    ctx.font = `500 22px ${FONT_FAMILY}`
-    ctx.textAlign = 'center'
-    ctx.fillText(badgeText, centerX, badgeY + 25)
-  }
 }
 
 function drawScoreCards(
   ctx: CanvasRenderingContext2D,
   score: number,
   percentile: number,
-  isHidden: boolean,
 ) {
-  const cardY = isHidden ? 345 : 320
+  const cardY = 320
   const cardH = 120
   const cardW = 280
   const gap = 40
@@ -171,13 +171,13 @@ function drawScoreCards(
   ctx.fillText('超越玩家', rightX + cardW / 2, cardY + 95)
 }
 
-function drawStatBars(ctx: CanvasRenderingContext2D, stats: PlayerStats, isHidden: boolean) {
-  const startY = isHidden ? 535 : 510
+function drawStatBars(ctx: CanvasRenderingContext2D, stats: PlayerStats) {
+  const startY = 510
   const barHeight = 20
   const barMaxWidth = 380
   const labelWidth = 90
   const leftMargin = 80
-  const lineSpacing = 55
+  const lineSpacing = 60
 
   const entries: ReadonlyArray<[string, number]> = [
     ['judgment', stats.judgment],
@@ -215,41 +215,8 @@ function drawStatBars(ctx: CanvasRenderingContext2D, stats: PlayerStats, isHidde
   })
 }
 
-function drawFingerprints(
-  ctx: CanvasRenderingContext2D,
-  fingerprints: readonly string[],
-  isHidden: boolean,
-) {
-  if (fingerprints.length === 0) return
-
-  const startY = isHidden ? 780 : 755
-  const leftMargin = 80
-
-  // Section title
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.35)'
-  ctx.font = `400 22px ${FONT_FAMILY}`
-  ctx.textAlign = 'left'
-  ctx.fillText('决策指纹', leftMargin, startY)
-
-  // Fingerprint items
-  fingerprints.forEach((fp, i) => {
-    const y = startY + 35 + i * 36
-
-    // Number
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.25)'
-    ctx.font = `400 20px ${FONT_FAMILY}`
-    ctx.textAlign = 'left'
-    ctx.fillText(String(i + 1).padStart(2, '0'), leftMargin, y)
-
-    // Text
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.65)'
-    ctx.font = `400 22px ${FONT_FAMILY}`
-    ctx.fillText(fp, leftMargin + 40, y)
-  })
-}
-
-function drawQuote(ctx: CanvasRenderingContext2D, isHidden: boolean) {
-  const y = isHidden ? 920 : 895
+function drawQuote(ctx: CanvasRenderingContext2D) {
+  const y = 790
 
   ctx.fillStyle = 'rgba(255, 255, 255, 0.06)'
   drawRoundedRect(ctx, 60, y - 30, CANVAS_WIDTH - 120, 80, 12)
@@ -268,11 +235,10 @@ function drawQuote(ctx: CanvasRenderingContext2D, isHidden: boolean) {
 function drawQRCode(
   ctx: CanvasRenderingContext2D,
   qrImage: HTMLImageElement,
-  isHidden: boolean,
 ) {
   const qrSize = 160
   const qrX = (CANVAS_WIDTH - qrSize) / 2
-  const qrY = isHidden ? 1030 : 1010
+  const qrY = 920
 
   // White background behind QR
   ctx.fillStyle = '#ffffff'
@@ -315,6 +281,7 @@ function renderCanvas(
   result: GameResult,
   percentile: number,
   qrImage: HTMLImageElement,
+  bgImage: HTMLImageElement,
 ) {
   const ctx = canvas.getContext('2d')
   if (!ctx) return
@@ -322,17 +289,14 @@ function renderCanvas(
   canvas.width = CANVAS_WIDTH
   canvas.height = CANVAS_HEIGHT
 
-  const isHidden = result.isHidden
-
-  drawBackground(ctx)
+  drawBackground(ctx, bgImage)
   drawDecorations(ctx)
   drawTitle(ctx)
-  drawPlayerInfo(ctx, playerName, result.title, isHidden)
-  drawScoreCards(ctx, result.score, percentile, isHidden)
-  drawStatBars(ctx, stats, isHidden)
-  drawFingerprints(ctx, result.fingerprints, isHidden)
-  drawQuote(ctx, isHidden)
-  drawQRCode(ctx, qrImage, isHidden)
+  drawPlayerInfo(ctx, playerName, result.title)
+  drawScoreCards(ctx, result.score, percentile)
+  drawStatBars(ctx, stats)
+  drawQuote(ctx)
+  drawQRCode(ctx, qrImage)
 }
 
 function loadImage(src: string): Promise<HTMLImageElement> {
@@ -358,18 +322,21 @@ export default function ShareCard({
 
   const displayPercentile = rankData?.percentile ?? result.percentile
 
+  const bgPathRef = useRef(pickRandomBackground())
+
   useEffect(() => {
     const init = async () => {
       const canvas = canvasRef.current
       if (!canvas) return
 
       try {
-        const [qrImage] = await Promise.all([
+        const [qrImage, bgImage] = await Promise.all([
           loadImage('/QRcode.png'),
+          loadImage(bgPathRef.current),
           document.fonts?.ready ?? Promise.resolve(),
         ])
 
-        renderCanvas(canvas, playerName, stats, result, displayPercentile, qrImage)
+        renderCanvas(canvas, playerName, stats, result, displayPercentile, qrImage, bgImage)
         setIsReady(true)
       } catch {
         setStatusText('图片加载失败，请重试')

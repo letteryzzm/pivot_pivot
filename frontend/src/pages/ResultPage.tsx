@@ -413,7 +413,7 @@ export default function ResultPage() {
             </p>
           </motion.div>
 
-          {/* Action buttons */}
+          {/* Actions */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -422,16 +422,47 @@ export default function ResultPage() {
           >
             <button
               onClick={() => setShowShareCard(true)}
-              className="w-full py-3.5 text-sm font-medium rounded-xl bg-white/20 border border-white/25 hover:bg-white/30 active:scale-[0.98] transition-all"
+              className="w-full flex items-center gap-3 bg-white/8 border border-white/10 rounded-xl p-3 hover:bg-white/12 active:scale-[0.98] transition-all text-left"
             >
-              分享结果
+              <p className="flex-1 text-xs text-white/50 leading-relaxed">
+                假如你有100万美金，你会投给谁？把这个游戏发给他，如果适合创业，给他投钱
+              </p>
+              <div className="w-9 h-9 rounded-lg bg-white/10 flex-shrink-0 flex items-center justify-center">
+                <svg className="w-4 h-4 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                </svg>
+              </div>
             </button>
+
             <button
               onClick={handleRestart}
-              className="w-full py-3.5 text-sm font-medium rounded-xl bg-white/8 border border-white/10 hover:bg-white/15 active:scale-[0.98] transition-all text-white/60"
+              className="w-full flex items-center gap-3 bg-white/8 border border-white/10 rounded-xl p-3 hover:bg-white/12 active:scale-[0.98] transition-all text-left"
             >
-              再来一次，做不同的选择
+              <p className="flex-1 text-xs text-white/50 leading-relaxed">
+                觉得这不是真正的你，而是你想成为的你？再来一次
+              </p>
+              <div className="w-9 h-9 rounded-lg bg-white/10 flex-shrink-0 flex items-center justify-center">
+                <svg className="w-4 h-4 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+              </div>
             </button>
+
+            <a
+              href="https://lh9emykotk.feishu.cn/share/base/form/shrcnidjRDdc5Mnkx2JEmzaXfqf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full flex items-center gap-3 bg-white/8 border border-amber-400/20 rounded-xl p-3 hover:bg-white/12 active:scale-[0.98] transition-all text-left"
+            >
+              <p className="flex-1 text-xs text-white/50 leading-relaxed">
+                这些问题都游刃有余？加微信凭截图查看你的完整选择过程
+              </p>
+              <div className="w-9 h-9 rounded-lg bg-amber-400/10 flex-shrink-0 flex items-center justify-center">
+                <svg className="w-4 h-4 text-amber-400/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                </svg>
+              </div>
+            </a>
           </motion.div>
         </div>
       </div>
