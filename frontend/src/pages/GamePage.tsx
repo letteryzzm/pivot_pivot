@@ -149,7 +149,7 @@ export default function GamePage() {
 
                 {/* Claw */}
                 <div className="flex justify-center mt-3 mb-2">
-                  <ClawSprite stage={clawStage} mood="walk" size={72} />
+                  <ClawSprite stage={clawStage} mood="idle" size={72} />
                 </div>
 
                 {/* Scenario description */}
@@ -198,7 +198,7 @@ export default function GamePage() {
                 {/* Claw reacting */}
                 <ClawSprite
                   stage={clawStage}
-                  mood={clawStage === 'business' ? 'run' : 'walk'}
+                  mood="idle"
                   size={120}
                 />
 

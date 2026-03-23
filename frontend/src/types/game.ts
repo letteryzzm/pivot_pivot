@@ -33,6 +33,8 @@ export interface ChoiceRecord {
   effects: StatEffect
 }
 
+export type PlayerPath = 'exploring' | 'ready' | 'started'
+
 export type FounderType = 'founder' | 'thinker' | 'hustler' | 'explorer' | 'observer'
 
 export interface GameResult {

@@ -383,10 +383,14 @@ const POOL: readonly (readonly Scenario[])[] = [
  * Returns 10 scenarios with sequential ids (1-10).
  */
 export function generateScenarios(): Scenario[] {
-  return POOL.map((slot, index) => {
+  return generateScenariosFromPool(POOL)
+}
+
+export function generateScenariosFromPool(pool: readonly (readonly Scenario[])[]): Scenario[] {
+  return pool.map((slot, index) => {
     const picked = slot[Math.floor(Math.random() * slot.length)]
     return { ...picked, id: index + 1 }
   })
 }
 
-export const TOTAL_ROUNDS = POOL.length
+export const TOTAL_ROUNDS = 10

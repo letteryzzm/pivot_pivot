@@ -1,17 +1,28 @@
 import { create } from 'zustand'
 import type {
   PlayerStats,
+  PlayerPath,
   ChoiceRecord,
   GameResult,
   Choice,
   Scenario,
 } from '../types/game.ts'
 import { INITIAL_STATS, applyEffects, generateResult, generateBridge } from '../game/engine.ts'
-import { generateScenarios, TOTAL_ROUNDS } from '../game/scenarios.ts'
+import { generateScenarios, generateScenariosFromPool, TOTAL_ROUNDS } from '../game/scenarios.ts'
+import { EXPLORING_POOL } from '../game/scenarios-exploring.ts'
+import { READY_POOL } from '../game/scenarios-ready.ts'
+import { STARTED_POOL } from '../game/scenarios-started.ts'
 import { trackGameStart, trackChoice, trackGameEnd } from '../utils/tracker.ts'
+
+const PATH_POOLS = {
+  exploring: EXPLORING_POOL,
+  ready: READY_POOL,
+  started: STARTED_POOL,
+} as const
 
 interface GameStore {
   playerName: string
+  playerPath: PlayerPath | null
   stats: PlayerStats
   currentRound: number
   history: readonly ChoiceRecord[]
@@ -22,13 +33,15 @@ interface GameStore {
   isPlaying: boolean
   isFinished: boolean
 
-  startGame: (name: string) => void
+  setPlayerName: (name: string) => void
+  startGame: (name: string, path?: PlayerPath) => void
   makeChoice: (choice: Choice) => void
   resetGame: () => void
 }
 
 export const useGameStore = create<GameStore>((set, get) => ({
   playerName: '',
+  playerPath: null,
   stats: { ...INITIAL_STATS },
   currentRound: 0,
   history: [],
@@ -38,15 +51,23 @@ export const useGameStore = create<GameStore>((set, get) => ({
   isPlaying: false,
   isFinished: false,
 
-  startGame: (name: string) => {
+  setPlayerName: (name: string) => {
+    set({ playerName: name })
+  },
+
+  startGame: (name: string, path?: PlayerPath) => {
     trackGameStart(name)
+    const scenarios = path
+      ? generateScenariosFromPool(PATH_POOLS[path])
+      : generateScenarios()
     set({
       playerName: name,
+      playerPath: path ?? null,
       stats: { ...INITIAL_STATS },
       currentRound: 0,
       history: [],
       result: null,
-      scenarios: generateScenarios(),
+      scenarios,
       bridge: '',
       isPlaying: true,
       isFinished: false,
@@ -107,6 +128,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   resetGame: () => {
     set({
       playerName: '',
+      playerPath: null,
       stats: { ...INITIAL_STATS },
       currentRound: 0,
       history: [],
