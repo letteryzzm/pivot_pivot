@@ -147,21 +147,23 @@ export default function GamePage() {
                   </div>
                 )}
 
-                {/* Claw + scenario */}
-                <div className="flex items-start gap-3 mt-3 mb-4">
-                  <ClawSprite stage={clawStage} mood="walk" size={64} className="shrink-0" />
-                  <div>
-                    <span className="text-xs font-mono text-white/40 block mb-1">
-                      DAY {scenario.id} · {scenario.title}
-                    </span>
-                    <p className="text-sm text-white/85 leading-relaxed">
-                      {t(scenario.description, playerName)}
-                    </p>
-                  </div>
+                {/* Claw */}
+                <div className="flex justify-center mt-3 mb-2">
+                  <ClawSprite stage={clawStage} mood="walk" size={72} />
+                </div>
+
+                {/* Scenario description */}
+                <div className="mb-4">
+                  <span className="text-xs font-mono text-white/40 block mb-1">
+                    DAY {scenario.id} · {scenario.title}
+                  </span>
+                  <p className="text-sm text-white/85 leading-relaxed">
+                    {t(scenario.description, playerName)}
+                  </p>
                 </div>
 
                 {/* Choices */}
-                <div className="flex flex-col gap-2.5 mt-auto mb-4">
+                <div className="flex flex-col gap-2.5 mb-4">
                   {scenario.choices.map((choice, index) => {
                     const letter = String.fromCharCode(65 + index)
                     return (
