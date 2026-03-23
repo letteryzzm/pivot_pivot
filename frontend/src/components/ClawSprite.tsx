@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { getImagePath } from '../utils/imageUtils.ts'
 
 type ClawStage = 'baby' | 'child' | 'teen' | 'business'
 
@@ -45,7 +46,7 @@ export default function ClawSprite({
     run: '奔跑',
   }
   const action = actionMap[mood] || '待机'
-  const src = `/images/claw/${prefix}${action}${frame}.png`
+  const src = getImagePath(`/images/claw/${prefix}${action}${frame}.png`)
 
   return (
     <img

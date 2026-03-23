@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsx scripts/convert-images.ts && tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "convert-images": "tsx scripts/convert-images.ts"

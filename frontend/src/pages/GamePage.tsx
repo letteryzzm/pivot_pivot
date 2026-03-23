@@ -6,6 +6,8 @@ import type { Choice } from '../types/game.ts'
 import ClawSprite, { getClawStage } from '../components/ClawSprite.tsx'
 import TypewriterText from '../components/TypewriterText.tsx'
 import { motion, AnimatePresence } from 'framer-motion'
+import { getImagePath } from '../utils/imageUtils.ts'
+import { preloadGameRoundAssets, preloadResultAssets } from '../utils/imagePreloader.ts'
 
 function t(text: string, name: string): string {
   return text.replace(/\{name\}/g, name)
@@ -49,11 +51,19 @@ export default function GamePage() {
     if (isFinished) navigate('/result', { replace: true })
   }, [isFinished, navigate])
 
+  // Preload current + next round assets; preload result assets near end
+  useEffect(() => {
+    preloadGameRoundAssets(currentRound)
+    if (currentRound >= TOTAL_ROUNDS - 2) {
+      preloadResultAssets()
+    }
+  }, [currentRound])
+
   if (!isPlaying || currentRound >= TOTAL_ROUNDS || scenarios.length === 0) return null
 
   const scenario = scenarios[currentRound]
   const clawStage = getClawStage(currentRound)
-  const bgImage = ROUND_BACKGROUNDS[currentRound] || ROUND_BACKGROUNDS[0]
+  const bgImage = getImagePath(ROUND_BACKGROUNDS[currentRound] || ROUND_BACKGROUNDS[0])
 
   const handleChoiceSelect = (choice: Choice) => {
     if (isTransitioning) return

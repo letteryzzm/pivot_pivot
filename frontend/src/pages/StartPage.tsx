@@ -1,8 +1,10 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGameStore } from '../store/gameStore.ts'
 import ClawSprite from '../components/ClawSprite.tsx'
 import { motion } from 'framer-motion'
+import { getImagePath } from '../utils/imageUtils.ts'
+import { preloadStartPageAssets, preloadGameRoundAssets } from '../utils/imagePreloader.ts'
 
 export default function StartPage() {
   const [name, setName] = useState('')
@@ -16,14 +18,22 @@ export default function StartPage() {
     navigate('/game')
   }
 
+  // Preload start page assets on mount, and game round 0 assets ahead of time
+  useEffect(() => {
+    preloadStartPageAssets()
+    preloadGameRoundAssets(0)
+  }, [])
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') handleStart()
   }
 
+  const bgUrl = getImagePath('/images/背景/欢迎屏幕背景_2.png')
+
   return (
     <div
       className="min-h-full flex flex-col text-white bg-cover bg-center"
-      style={{ backgroundImage: "url('/images/背景/欢迎屏幕背景_2.png')" }}
+      style={{ backgroundImage: `url('${bgUrl}')` }}
     >
       <div className="flex flex-col bg-black/50 backdrop-blur-sm" style={{ minHeight: '874px' }}>
         <div className="h-12" />

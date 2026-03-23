@@ -10,6 +10,7 @@ import TypewriterText from '../components/TypewriterText.tsx'
 import LoadingDots from '../components/LoadingDots.tsx'
 import ShareCard from '../components/ShareCard.tsx'
 import { motion } from 'framer-motion'
+import { getImagePath } from '../utils/imageUtils.ts'
 
 const STAT_CONFIG: Record<
   string,
@@ -92,8 +93,9 @@ export default function ResultPage() {
 
   if (!result) return null
 
-  const bgImage =
+  const bgImage = getImagePath(
     ENDING_BACKGROUNDS[result.founderType] || ENDING_BACKGROUNDS.explorer
+  )
   const displayPercentile = rankData?.percentile ?? result.percentile
   const totalPlayers = rankData?.totalPlayers ?? 0
 
