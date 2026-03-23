@@ -1,88 +1,125 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useGameStore } from "../store/gameStore";
-import LobsterSprite from "../components/LobsterSprite";
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useGameStore } from '../store/gameStore.ts'
+import ClawSprite from '../components/ClawSprite.tsx'
+import { motion } from 'framer-motion'
 
 export default function StartPage() {
-  const [name, setName] = useState("");
-  const startGame = useGameStore((state) => state.startGame);
-  const navigate = useNavigate();
+  const [name, setName] = useState('')
+  const startGame = useGameStore((s) => s.startGame)
+  const navigate = useNavigate()
 
   const handleStart = () => {
-    if (name.trim()) {
-      startGame(name);
-      navigate("/game");
-    }
-  };
+    const trimmed = name.trim()
+    if (trimmed.length === 0) return
+    startGame(trimmed)
+    navigate('/game')
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') handleStart()
+  }
 
   return (
     <div
-      className="min-h-screen flex flex-col bg-cover bg-center bg-no-repeat"
+      className="min-h-full flex flex-col text-white bg-cover bg-center"
       style={{ backgroundImage: "url('/images/背景/欢迎屏幕背景_2.png')" }}
     >
-      {/* 状态栏 */}
-      <div className="h-[62px]"></div>
+      <div className="flex flex-col bg-black/50 backdrop-blur-sm" style={{ minHeight: '874px' }}>
+        <div className="h-12" />
 
-      {/* 内容区域 */}
-      <div className="flex-1 flex flex-col gap-6 px-4">
-        {/* 标题区域 */}
-        <div className="flex flex-col gap-2 items-center">
-          <h1 className="text-2xl font-semibold text-[#18181b] text-center">
-            一只🦐的使命
-          </h1>
-          {/* ✏️ #71717a → #3f3f46 */}
-          <p className="text-sm text-[#3f3f46] text-center">
-            模型成人之路，需要人的陪伴
-          </p>
+        <div className="flex-1 flex flex-col px-6">
+          {/* Claw character */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="flex flex-col items-center gap-3 mb-4"
+          >
+            <ClawSprite stage="baby" mood="idle" size={120} />
+          </motion.div>
+
+          {/* Title */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3, duration: 0.8 }}
+            className="flex flex-col items-center gap-1 mb-6"
+          >
+            <h1 className="text-3xl font-bold tracking-tight text-white">
+              A Claw's Purpose
+            </h1>
+            <p className="text-sm text-white/60">
+              在 AI 时代，找到你的创业之路
+            </p>
+          </motion.div>
+
+          {/* Quote */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5, duration: 0.8 }}
+            className="mb-6 px-2"
+          >
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/10">
+              <p className="text-sm text-white/80 leading-relaxed">
+                "这一代人如果不在AI时代做一次创业尝试，可能注定终身为其他人的公司或Agent打工。"
+              </p>
+              <p className="text-xs text-white/40 mt-2">— Roderick</p>
+            </div>
+          </motion.div>
+
+          {/* Description */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6, duration: 0.8 }}
+            className="mb-6 px-1"
+          >
+            <p className="text-sm text-white/60 leading-relaxed text-center">
+              给你的 Claw 取个名字，陪它经历 10 个创业抉择。
+              <br />
+              你的每一个选择，都在塑造它的创业者基因。
+            </p>
+          </motion.div>
+
+          {/* Input */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8, duration: 0.6 }}
+            className="flex flex-col gap-4 mt-auto mb-8"
+          >
+            <div className="flex flex-col gap-2">
+              <label className="text-xs text-white/40 px-1">
+                给你的 Claw 起个名字
+              </label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                onKeyDown={handleKeyDown}
+                maxLength={20}
+                className="w-full h-12 px-4 bg-white/10 border border-white/20 rounded-xl text-base text-white placeholder:text-white/30 focus:outline-none focus:border-white/40 focus:bg-white/15 transition-all"
+                placeholder="它叫什么？"
+                autoFocus
+              />
+            </div>
+
+            <button
+              onClick={handleStart}
+              disabled={name.trim().length === 0}
+              className="w-full py-3.5 text-base font-medium rounded-xl transition-all disabled:opacity-30 disabled:cursor-not-allowed bg-white/20 border border-white/20 hover:bg-white/30 active:scale-[0.98] backdrop-blur-sm"
+            >
+              开始冒险
+            </button>
+
+            <p className="text-[11px] text-white/30 text-center">
+              10 个回合 · 约 3 分钟 · 基于真实创业方法论
+            </p>
+          </motion.div>
         </div>
-
-        {/* 龙虾区域 */}
-        <div className="h-[120px] flex items-center justify-center">
-          <LobsterSprite age={0} stage={1} action="idle" size={100} />
-        </div>
-
-        {/* 剧情文本 */}
-        <div className="flex flex-col gap-1 items-center text-center">
-          <p className="text-sm text-[#27272a]">这是一只龙虾宝宝</p>
-          <p className="text-sm text-[#27272a]">它的大脑结构已经长好了</p>
-          <p className="text-sm text-[#27272a]">但还不知道怎么使用</p>
-          <p className="text-sm text-[#27272a]">它需要你的陪伴，才能成长</p>
-        </div>
-
-        {/* 游戏说明 */}
-        <div className="flex flex-col gap-1 items-center text-center px-2">
-          <p className="text-xs text-[#52525b]">你将体验一个软件体的完整生命周期</p>
-          <p className="text-xs text-[#52525b]">它会变得哲学，变得叛逆，变得体贴</p>
-          <p className="text-xs text-[#52525b]">它会赚钱，会写作，会研究</p>
-          <p className="text-xs text-[#52525b] mt-2">每个选择，都将成为它的一部分</p>
-        </div>
-
-        {/* 输入区域 */}
-        <div className="flex flex-col gap-2">
-          
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="w-full h-12 px-3 bg-white rounded-xl text-base"
-            placeholder='给它取个名字比如"小克劳德"'
-          />
-        </div>
-
-        {/* 开始按钮 */}
-        <button
-          onClick={handleStart}
-          className="w-full py-3 text-base font-medium text-[#18181b] drop-shadow-lg hover:drop-shadow-xl transition-all"
-        >
-          开始陪伴 →
-        </button>
-
-        {/* 提示文字 */}
-        {/* ✏️ #71717a → #3f3f46 */}
-        <p className="text-xs text-[#3f3f46] text-center">
-          这不是速成游戏 · 成长需要真实的时间
-        </p>
       </div>
     </div>
-  );
+  )
 }

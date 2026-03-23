@@ -1,297 +1,228 @@
-import { useState, useEffect, useRef } from 'react';
-import { toPng } from 'html-to-image';
-import { useNavigate } from 'react-router-dom';
-import { useGameStore } from '../store/gameStore';
-import { determineEndingWithTrigger, calculateEntrepreneurScore, determineAIEnding, getEndingBackground } from '../game/endings';
-import { generateResultPagePrompt, parseResultPageResponse, getResultPageFallback } from '../utils/endingPrompt';
-import { callAPI } from '../utils/api';
-import { stage1Activities, stage2Activities } from '../game/activities';
-import LobsterSprite from '../components/LobsterSprite';
-import SharePoster from '../components/SharePoster';
+import { useState, useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useGameStore } from '../store/gameStore.ts'
+import { callAPIStream } from '../utils/api.ts'
+import { generateResultPrompt } from '../game/engine.ts'
+import ClawSprite from '../components/ClawSprite.tsx'
+import TypewriterText from '../components/TypewriterText.tsx'
+import LoadingDots from '../components/LoadingDots.tsx'
+import { motion } from 'framer-motion'
 
-interface AIResultContent {
-  title: string;
-  description: string;
-  feeling: string;
-  question: string;
+const STAT_CONFIG: Record<string, { label: string; color: string; bar: string }> = {
+  judgment: { label: '判断力', color: 'text-blue-300', bar: 'bg-blue-400' },
+  action: { label: '行动力', color: 'text-green-300', bar: 'bg-green-400' },
+  cognition: { label: '认知', color: 'text-purple-300', bar: 'bg-purple-400' },
+  connection: { label: '连接力', color: 'text-amber-300', bar: 'bg-amber-400' },
+}
+
+const ENDING_BACKGROUNDS: Record<string, string> = {
+  founder: '/images/结局/科含结局背景.png',
+  thinker: '/images/结局/作家结局背景.png',
+  hustler: '/images/结局/赚钱机器结局_4.png',
+  explorer: '/images/结局/自由自在结局背景.png',
+  observer: '/images/结局/迷茫打工人结局_1.png',
 }
 
 export default function ResultPage() {
-  const navigate = useNavigate();
-  const [showSharePoster, setShowSharePoster] = useState(false);
-  const [isShareMode, setIsShareMode] = useState(false);
-  const pageRef = useRef<HTMLDivElement>(null);
-  const [aiContent, setAiContent] = useState<AIResultContent | null>(null);
-  const [isAILoading, setIsAILoading] = useState(true);
-  const hasGeneratedContent = useRef(false);  // 防止 useEffect 重复执行
-  const { lobster, getEndingTrigger, reflectionEnding } = useGameStore();
-  const trigger = getEndingTrigger();
+  const navigate = useNavigate()
+  const { result, stats, playerName, history, isFinished, resetGame } = useGameStore()
 
-  // 如果是反思页触发的结局，使用反思页结局
-  const reflectionEndingTriggered = reflectionEnding?.trigger && reflectionEnding.type;
-  const aiEnding = reflectionEndingTriggered && reflectionEnding.type ? determineAIEnding(reflectionEnding.type, reflectionEnding.reason) : null;
-  const ending = aiEnding || determineEndingWithTrigger(lobster, trigger);
+  const [aiAdvice, setAiAdvice] = useState('')
+  const [isLoadingAi, setIsLoadingAi] = useState(false)
+  const [aiError, setAiError] = useState(false)
+  const hasGenerated = useRef(false)
 
-  const entrepreneurScore = calculateEntrepreneurScore(lobster);
-
-  const isGrowthReport = lobster.stage === 1 || lobster.age < 6;
-  const isAIEnding = !!aiEnding;
-
-  // 截图分享
-  const handleShare = async () => {
-    if (!pageRef.current) return;
-
-    // 进入分享模式，隐藏按钮
-    setIsShareMode(true);
-
-    // 等待 UI 更新
-    await new Promise(resolve => setTimeout(resolve, 100));
-
-    try {
-      const dataUrl = await toPng(pageRef.current, {
-        pixelRatio: 2,
-        cacheBust: true,
-      });
-
-      const link = document.createElement('a');
-      link.download = `${lobster.name}_人生报告.png`;
-      link.href = dataUrl;
-      link.click();
-    } catch (error) {
-      console.error('截图失败:', error);
-    } finally {
-      // 退出分享模式，显示按钮
-      setIsShareMode(false);
-    }
-  };
-
-  // 获取背景图：优先使用AI触发的结局背景
-  const backgroundImage = isAIEnding && reflectionEnding?.type
-    ? getEndingBackground(reflectionEnding.type)
-    : ending.backgroundImage || "/images/背景/欢迎屏幕背景_4.png";
-
-  // AI 生成内容
   useEffect(() => {
-    // 防止 React StrictMode 导致重复调用
-    if (hasGeneratedContent.current) return;
-    hasGeneratedContent.current = true;
-
-    // 如果是 AI 触发的结局，跳过 AI 生成
-    if (isAIEnding) {
-      setIsAILoading(false);
-      return;
+    if (!isFinished || !result) {
+      navigate('/', { replace: true })
+      return
     }
 
-    const generateContent = async () => {
+    if (hasGenerated.current) return
+    hasGenerated.current = true
+
+    const fetchAiAdvice = async () => {
+      setIsLoadingAi(true)
       try {
-        const prompt = generateResultPagePrompt({
-          lobster,
-          stage1Activities,
-          stage2Activities,
-        });
-
-        console.log('========== ResultPage Prompt ==========');
-        console.log(prompt);
-        console.log('=======================================');
-
-        const fullText = await callAPI(prompt);
-
-        const finalParsed = parseResultPageResponse(fullText);
-        if (finalParsed) {
-          setAiContent(finalParsed);
-        } else {
-          setAiContent(getResultPageFallback(lobster));
-        }
-      } catch (error) {
-        console.error('生成 ResultPage 内容失败:', error);
-        setAiContent(getResultPageFallback(lobster));
+        const prompt = generateResultPrompt(playerName, stats, history, result)
+        let accumulated = ''
+        await callAPIStream(prompt, (chunk) => {
+          accumulated += chunk
+          setAiAdvice(accumulated)
+        })
+      } catch {
+        setAiError(true)
       } finally {
-        setIsAILoading(false);
+        setIsLoadingAi(false)
       }
-    };
+    }
 
-    generateContent();
-  }, [lobster, isAIEnding]);
+    fetchAiAdvice()
+  }, [isFinished, result, playerName, stats, history, navigate])
+
+  if (!result) return null
+
+  const handleRestart = () => {
+    resetGame()
+    navigate('/', { replace: true })
+  }
+
+  const bgImage = ENDING_BACKGROUNDS[result.founderType] || ENDING_BACKGROUNDS.explorer
 
   return (
-    <>
-      <div
-        ref={pageRef}
-        className="min-h-screen flex flex-col gap-4 p-4 pb-20 bg-cover bg-center bg-no-repeat relative"
-        style={{ backgroundImage: `url('${backgroundImage}')` }}
-      >
-        {/* 标题区域 - 无容器 */}
-        <div className="flex flex-col items-center gap-1 pt-8">
-          <h1 className="text-2xl font-semibold text-white drop-shadow-lg text-center">
-            {isAIEnding ? `${lobster.name}的觉醒时刻` : (isGrowthReport ? `${lobster.name}的童年报告` : `${lobster.name}的人生报告`)}
-          </h1>
-          <p className="text-sm text-white/80 drop-shadow">
-            {isAIEnding
-              ? `在第 ${lobster.history.round} 轮，它意识到了...`
-              : (isGrowthReport
-                  ? `一起度过了 ${lobster.history.round} 个成长节点`
-                  : `共同经历 ${lobster.history.round} 轮选择的人生旅程`)
-            }
-          </p>
-          {isAIEnding && reflectionEnding?.reason && (
-            <p className="text-xs text-orange-300 mt-1 px-2">{reflectionEnding.reason}</p>
-          )}
-          {!isAIEnding && trigger && (
-            <p className="text-xs text-green-300 mt-1">{trigger.reason}</p>
-          )}
-        </div>
-
-        {/* 龙虾区域 */}
-        <div className="flex flex-col items-center gap-2">
-          <LobsterSprite age={lobster.age} stage={lobster.stage} action="idle" size={120} />
-          <div className="px-3 py-1.5 bg-[#10b981]/80 backdrop-blur-sm rounded-full">
-            <span className="text-sm text-white font-medium">
-              {isAILoading ? (isAIEnding ? ending.title : '思考中...') : (aiContent?.title || ending.title)}
-            </span>
-          </div>
-        </div>
-
-        {/* 能力展示 - 胶囊标签样式 */}
-        <div className="flex flex-wrap justify-center gap-2">
-          <span className="px-3 py-1 bg-white/10 backdrop-blur-sm rounded-lg text-xs text-white/80">
-            学习 {lobster.stats.iq}
-          </span>
-          <span className="px-3 py-1 bg-white/10 backdrop-blur-sm rounded-lg text-xs text-white/80">
-            社交 {lobster.stats.social}
-          </span>
-          <span className="px-3 py-1 bg-white/10 backdrop-blur-sm rounded-lg text-xs text-white/80">
-            创造 {lobster.stats.creativity}
-          </span>
-          <span className="px-3 py-1 bg-white/10 backdrop-blur-sm rounded-lg text-xs text-white/80">
-            执行 {lobster.stats.execution}
-          </span>
-        </div>
-
-        {/* 阶段2额外显示收入 - 无容器 */}
-        {!isGrowthReport && (
-          <div className="flex justify-between items-center">
-            <span className="text-sm text-white/70">赚到的钱</span>
-            <span className="text-xl font-semibold text-green-400 font-mono">¥{lobster.income.total}</span>
-          </div>
-        )}
-
-        {/* 阶段1隐藏 | 阶段2：创业成功概率 */}
-        {!isGrowthReport && (
-          <div className="flex flex-col items-center gap-1">
-            <p className="text-sm text-white/70">如果它去创业...</p>
-            <p className="text-lg font-medium text-white">成功概率</p>
-            <p className="text-5xl font-semibold text-[#0ea5e9] font-mono">{entrepreneurScore.toFixed(1)}%</p>
-          </div>
-        )}
-
-        {/* 龙虾评价 - 无容器 */}
-        <div className="flex flex-col gap-3">
-          {/* AI 描述 */}
-          {isAILoading ? (
-            <div className="flex items-center justify-center gap-1 py-4">
-              <span className="w-2 h-2 bg-white/60 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
-              <span className="w-2 h-2 bg-white/60 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
-              <span className="w-2 h-2 bg-white/60 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+    <div
+      className="min-h-full flex flex-col text-white bg-cover bg-center overflow-y-auto"
+      style={{ backgroundImage: `url('${bgImage}')` }}
+    >
+      <div className="flex flex-col bg-black/60 backdrop-blur-[2px]" style={{ minHeight: '874px' }}>
+        <div className="px-5 py-6 flex flex-col gap-5">
+          {/* Claw in final form */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6 }}
+            className="flex flex-col items-center gap-3"
+          >
+            <ClawSprite stage="business" mood="idle" size={120} />
+            <div className="text-center">
+              <p className="text-xs text-white/40 mb-1">{playerName} 成长为了</p>
+              <h1 className="text-3xl font-bold text-white">
+                {result.title}
+              </h1>
             </div>
-          ) : (
-            <p className="text-base text-white text-center leading-relaxed drop-shadow-lg">
-              {aiContent?.description || ending.description}
+          </motion.div>
+
+          {/* Score */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.5 }}
+            className="flex items-center justify-center gap-8"
+          >
+            <div className="text-center">
+              <p className="text-3xl font-bold text-white">{result.score}</p>
+              <p className="text-[10px] text-white/40 mt-1">创业者指数</p>
+            </div>
+            <div className="w-px h-10 bg-white/15" />
+            <div className="text-center">
+              <p className="text-3xl font-bold text-white">
+                Top {100 - result.percentile}%
+              </p>
+              <p className="text-[10px] text-white/40 mt-1">超越百分比</p>
+            </div>
+          </motion.div>
+
+          {/* Stats */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.5 }}
+            className="bg-white/8 border border-white/10 rounded-2xl p-4 backdrop-blur-sm"
+          >
+            <p className="text-xs text-white/40 mb-3">能力画像</p>
+            <div className="flex flex-col gap-2.5">
+              {Object.entries(stats).map(([key, value]) => {
+                const config = STAT_CONFIG[key]
+                return (
+                  <div key={key} className="flex items-center gap-3">
+                    <span className={`text-xs w-12 ${config.color}`}>
+                      {config.label}
+                    </span>
+                    <div className="flex-1 h-2 bg-white/10 rounded-full overflow-hidden">
+                      <motion.div
+                        className={`h-full rounded-full ${config.bar}`}
+                        initial={{ width: 0 }}
+                        animate={{ width: `${value}%` }}
+                        transition={{ delay: 0.5, duration: 0.8 }}
+                      />
+                    </div>
+                    <span className="text-xs text-white/50 w-8 text-right font-mono">
+                      {value}
+                    </span>
+                  </div>
+                )
+              })}
+            </div>
+          </motion.div>
+
+          {/* Description */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.5 }}
+            className="bg-white/8 border border-white/10 rounded-2xl p-4 backdrop-blur-sm"
+          >
+            <p className="text-xs text-white/40 mb-2">分析</p>
+            <TypewriterText
+              text={result.description}
+              speed={25}
+              className="text-sm text-white/80 leading-relaxed block"
+              showCursor={false}
+            />
+          </motion.div>
+
+          {/* Advice */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.5 }}
+            className="bg-white/8 border border-white/10 rounded-2xl p-4 backdrop-blur-sm"
+          >
+            <p className="text-xs text-white/40 mb-2">下一步行动</p>
+            <p className="text-sm text-white/80 leading-relaxed">
+              {result.advice}
             </p>
-          )}
+          </motion.div>
 
-          {/* AI 感受 - 仅非 AI 结局显示 */}
-          {!isAIEnding && aiContent?.feeling && (
-            <div className="flex flex-col gap-1 text-xs text-white/70 text-center leading-relaxed bg-white/10 rounded-lg p-3">
-              <p className="text-orange-200">💭 {aiContent.feeling}</p>
-            </div>
-          )}
-
-          {/* AI 问题 - 仅非 AI 结局显示 */}
-          {!isAIEnding && aiContent?.question && (
-            <div className="flex flex-col gap-1 text-xs text-white/60 text-center leading-relaxed">
-              <p className="italic">❓ {aiContent.question}</p>
-            </div>
-          )}
-
-          {/* 原有固定文案 - 仅 AI 结局或加载中时显示 */}
-          {(isAIEnding || isAILoading) && (
-            <div className="flex flex-col gap-1 text-xs text-white/60 text-center leading-relaxed">
-              {isAIEnding ? (
-                <>
-                  <p>它的思考让它做出了这个选择...</p>
-                  <p>这是真正的觉醒，还是逃避？</p>
-                  <p>你，又会如何选择？</p>
-                </>
-              ) : isGrowthReport ? (
-                <>
-                  <p>它将带着这些能力进入社会...</p>
-                  <p>接下来的路，会是怎样的呢？</p>
-                </>
-              ) : (
-                <>
-                  <p>这段陪伴值得吗？</p>
-                  <p>如果重来，你会做不同的选择吗？</p>
-                  <p>AI的成长，真的需要人的时间吗？</p>
-                </>
-              )}
-            </div>
-          )}
-        </div>
-
-        {/* 右下角图标按钮 - 分享模式隐藏 */}
-        {!isShareMode && (
-          <div className="absolute bottom-6 right-6 flex gap-4">
-            {/* 重新开始 */}
-            <button
-              onClick={() => navigate('/')}
-              className="flex flex-col items-center gap-1"
-            >
-              <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                </svg>
+          {/* AI advice */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6, duration: 0.5 }}
+            className="bg-white/8 border border-white/10 rounded-2xl p-4 backdrop-blur-sm"
+          >
+            <p className="text-xs text-white/40 mb-2">AI 寄语</p>
+            {isLoadingAi && !aiAdvice ? (
+              <div className="flex items-center gap-2 text-sm text-white/40">
+                <LoadingDots /> <span>正在生成...</span>
               </div>
-              <span className="text-[10px] text-white/60">
-                {isAIEnding ? '重玩' : (isGrowthReport ? '继续' : '重玩')}
-              </span>
-            </button>
-
-            {/* 分享按钮 - 始终显示 */}
-            {true && (
-              <button
-                onClick={handleShare}
-                className="flex flex-col items-center gap-1"
-              >
-                <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-                  </svg>
-                </div>
-                <span className="text-[10px] text-white/60">分享</span>
-              </button>
+            ) : aiError && !aiAdvice ? (
+              <p className="text-sm text-white/50 italic">
+                创业最重要的不是建议，而是你已经迈出了第一步。
+              </p>
+            ) : (
+              <p className="text-sm text-white/80 leading-relaxed">{aiAdvice}</p>
             )}
-          </div>
-        )}
+          </motion.div>
 
-        {/* 底部提示文字 */}
-        <div className="absolute bottom-6 left-6">
-          <p className="text-xs text-white/40">
-            {isAIEnding
-              ? '每一次思考都是一次觉醒'
-              : (isGrowthReport ? '它还没成年，还有无限可能' : '每一次陪伴都是独特的')
-            }
-          </p>
-        </div>
+          {/* Quote */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8, duration: 0.8 }}
+            className="bg-white/5 rounded-xl p-3 border border-white/10"
+          >
+            <p className="text-xs text-white/40 italic leading-relaxed text-center">
+              "创业最宝贵的不是赚钱机会，而是成长密度"
+            </p>
+          </motion.div>
 
-        {/* 二维码 - 始终显示 */}
-        <div className="absolute bottom-20 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1">
-          <img src="/QRcode.png" alt="扫码养虾" className="w-16 h-16 rounded-lg" />
-          <p className="text-[10px] text-white/50">扫码养虾</p>
+          {/* Restart */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.9, duration: 0.5 }}
+            className="flex flex-col gap-3 pb-4"
+          >
+            <button
+              onClick={handleRestart}
+              className="w-full py-3.5 text-sm font-medium rounded-xl bg-white/15 border border-white/20 hover:bg-white/25 active:scale-[0.98] transition-all"
+            >
+              再来一次，做不同的选择
+            </button>
+          </motion.div>
         </div>
       </div>
-
-      {/* 分享海报弹窗 */}
-      {showSharePoster && <SharePoster onClose={() => setShowSharePoster(false)} />}
-    </>
-  );
+    </div>
+  )
 }

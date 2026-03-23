@@ -6,15 +6,16 @@ body {
   font-family: 'Inter', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: #0a0a0f;
 }
 
 #root {
   width: 100%;
   min-height: 100vh;
-  background: #fafafa;
+  background: #0a0a0f;
 }
 
-/* 隐藏滚动条但保持滚动功能 */
+/* Hide scrollbar but keep scrolling */
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -24,8 +25,18 @@ body {
   display: none;
 }
 
-/* 光标闪烁动画 */
+/* Cursor blink animation */
 @keyframes blink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
+}
+
+/* Bounce animation for loading dots */
+@keyframes bounce {
+  0%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-6px);
+  }
 }
