@@ -238,6 +238,11 @@ export default function ResultPage() {
             )}
           </motion.div>
 
+          {/* Hint */}
+          <p className="text-xs text-white/40 text-center leading-relaxed">
+            如果你的某一维度超过了 90 或有两个超过了 80，请立刻截图并填写下方联系方式联系我们
+          </p>
+
           {/* Contact form */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
