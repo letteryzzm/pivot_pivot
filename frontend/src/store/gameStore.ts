@@ -68,7 +68,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const newStats = applyEffects(state.stats, choice.effects)
     const newHistory = [...state.history, record]
 
-    trackChoice(record)
+    trackChoice(
+      record,
+      scenario.title,
+      scenario.description.replace(/\{name\}/g, state.playerName),
+      choice.text,
+      choice.clawReaction.replace(/\{name\}/g, state.playerName),
+    )
 
     const isLastRound = nextRound >= TOTAL_ROUNDS
 
