@@ -5,6 +5,7 @@ import type {
   FounderType,
   GameResult,
 } from '../types/game.ts'
+import { HIDDEN_ENDINGS } from '../types/game.ts'
 
 // ── Bridge generation: connect scenes based on previous choice ──
 
@@ -143,6 +144,8 @@ export function determineFounderType(stats: PlayerStats): FounderType {
   return 'explorer'
 }
 
+// ── Direction 2: Rewritten descriptions (mirror/sting style) ──
+
 const RESULT_PROFILES: Record<
   FounderType,
   { title: string; description: string; advice: string }
@@ -150,38 +153,234 @@ const RESULT_PROFILES: Record<
   founder: {
     title: '天生创业者',
     description:
-      '你展现了极高的结构外生长力——不需要外部压力就能自我驱动、独立判断、持续行动。你能在信息不完整时做出判断，在所有人说不行的时候继续往前走，同时还保持着对人和现实的敏锐感知。这是投资人最想在20岁年轻人身上看到的特质。',
+      '你在10轮选择中表现得近乎完美——每一步都兼顾了思考和行动，判断和连接。你总是在信息还不够多的时候就敢做决定，而且决定的方向还基本是对的。说实话，这种平衡感让人不安，因为你看起来太像那种"什么都擅长但还没找到真正值得all-in的事"的人。',
     advice:
       '你已经具备了出发的能力。现在需要的是一个足够大、足够痛的问题。找一个高频痛点，用AI做到10倍改进，两周内做出第一版，立刻找到5个真实用户。记住：创业最宝贵的不是赚钱机会，而是成长密度。',
   },
   thinker: {
     title: '深度思考者',
     description:
-      '你的判断力和认知深度远超同龄人，能看到别人看不到的东西，善于从第一性原理思考问题。但你可能被"想清楚再开始"困住了。认知 = 输入 x 判断 x 验证——没有验证的判断只是假设，不管它多漂亮。',
+      '你在10个选择中把大多数机会都给了"先想清楚"。你的备忘录里大概有15个项目计划，但上线的产品是0个。你不是缺能力，你是害怕做出来之后发现自己错了。你总是在等一个"完美时机"——但那个时机永远不会来，因为你会一直发现新的"还没想清楚的地方"。',
     advice:
       '你缺的不是思考，是行动中的反馈循环。给自己14天：前7天找20个目标用户聊痛点，后7天写一页纸（问题是什么、谁最痛、现在怎么解决、你准备先做什么）。用最土的方法先帮一个人解决一个问题。验证会让你的判断力真正长起来。',
   },
   hustler: {
     title: '极速行动派',
     description:
-      '你行动力惊人，敢在两三成把握时就起飞，边飞边造引擎。这种"先开枪再瞄准"的本能是稀缺的。但方向错了，跑得越快偏得越远。创业不是比速度，是比谁更早接近真相。',
+      '你在10轮里几乎每次都选了"先干再说"。你的行动速度让人佩服，但你有没有注意到，你很少选择那些需要停下来想一想的选项？你不是在创业，你是在用忙碌逃避那个你不敢面对的问题：万一方向从一开始就是错的呢？跑得越快，回头的成本越高。',
     advice:
       '放慢一步问自己：我在解决的问题，痛感真的够强吗？有人愿意为此付代价吗？好问题的五个条件——痛感强、频率高、有人愿付代价、能更早接近用户、切口未来能长大——缺一不可。找20个目标用户深度访谈，让他们的行为而不是言语告诉你答案。',
   },
   explorer: {
     title: '潜力探索者',
     description:
-      '你正在寻找自己的节奏和方向，四维能力各有特色。你身上有创业者的火苗——你对世界的不满足、对问题的好奇心，都是珍贵的原材料。创业天才不是一开始就强大的，他们也会犹豫和害怕，但他们不逃。',
+      '你的10轮选择没有明显的偏好——一会儿想多了解一下，一会儿又想直接干。你还在寻找"那个让你愿意连续加班三个月也不觉得累"的事情。你身上有好奇心，但好奇心如果不聚焦，就只是一种消遣。你什么都想尝试，意味着你还没找到那个让你愿意放弃其他所有选项的东西。',
     advice:
       '从一个你身边反复看见的低效场景开始。去不同的城市看看，和优秀的人在一起，写作和反思。学会介绍你自己——讲清楚你是谁、想干什么、有什么不同。然后给自己60天，做一个最小原型，盯三个数：使用、留存、付费意愿。',
   },
   observer: {
     title: '旁观者',
     description:
-      '你倾向于在安全边界内做选择，回避不确定性和冲突。这不是缺点——大部分人都是这样。但如果你内心深处有什么东西在不安分，那值得认真对待。很多改变世界的人，不是一开始就很厉害，而是在某个时刻选择了不再旁观。',
+      '你在10轮选择中，总是选了那个最安全的选项。你不是没有想法，你是选择了不冒险。你看着别人折腾，心里可能在想"我比他们聪明，只是我还没准备好"。但准备好这件事不会发生——它是你给自己找的最体面的借口，用来回避那个真正让你害怕的问题：万一我试了，发现自己其实不行呢？',
     advice:
       '创业不适合所有人，但"开始"适合。找一个让你无法忍受的问题，从一个小实验开始。不需要辞职、不需要all-in，只需要用两周的业余时间做一件事：帮一个真实的人解决一个真实的问题。如果做完之后你停不下来，那就是信号。',
   },
+  // Hidden endings
+  gambler: {
+    title: '赌徒',
+    description:
+      '你每一轮都选了最激进的那个。要么你真的无所畏惧，要么你根本没在看题。不管哪种，你大概率会成为那个让投资人心跳加速的人。',
+    advice:
+      '你的胆量是稀缺资源，但赌徒和创业者的区别在于：创业者知道自己在赌什么。找到那个你愿意用三年青春去赌的问题，然后用数据而不是直觉来验证它。',
+  },
+  prophet: {
+    title: '先知',
+    description:
+      '你在某个维度上达到了近乎变态的专注。这不是均衡发展，这是偏执——而偏执者改变世界。',
+    advice:
+      '你的极致专注是你最大的武器。找到一个能把这种专注转化为产品的领域，然后找一个和你互补的合伙人来补短板。',
+  },
+  philosopher: {
+    title: '哲学家',
+    description:
+      '你花了10轮时间思考人生，但几乎没有行动。你的脑子里有一个完美的创业计划，它将永远停留在那里。除非你现在就关掉这个页面去做点什么。',
+    advice:
+      '你现在最需要的不是更多思考，而是一个48小时冲刺：选一个想法，做一个最丑的原型，发给10个人。不是为了成功，是为了打破"思考-再思考"的死循环。',
+  },
+  polymath: {
+    title: '万能选手',
+    description:
+      '四个维度全部75+，你是统计学上的异常值。要么你真的是天选之人，要么你只是很会选"看起来正确"的答案。如果是后者——恭喜，你很适合做咨询。',
+    advice:
+      '你的全面性是罕见的，但创业需要的不是全面，是在一个点上的极致。选择你最强的那个维度，用它作为突破口，其他维度用来支撑。',
+  },
+}
+
+// ── Direction 4: Hidden ending detection ──
+
+function checkHiddenEnding(
+  stats: PlayerStats,
+  history: readonly ChoiceRecord[],
+  scenarios: readonly { readonly choices: readonly { readonly id: string; readonly effects: StatEffect }[] }[],
+): FounderType | null {
+  // Gambler: all 10 rounds picked the most aggressive (highest action effect) option
+  if (history.length >= 10 && scenarios.length >= 10) {
+    const allAggressive = history.every((record, index) => {
+      const scenarioChoices = scenarios[index]?.choices
+      if (!scenarioChoices || scenarioChoices.length === 0) return false
+
+      const maxAction = Math.max(
+        ...scenarioChoices.map((c) => c.effects.action ?? 0)
+      )
+      const chosenAction = record.effects.action ?? 0
+      return chosenAction >= maxAction && maxAction > 0
+    })
+    if (allAggressive) return 'gambler'
+  }
+
+  // Prophet: any single stat >= 95
+  const statValues = [stats.judgment, stats.action, stats.cognition, stats.connection]
+  if (statValues.some((v) => v >= 95)) return 'prophet'
+
+  // Polymath: all four stats > 75
+  if (statValues.every((v) => v > 75)) return 'polymath'
+
+  // Philosopher: action <= 30
+  if (stats.action <= 30) return 'philosopher'
+
+  return null
+}
+
+// ── Direction 1: Decision Fingerprints ──
+
+const STAT_KEYS: readonly (keyof PlayerStats)[] = [
+  'judgment',
+  'action',
+  'cognition',
+  'connection',
+]
+
+const STAT_NAMES: Record<keyof PlayerStats, string> = {
+  judgment: '判断力',
+  action: '行动力',
+  cognition: '认知',
+  connection: '连接力',
+}
+
+export function generateFingerprints(
+  history: readonly ChoiceRecord[],
+  stats: PlayerStats
+): string[] {
+  const fingerprints: string[] = []
+
+  if (history.length === 0) return fingerprints
+
+  // 1. Dominant stat pattern
+  const effectTotals: Record<keyof PlayerStats, number> = {
+    judgment: 0,
+    action: 0,
+    cognition: 0,
+    connection: 0,
+  }
+  for (const record of history) {
+    for (const key of STAT_KEYS) {
+      effectTotals[key] += record.effects[key] ?? 0
+    }
+  }
+
+  const sortedStats = [...STAT_KEYS].sort(
+    (a, b) => effectTotals[b] - effectTotals[a]
+  )
+  const dominant = sortedStats[0]
+
+  const dominantFingerprints: Record<keyof PlayerStats, string> = {
+    action: '在信息不完整时选择行动',
+    cognition: '决策前先构建完整认知',
+    judgment: '用独立判断过滤噪音',
+    connection: '通过人脉网络获取关键信息',
+  }
+  fingerprints.push(dominantFingerprints[dominant])
+
+  // 2. Risk pattern: count rounds with net negative or high-variance effects
+  const roundRisks = history.map((record) => {
+    const vals = STAT_KEYS.map((k) => record.effects[k] ?? 0)
+    const hasNegative = vals.some((v) => v < 0)
+    const maxPositive = Math.max(...vals)
+    return { hasNegative, maxPositive, total: vals.reduce((a, b) => a + b, 0) }
+  })
+
+  const highRiskRounds = roundRisks.filter(
+    (r) => r.hasNegative && r.maxPositive >= 5
+  ).length
+  const consecutiveHighRisk = countMaxConsecutive(
+    roundRisks.map((r) => r.maxPositive >= 5)
+  )
+
+  if (consecutiveHighRisk >= 3) {
+    fingerprints.push('面对不确定性时加倍下注')
+  } else if (highRiskRounds >= 5) {
+    fingerprints.push('愿意用短期损失换长期收益')
+  } else if (highRiskRounds <= 2) {
+    fingerprints.push('倾向于选择确定性高的路径')
+  } else {
+    fingerprints.push('在风险和安全之间反复权衡')
+  }
+
+  // 3. Strategy shift: compare first half vs second half style
+  const midpoint = Math.floor(history.length / 2)
+  const firstHalf = history.slice(0, midpoint)
+  const secondHalf = history.slice(midpoint)
+
+  const firstDominant = getDominantStat(firstHalf)
+  const secondDominant = getDominantStat(secondHalf)
+
+  if (firstDominant !== secondDominant) {
+    fingerprints.push(
+      `前期侧重${STAT_NAMES[firstDominant]}，后期转向${STAT_NAMES[secondDominant]}`
+    )
+  } else {
+    // Check if the weakest stat improved
+    const weakest = sortedStats[sortedStats.length - 1]
+    const weakestVal = stats[weakest]
+    if (weakestVal >= 55) {
+      fingerprints.push('不放弃任何一个维度的成长')
+    } else {
+      fingerprints.push(`始终坚持${STAT_NAMES[dominant]}优先的策略`)
+    }
+  }
+
+  return fingerprints.slice(0, 3)
+}
+
+function getDominantStat(records: readonly ChoiceRecord[]): keyof PlayerStats {
+  const totals: Record<keyof PlayerStats, number> = {
+    judgment: 0,
+    action: 0,
+    cognition: 0,
+    connection: 0,
+  }
+  for (const record of records) {
+    for (const key of STAT_KEYS) {
+      totals[key] += record.effects[key] ?? 0
+    }
+  }
+  return STAT_KEYS.reduce((best, key) =>
+    totals[key] > totals[best] ? key : best
+  )
+}
+
+function countMaxConsecutive(bools: boolean[]): number {
+  let max = 0
+  let current = 0
+  for (const b of bools) {
+    if (b) {
+      current += 1
+      max = Math.max(max, current)
+    } else {
+      current = 0
+    }
+  }
+  return max
 }
 
 export function calculatePercentile(score: number): number {
@@ -195,18 +394,27 @@ export function calculatePercentile(score: number): number {
 
 export function generateResult(
   stats: PlayerStats,
-  _history: readonly ChoiceRecord[]
+  history: readonly ChoiceRecord[],
+  scenarios?: readonly { readonly choices: readonly { readonly id: string; readonly effects: StatEffect }[] }[],
 ): GameResult {
-  const founderType = determineFounderType(stats)
+  // Direction 4: check hidden endings first (higher priority)
+  const hiddenType = checkHiddenEnding(stats, history, scenarios ?? [])
+  const founderType = hiddenType ?? determineFounderType(stats)
+
   const score = calculateScore(stats)
   const percentile = calculatePercentile(score)
   const profile = RESULT_PROFILES[founderType]
+
+  // Direction 1: generate fingerprints
+  const fingerprints = generateFingerprints(history, stats)
 
   return {
     founderType,
     stats,
     score,
     percentile,
+    isHidden: HIDDEN_ENDINGS.has(founderType),
+    fingerprints,
     ...profile,
   }
 }

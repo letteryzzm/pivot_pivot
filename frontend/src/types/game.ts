@@ -35,7 +35,23 @@ export interface ChoiceRecord {
 
 export type PlayerPath = 'exploring' | 'ready' | 'started'
 
-export type FounderType = 'founder' | 'thinker' | 'hustler' | 'explorer' | 'observer'
+export type FounderType =
+  | 'founder'
+  | 'thinker'
+  | 'hustler'
+  | 'explorer'
+  | 'observer'
+  | 'gambler'
+  | 'prophet'
+  | 'philosopher'
+  | 'polymath'
+
+export const HIDDEN_ENDINGS: ReadonlySet<FounderType> = new Set([
+  'gambler',
+  'prophet',
+  'philosopher',
+  'polymath',
+])
 
 export interface GameResult {
   founderType: FounderType
@@ -45,4 +61,6 @@ export interface GameResult {
   title: string
   description: string
   advice: string
+  isHidden: boolean
+  fingerprints: string[]
 }

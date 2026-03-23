@@ -49,6 +49,7 @@ export async function trackChoice(
   scenarioDesc?: string,
   choiceText?: string,
   clawReaction?: string,
+  thinkTimeSec?: number,
 ): Promise<void> {
   await supabaseInsert('game_choices', {
     session_id: getSessionId(),
@@ -60,6 +61,7 @@ export async function trackChoice(
     scenario_desc: scenarioDesc || '',
     choice_text: choiceText || '',
     claw_reaction: clawReaction || '',
+    think_time_sec: thinkTimeSec ?? 0,
     chosen_at: new Date().toISOString(),
   })
 }

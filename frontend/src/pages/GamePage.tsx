@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGameStore } from '../store/gameStore.ts'
 import { TOTAL_ROUNDS } from '../game/scenarios.ts'
@@ -42,6 +42,8 @@ export default function GamePage() {
   const [selectedChoice, setSelectedChoice] = useState<Choice | null>(null)
   const [phase, setPhase] = useState<'choose' | 'reaction'>('choose')
   const [isTransitioning, setIsTransitioning] = useState(false)
+  const roundStartTimeRef = useRef<number>(0)
+  const currentThinkTimeRef = useRef<number>(0)
 
   useEffect(() => {
     if (!isPlaying) navigate('/', { replace: true })
@@ -51,6 +53,11 @@ export default function GamePage() {
     if (isFinished) navigate('/result', { replace: true })
   }, [isFinished, navigate])
 
+  // Reset round start time when a new round begins
+  useEffect(() => {
+    roundStartTimeRef.current = Date.now()
+  }, [currentRound])
+
   // Preload current + next round assets; preload result assets near end
   useEffect(() => {
     preloadGameRoundAssets(currentRound)
@@ -59,29 +66,33 @@ export default function GamePage() {
     }
   }, [currentRound])
 
+  const handleChoiceSelect = useCallback((choice: Choice) => {
+    if (isTransitioning) return
+    currentThinkTimeRef.current = Math.round(
+      (Date.now() - roundStartTimeRef.current) / 1000
+    )
+    setSelectedChoice(choice)
+    setPhase('reaction')
+  }, [isTransitioning])
+
+  const handleContinue = useCallback(() => {
+    if (!selectedChoice || isTransitioning) return
+    setIsTransitioning(true)
+
+    setTimeout(() => {
+      makeChoice(selectedChoice, currentThinkTimeRef.current)
+      setSelectedChoice(null)
+      setPhase('choose')
+      setIsTransitioning(false)
+      currentThinkTimeRef.current = 0
+    }, 400)
+  }, [selectedChoice, isTransitioning, makeChoice])
+
   if (!isPlaying || currentRound >= TOTAL_ROUNDS || scenarios.length === 0) return null
 
   const scenario = scenarios[currentRound]
   const clawStage = getClawStage(currentRound)
   const bgImage = getImagePath(ROUND_BACKGROUNDS[currentRound] || ROUND_BACKGROUNDS[0])
-
-  const handleChoiceSelect = (choice: Choice) => {
-    if (isTransitioning) return
-    setSelectedChoice(choice)
-    setPhase('reaction')
-  }
-
-  const handleContinue = () => {
-    if (!selectedChoice || isTransitioning) return
-    setIsTransitioning(true)
-
-    setTimeout(() => {
-      makeChoice(selectedChoice)
-      setSelectedChoice(null)
-      setPhase('choose')
-      setIsTransitioning(false)
-    }, 400)
-  }
 
   const progress = ((currentRound + 1) / TOTAL_ROUNDS) * 100
 

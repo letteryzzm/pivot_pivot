@@ -83,6 +83,7 @@ function drawPlayerInfo(
   ctx: CanvasRenderingContext2D,
   playerName: string,
   resultTitle: string,
+  isHidden: boolean,
 ) {
   const centerX = CANVAS_WIDTH / 2
 
@@ -98,14 +99,38 @@ function drawPlayerInfo(
   ctx.fillStyle = '#ffffff'
   ctx.font = `bold 52px ${FONT_FAMILY}`
   ctx.fillText(resultTitle, centerX, 270)
+
+  // Hidden ending badge
+  if (isHidden) {
+    const badgeText = '隐藏结局'
+    ctx.font = `500 22px ${FONT_FAMILY}`
+    const textWidth = ctx.measureText(badgeText).width
+    const badgeW = textWidth + 32
+    const badgeH = 36
+    const badgeX = centerX - badgeW / 2
+    const badgeY = 285
+
+    ctx.fillStyle = 'rgba(245, 158, 11, 0.2)'
+    drawRoundedRect(ctx, badgeX, badgeY, badgeW, badgeH, 18)
+    ctx.fill()
+    ctx.strokeStyle = 'rgba(251, 191, 36, 0.3)'
+    ctx.lineWidth = 1
+    ctx.stroke()
+
+    ctx.fillStyle = '#fbbf24'
+    ctx.font = `500 22px ${FONT_FAMILY}`
+    ctx.textAlign = 'center'
+    ctx.fillText(badgeText, centerX, badgeY + 25)
+  }
 }
 
 function drawScoreCards(
   ctx: CanvasRenderingContext2D,
   score: number,
   percentile: number,
+  isHidden: boolean,
 ) {
-  const cardY = 320
+  const cardY = isHidden ? 345 : 320
   const cardH = 120
   const cardW = 280
   const gap = 40
@@ -146,13 +171,13 @@ function drawScoreCards(
   ctx.fillText('超越玩家', rightX + cardW / 2, cardY + 95)
 }
 
-function drawStatBars(ctx: CanvasRenderingContext2D, stats: PlayerStats) {
-  const startY = 510
+function drawStatBars(ctx: CanvasRenderingContext2D, stats: PlayerStats, isHidden: boolean) {
+  const startY = isHidden ? 535 : 510
   const barHeight = 20
   const barMaxWidth = 380
   const labelWidth = 90
   const leftMargin = 80
-  const lineSpacing = 60
+  const lineSpacing = 55
 
   const entries: ReadonlyArray<[string, number]> = [
     ['judgment', stats.judgment],
@@ -190,8 +215,41 @@ function drawStatBars(ctx: CanvasRenderingContext2D, stats: PlayerStats) {
   })
 }
 
-function drawQuote(ctx: CanvasRenderingContext2D) {
-  const y = 790
+function drawFingerprints(
+  ctx: CanvasRenderingContext2D,
+  fingerprints: readonly string[],
+  isHidden: boolean,
+) {
+  if (fingerprints.length === 0) return
+
+  const startY = isHidden ? 780 : 755
+  const leftMargin = 80
+
+  // Section title
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.35)'
+  ctx.font = `400 22px ${FONT_FAMILY}`
+  ctx.textAlign = 'left'
+  ctx.fillText('决策指纹', leftMargin, startY)
+
+  // Fingerprint items
+  fingerprints.forEach((fp, i) => {
+    const y = startY + 35 + i * 36
+
+    // Number
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.25)'
+    ctx.font = `400 20px ${FONT_FAMILY}`
+    ctx.textAlign = 'left'
+    ctx.fillText(String(i + 1).padStart(2, '0'), leftMargin, y)
+
+    // Text
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.65)'
+    ctx.font = `400 22px ${FONT_FAMILY}`
+    ctx.fillText(fp, leftMargin + 40, y)
+  })
+}
+
+function drawQuote(ctx: CanvasRenderingContext2D, isHidden: boolean) {
+  const y = isHidden ? 920 : 895
 
   ctx.fillStyle = 'rgba(255, 255, 255, 0.06)'
   drawRoundedRect(ctx, 60, y - 30, CANVAS_WIDTH - 120, 80, 12)
@@ -210,10 +268,11 @@ function drawQuote(ctx: CanvasRenderingContext2D) {
 function drawQRCode(
   ctx: CanvasRenderingContext2D,
   qrImage: HTMLImageElement,
+  isHidden: boolean,
 ) {
   const qrSize = 160
   const qrX = (CANVAS_WIDTH - qrSize) / 2
-  const qrY = 920
+  const qrY = isHidden ? 1030 : 1010
 
   // White background behind QR
   ctx.fillStyle = '#ffffff'
@@ -263,14 +322,17 @@ function renderCanvas(
   canvas.width = CANVAS_WIDTH
   canvas.height = CANVAS_HEIGHT
 
+  const isHidden = result.isHidden
+
   drawBackground(ctx)
   drawDecorations(ctx)
   drawTitle(ctx)
-  drawPlayerInfo(ctx, playerName, result.title)
-  drawScoreCards(ctx, result.score, percentile)
-  drawStatBars(ctx, stats)
-  drawQuote(ctx)
-  drawQRCode(ctx, qrImage)
+  drawPlayerInfo(ctx, playerName, result.title, isHidden)
+  drawScoreCards(ctx, result.score, percentile, isHidden)
+  drawStatBars(ctx, stats, isHidden)
+  drawFingerprints(ctx, result.fingerprints, isHidden)
+  drawQuote(ctx, isHidden)
+  drawQRCode(ctx, qrImage, isHidden)
 }
 
 function loadImage(src: string): Promise<HTMLImageElement> {

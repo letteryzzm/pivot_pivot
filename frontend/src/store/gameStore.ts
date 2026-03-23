@@ -29,13 +29,14 @@ interface GameStore {
   result: GameResult | null
   scenarios: Scenario[]
   bridge: string
+  choiceTimes: readonly number[]
 
   isPlaying: boolean
   isFinished: boolean
 
   setPlayerName: (name: string) => void
   startGame: (name: string, path?: PlayerPath) => void
-  makeChoice: (choice: Choice) => void
+  makeChoice: (choice: Choice, thinkTime: number) => void
   resetGame: () => void
 }
 
@@ -48,6 +49,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   result: null,
   scenarios: [],
   bridge: '',
+  choiceTimes: [],
   isPlaying: false,
   isFinished: false,
 
@@ -69,12 +71,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
       result: null,
       scenarios,
       bridge: '',
+      choiceTimes: [],
       isPlaying: true,
       isFinished: false,
     })
   },
 
-  makeChoice: (choice: Choice) => {
+  makeChoice: (choice: Choice, thinkTime: number) => {
     const state = get()
     const nextRound = state.currentRound + 1
     const scenario = state.scenarios[state.currentRound]
@@ -88,6 +91,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     const newStats = applyEffects(state.stats, choice.effects)
     const newHistory = [...state.history, record]
+    const newChoiceTimes = [...state.choiceTimes, thinkTime]
 
     trackChoice(
       record,
@@ -95,6 +99,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       scenario.description.replace(/\{name\}/g, state.playerName),
       choice.text,
       choice.clawReaction.replace(/\{name\}/g, state.playerName),
+      thinkTime,
     )
 
     const isLastRound = nextRound >= TOTAL_ROUNDS
@@ -104,13 +109,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
       : generateBridge(choice.effects, state.playerName)
 
     if (isLastRound) {
-      const result = generateResult(newStats, newHistory)
+      const result = generateResult(newStats, newHistory, state.scenarios)
       trackGameEnd(newStats, result.score, result.founderType)
 
       set({
         stats: newStats,
         currentRound: nextRound,
         history: newHistory,
+        choiceTimes: newChoiceTimes,
         result,
         bridge: '',
         isFinished: true,
@@ -120,6 +126,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         stats: newStats,
         currentRound: nextRound,
         history: newHistory,
+        choiceTimes: newChoiceTimes,
         bridge: nextBridge,
       })
     }
@@ -135,6 +142,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       result: null,
       scenarios: [],
       bridge: '',
+      choiceTimes: [],
       isPlaying: false,
       isFinished: false,
     })

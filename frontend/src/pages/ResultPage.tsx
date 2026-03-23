@@ -32,11 +32,29 @@ const ENDING_BACKGROUNDS: Record<string, string> = {
   hustler: '/images/结局/赚钱机器结局_4.png',
   explorer: '/images/结局/自由自在结局背景.png',
   observer: '/images/结局/迷茫打工人结局_1.png',
+  gambler: '/images/结局/赚钱机器结局_4.png',
+  prophet: '/images/结局/科含结局背景.png',
+  philosopher: '/images/结局/作家结局背景.png',
+  polymath: '/images/结局/科含结局背景.png',
+}
+
+const TEAM_KEYWORDS = ['团队', '合作', '伙伴', '合伙', '同事', '朋友', '一起', '协作']
+
+function isTeamScenario(title: string, description: string): boolean {
+  const text = title + description
+  return TEAM_KEYWORDS.some((kw) => text.includes(kw))
+}
+
+function formatTime(seconds: number): string {
+  if (seconds < 60) return `${seconds}秒`
+  const mins = Math.floor(seconds / 60)
+  const secs = seconds % 60
+  return secs > 0 ? `${mins}分${secs}秒` : `${mins}分钟`
 }
 
 export default function ResultPage() {
   const navigate = useNavigate()
-  const { result, stats, playerName, history, isFinished, resetGame } =
+  const { result, stats, playerName, history, isFinished, resetGame, scenarios, choiceTimes } =
     useGameStore()
 
   const [aiAdvice, setAiAdvice] = useState('')
@@ -99,6 +117,38 @@ export default function ResultPage() {
   const displayPercentile = rankData?.percentile ?? result.percentile
   const totalPlayers = rankData?.totalPlayers ?? 0
 
+  // Decision time stats
+  const validTimes = choiceTimes.length > 0 ? choiceTimes : []
+  const avgTime = validTimes.length > 0
+    ? Math.round(validTimes.reduce((a, b) => a + b, 0) / validTimes.length)
+    : 0
+  const longestTimeIndex = validTimes.length > 0
+    ? validTimes.indexOf(Math.max(...validTimes))
+    : -1
+  const longestTimeScenario = longestTimeIndex >= 0 && scenarios[longestTimeIndex]
+    ? scenarios[longestTimeIndex].title
+    : null
+  const longestTime = longestTimeIndex >= 0 ? validTimes[longestTimeIndex] : 0
+
+  // Team vs solo time comparison
+  const teamTimes: number[] = []
+  const soloTimes: number[] = []
+  validTimes.forEach((time, index) => {
+    const scenario = scenarios[index]
+    if (scenario && isTeamScenario(scenario.title, scenario.description)) {
+      teamTimes.push(time)
+    } else {
+      soloTimes.push(time)
+    }
+  })
+  const avgTeamTime = teamTimes.length > 0
+    ? Math.round(teamTimes.reduce((a, b) => a + b, 0) / teamTimes.length)
+    : 0
+  const avgSoloTime = soloTimes.length > 0
+    ? Math.round(soloTimes.reduce((a, b) => a + b, 0) / soloTimes.length)
+    : 0
+  const hasTeamComparison = teamTimes.length >= 2 && soloTimes.length >= 2
+
   return (
     <div
       className="min-h-full flex flex-col text-white bg-cover bg-center overflow-y-auto"
@@ -122,6 +172,17 @@ export default function ResultPage() {
                 {playerName} 成长为了
               </p>
               <h1 className="text-3xl font-bold text-white">{result.title}</h1>
+              {/* Hidden ending badge */}
+              {result.isHidden && (
+                <motion.span
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.3, duration: 0.4 }}
+                  className="inline-block mt-2 px-3 py-1 text-xs font-medium rounded-full bg-amber-500/20 border border-amber-400/30 text-amber-300"
+                >
+                  隐藏结局
+                </motion.span>
+              )}
             </div>
           </motion.div>
 
@@ -185,6 +246,87 @@ export default function ResultPage() {
               })}
             </div>
           </motion.div>
+
+          {/* Decision Fingerprints */}
+          {result.fingerprints.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.35, duration: 0.5 }}
+              className="bg-white/8 border border-white/10 rounded-2xl p-4 backdrop-blur-sm"
+            >
+              <p className="text-xs text-white/40 mb-3">决策指纹</p>
+              <div className="flex flex-col gap-2">
+                {result.fingerprints.map((fp, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.5 + i * 0.15, duration: 0.4 }}
+                    className="flex items-start gap-2.5"
+                  >
+                    <span className="text-xs text-white/25 font-mono mt-0.5">
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                    <p className="text-sm text-white/75 leading-relaxed">{fp}</p>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
+          {/* Decision Time Stats */}
+          {validTimes.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.38, duration: 0.5 }}
+              className="bg-white/8 border border-white/10 rounded-2xl p-4 backdrop-blur-sm"
+            >
+              <p className="text-xs text-white/40 mb-3">决策时间</p>
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-white/50">平均决策时间</span>
+                  <span className="text-sm text-white/80 font-mono">
+                    {formatTime(avgTime)}
+                  </span>
+                </div>
+                {longestTimeScenario && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-white/50">
+                      最长思考：{longestTimeScenario}
+                    </span>
+                    <span className="text-sm text-white/80 font-mono">
+                      {formatTime(longestTime)}
+                    </span>
+                  </div>
+                )}
+                {hasTeamComparison && (
+                  <div className="mt-1 pt-2 border-t border-white/5">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-white/50">团队场景</span>
+                      <span className="text-sm text-white/80 font-mono">
+                        {formatTime(avgTeamTime)}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between mt-1">
+                      <span className="text-xs text-white/50">个人场景</span>
+                      <span className="text-sm text-white/80 font-mono">
+                        {formatTime(avgSoloTime)}
+                      </span>
+                    </div>
+                    <p className="text-[10px] text-white/30 mt-1.5">
+                      {avgTeamTime > avgSoloTime
+                        ? '涉及他人时你会多花时间斟酌'
+                        : avgTeamTime < avgSoloTime
+                          ? '独自决策时你反而更加犹豫'
+                          : '团队和个人场景的决策速度一致'}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          )}
 
           {/* Description */}
           <motion.div
