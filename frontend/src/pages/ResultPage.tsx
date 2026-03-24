@@ -483,7 +483,7 @@ export default function ResultPage() {
               {/* Investor note */}
               <div className="bg-amber-500/[0.08] border border-amber-400/20 rounded-xl p-4">
                 <p className="text-xs text-amber-300/80 leading-relaxed">
-                  你的信息已收到。如果你的背景和方向符合早期投资标准，我们会在一周内通过你留下的联系方式和你沟通。
+                  小声bb：这些天认识了很多人，就有投资人，可以多写点，我保证他们触达（doge）
                 </p>
               </div>
 
