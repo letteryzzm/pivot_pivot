@@ -367,7 +367,7 @@ export default function ResultPage() {
                     介绍下自己的背景（年龄、学历、经历、正在做的事等）
                   </label>
                   <p className="text-[10px] text-amber-400/70 leading-relaxed">
-                    写得越详细，AI 建议越精准。如果我们觉得你适合创业，会联系你讨论天使投资的事。
+                    小声bb：这几天认识了几个天使投资人，写得越详细他们越可能联系你
                   </p>
                   <textarea
                     value={selfIntro}

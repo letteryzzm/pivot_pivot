@@ -472,7 +472,7 @@ function detectBlindSpots(
     spots.push({
       title: '你倾向于观望而不是行动',
       description: '创业最大的风险不是失败，而是从来没有开始。风险不会因为等待而降低，只会因为错过而放大。',
-      sourceIds: [2, 12],
+      sourceIds: [2, 6],
     })
   }
 
@@ -492,7 +492,7 @@ function detectBlindSpots(
     spots.push({
       title: '你在猜用户要什么而不是去问',
       description: '市场报告不等于用户需求。去找20个不认识的目标用户，问他们现在为这个问题花了多少时间和钱。',
-      sourceIds: [7, 9],
+      sourceIds: [1],
     })
   }
 
@@ -502,7 +502,7 @@ function detectBlindSpots(
     spots.push({
       title: '创业公司死因只有一个：创始人放弃',
       description: '大多数创业公司不是因为没钱死的，而是因为创始人心理崩溃。只要你不死就能成功。',
-      sourceIds: [48],
+      sourceIds: [30],
     })
   }
 
@@ -512,7 +512,7 @@ function detectBlindSpots(
     spots.push({
       title: '一个人可以开始，但很难走远',
       description: '找到一个信任你且和你互补的合伙人。创业最孤独的时刻，需要有人分担。',
-      sourceIds: [26, 37],
+      sourceIds: [15, 25],
     })
   }
 
@@ -521,7 +521,7 @@ function detectBlindSpots(
     spots.push({
       title: '唯一不会被复制的，是你嵌进了用户的工作',
       description: '大模型可以复制功能，但复制不了你对用户工作流的深度理解。做那30%AI做不了的。',
-      sourceIds: [50, 51],
+      sourceIds: [31, 32],
     })
   }
 
