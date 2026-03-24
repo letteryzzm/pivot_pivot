@@ -36,8 +36,9 @@ const ROUND_BACKGROUNDS = [
 
 export default function GamePage() {
   const navigate = useNavigate()
-  const { currentRound, stats, isPlaying, isFinished, makeChoice, playerName, scenarios, bridge } =
-    useGameStore()
+  const {
+    currentRound, stats, isPlaying, isFinished, makeChoice, playerName, scenarios, bridge,
+  } = useGameStore()
 
   const [selectedChoice, setSelectedChoice] = useState<Choice | null>(null)
   const [phase, setPhase] = useState<'choose' | 'reaction'>('choose')

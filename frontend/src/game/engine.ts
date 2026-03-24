@@ -4,8 +4,12 @@ import type {
   ChoiceRecord,
   FounderType,
   GameResult,
+  Scenario,
+  DiagnosticBlindSpot,
 } from '../types/game.ts'
 import { HIDDEN_ENDINGS } from '../types/game.ts'
+import type { QuickAnswer } from '../game/quickQuestions.ts'
+import { analyzeQuickAnswers } from '../game/quickQuestions.ts'
 
 // ── Bridge generation: connect scenes based on previous choice ──
 
@@ -392,10 +396,176 @@ export function calculatePercentile(score: number): number {
   return 15
 }
 
+// ── Diagnostic Analysis from Scenario Choices ──
+
+export function analyzeChoicesForDiagnosis(
+  history: readonly ChoiceRecord[],
+  scenarios: readonly Scenario[]
+): {
+  recommendedSources: readonly number[]
+  blindSpots: readonly DiagnosticBlindSpot[]
+  stageSignal: string
+} {
+  // Collect all sourceIds from chosen options and count frequency
+  const sourceFrequency: Record<number, number> = {}
+  const allTags: Record<string, string>[] = []
+
+  for (const record of history) {
+    const scenario = scenarios.find((s) => s.id === record.round)
+    if (!scenario) continue
+
+    const chosenChoice = scenario.choices.find((c) => c.id === record.choiceId)
+    if (!chosenChoice) continue
+
+    // Collect sourceIds
+    const ids = chosenChoice.sourceIds ?? []
+    for (const id of ids) {
+      sourceFrequency[id] = (sourceFrequency[id] ?? 0) + 1
+    }
+
+    // Collect diagnostic tags
+    if (chosenChoice.diagnosticTags) {
+      allTags.push(chosenChoice.diagnosticTags)
+    }
+  }
+
+  // Top 8 most frequent sourceIds
+  const sortedSources = Object.entries(sourceFrequency)
+    .sort((a, b) => b[1] - a[1])
+    .map(([id]) => Number(id))
+    .slice(0, 8)
+
+  // Detect blind spots from diagnostic tags
+  const blindSpots = detectBlindSpots(allTags)
+
+  // Detect stage signal
+  const stageSignal = detectStageSignal(allTags)
+
+  return {
+    recommendedSources: sortedSources,
+    blindSpots,
+    stageSignal,
+  }
+}
+
+function collectTagValues(
+  tags: readonly Record<string, string>[],
+  key: string
+): string[] {
+  const values: string[] = []
+  for (const tag of tags) {
+    if (tag[key] !== undefined) {
+      values.push(tag[key])
+    }
+  }
+  return values
+}
+
+function detectBlindSpots(
+  tags: readonly Record<string, string>[]
+): DiagnosticBlindSpot[] {
+  const spots: DiagnosticBlindSpot[] = []
+
+  const actionLevels = collectTagValues(tags, 'action_level')
+  const passiveCount = actionLevels.filter((v) => v === 'passive').length
+  if (passiveCount > 0 && passiveCount >= actionLevels.length / 2) {
+    spots.push({
+      title: '你倾向于观望而不是行动',
+      description: '创业最大的风险不是失败，而是从来没有开始。风险不会因为等待而降低，只会因为错过而放大。',
+      sourceIds: [2, 12],
+    })
+  }
+
+  const executions = collectTagValues(tags, 'execution')
+  if (executions.includes('perfectionist')) {
+    spots.push({
+      title: '完美主义是行动的最大敌人',
+      description: '先做最小版本，丑就丑，能用就行。很多年轻创业者死在第一款产品想太大、做太大。',
+      sourceIds: [2],
+    })
+  }
+
+  const validations = collectTagValues(tags, 'validation')
+  const hasDeskResearch = validations.includes('desk-research')
+  const hasDirectUser = validations.includes('direct-user')
+  if (hasDeskResearch && !hasDirectUser) {
+    spots.push({
+      title: '你在猜用户要什么而不是去问',
+      description: '市场报告不等于用户需求。去找20个不认识的目标用户，问他们现在为这个问题花了多少时间和钱。',
+      sourceIds: [7, 9],
+    })
+  }
+
+  const failures = collectTagValues(tags, 'failure')
+  const resiliences = collectTagValues(tags, 'resilience')
+  if (failures.includes('quit') || resiliences.includes('quit')) {
+    spots.push({
+      title: '创业公司死因只有一个：创始人放弃',
+      description: '大多数创业公司不是因为没钱死的，而是因为创始人心理崩溃。只要你不死就能成功。',
+      sourceIds: [48],
+    })
+  }
+
+  const teams = collectTagValues(tags, 'team')
+  const commitments = collectTagValues(tags, 'commitment')
+  if (teams.includes('solo') && commitments.includes('all-in')) {
+    spots.push({
+      title: '一个人可以开始，但很难走远',
+      description: '找到一个信任你且和你互补的合伙人。创业最孤独的时刻，需要有人分担。',
+      sourceIds: [26, 37],
+    })
+  }
+
+  const adaptations = collectTagValues(tags, 'adaptation')
+  if (adaptations.includes('panic')) {
+    spots.push({
+      title: '唯一不会被复制的，是你嵌进了用户的工作',
+      description: '大模型可以复制功能，但复制不了你对用户工作流的深度理解。做那30%AI做不了的。',
+      sourceIds: [50, 51],
+    })
+  }
+
+  return spots.slice(0, 4)
+}
+
+function detectStageSignal(
+  tags: readonly Record<string, string>[]
+): string {
+  const commitments = collectTagValues(tags, 'commitment')
+  const executions = collectTagValues(tags, 'execution')
+  const failures = collectTagValues(tags, 'failure')
+
+  // If mostly deferred commitment, probably in idea stage
+  const deferredCount = commitments.filter((v) => v === 'deferred').length
+  if (deferredCount > 0 && deferredCount >= commitments.length / 2) {
+    return 'idea'
+  }
+
+  // If has execution choices, at least in build stage
+  if (executions.length > 0) {
+    const hasSellFirst = executions.includes('sell-first')
+    const hasShipFast = executions.includes('ship-fast') || executions.includes('manual-first')
+
+    if (hasSellFirst) return 'validate'
+    if (hasShipFast) return 'build'
+  }
+
+  // If dealing with failure, in survive stage
+  if (failures.includes('quit') || failures.includes('diagnose')) {
+    return 'survive'
+  }
+
+  // Default
+  return 'build'
+}
+
+// ── Main Result Generation ──
+
 export function generateResult(
   stats: PlayerStats,
   history: readonly ChoiceRecord[],
-  scenarios?: readonly { readonly choices: readonly { readonly id: string; readonly effects: StatEffect }[] }[],
+  scenarios?: readonly Scenario[],
+  quickAnswers?: readonly QuickAnswer[],
 ): GameResult {
   // Direction 4: check hidden endings first (higher priority)
   const hiddenType = checkHiddenEnding(stats, history, scenarios ?? [])
@@ -408,6 +578,14 @@ export function generateResult(
   // Direction 1: generate fingerprints
   const fingerprints = generateFingerprints(history, stats)
 
+  // Diagnostic analysis
+  const diagnosis = analyzeChoicesForDiagnosis(history, scenarios ?? [])
+
+  // Quick question analysis
+  const quickAnalysis = quickAnswers && quickAnswers.length > 0
+    ? analyzeQuickAnswers(quickAnswers)
+    : undefined
+
   return {
     founderType,
     stats,
@@ -415,6 +593,10 @@ export function generateResult(
     percentile,
     isHidden: HIDDEN_ENDINGS.has(founderType),
     fingerprints,
+    recommendedSources: diagnosis.recommendedSources,
+    blindSpots: diagnosis.blindSpots,
+    stageSignal: diagnosis.stageSignal,
+    quickAnalysis,
     ...profile,
   }
 }

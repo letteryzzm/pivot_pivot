@@ -1,0 +1,70 @@
+id,stage,title,url,one_liner,lang
+1,A. 想法 & 验证,Paul Graham - How to Get Startup Ideas,https://paulgraham.com/startupideas.html,最经典的找想法方法论：从自己的问题出发,en
+2,A. 想法 & 验证,Paul Graham - Do Things That Don't Scale,https://paulgraham.com/ds.html,早期不需要规模化，手动服务10个用户,en
+3,A. 想法 & 验证,Paul Graham - Startup = Growth,https://paulgraham.com/growth.html,创业和小生意的唯一区别是增长率,en
+4,A. 想法 & 验证,Paul Graham 全部 Essays,https://paulgraham.com/articles.html,200+篇，按时间排列，建议从最新的往回读,en
+5,A. 想法 & 验证,YC Request for Startups,https://www.ycombinator.com/rfs,YC 觉得什么问题值得做，每年更新,en
+6,A. 想法 & 验证,YC Spring 2026 RFS × Indie Hacker 视角,https://superframeworks.com/articles/yc-rfs-startup-ideas-indie-hackers-2026,YC 的8个方向中，独立开发者能做的部分,en
+7,A. 想法 & 验证,Superhuman PMF Engine - Rahul Vohra,https://review.firstround.com/how-superhuman-built-an-engine-to-find-product-market-fit/,如何量化 PMF：40%「非常失望」框架的原始出处,en
+8,A. 想法 & 验证,Superhuman PMF Engine 可操作版 (Coda),https://coda.io/@rahulvohra/superhuman-product-market-fit-engine,上面那篇文章的实操模板，可以直接复制使用,en
+9,A. 想法 & 验证,Lenny - Finding PMF in B2B,https://www.lennysnewsletter.com/p/finding-product-market-fit,20+个成功 B2B 创始人的 PMF 故事,en
+10,A. 想法 & 验证,Lenny - How to Know If You've Got PMF,https://www.lennysnewsletter.com/p/how-to-know-if-youve-got-productmarket,PMF 不是二元的，是一个光谱,en
+11,A. 想法 & 验证,Lenny - PMF Framework (Todd Jackson),https://www.lennysnewsletter.com/p/a-framework-for-finding-product-market,First Round 的四步 PMF 框架，通常需要4-6年,en
+12,B. 从0到1：构建 & 发布,Sam Altman - Startup Playbook,https://playbook.samaltman.com/,5000字浓缩创业全流程，从想法到规模化,en
+13,B. 从0到1：构建 & 发布,How to Start a Startup (Stanford 课程),https://startupclass.samaltman.com/,20讲视频课，Sam Altman + PG + Peter Thiel 等,en
+14,B. 从0到1：构建 & 发布,YC Startup School 课程,https://www.startupschool.org/curriculum,7周免费系统课程，YC 15年经验浓缩,en
+15,B. 从0到1：构建 & 发布,YC Library（按主题搜索）,https://www.ycombinator.com/library,YC 全部文章/视频/播客，可按 fundraising/product/growth 筛选,en
+16,B. 从0到1：构建 & 发布,indie-dev-toolkit (GitHub),https://github.com/thedaviddias/indie-dev-toolkit,独立开发者工具栈大全，从支付到部署到营销,en
+17,B. 从0到1：构建 & 发布,Indie Hacker Tools 2025,https://www.builtthisweek.com/blog/indie-hacker-tools-2025,2025最新工具推荐，AI + no-code 为主,en
+18,B. 从0到1：构建 & 发布,Product Hunt 发布完整指南,https://www.demandcurve.com/playbooks/product-hunt-launch,Demand Curve 的 PH 发布实操手册,en
+19,B. 从0到1：构建 & 发布,PH Launch Checklist 2026,https://calmops.com/indie-hackers/product-hunt-launch-guide/,最新版 PH 发布清单，含算法变化,en
+20,B. 从0到1：构建 & 发布,Indie Hackers vs Product Hunt 数据对比,https://awesome-directories.com/blog/indie-hackers-launch-strategy-guide-2025/,IH 转化率 23% vs PH 3%，具体数据,en
+21,C. 融资 & 法律,YC SAFE 官方文档（免费下载）,https://www.ycombinator.com/documents,Post-money SAFE 模板，2025年90%的pre-seed用的就是这个,en
+22,C. 融资 & 法律,Cooley GO SAFE 生成器,https://www.cooleygo.com/documents/y-combinator-safe-financing-document-generator/,在线自动生成定制化 SAFE 文档，免费,en
+23,C. 融资 & 法律,Startup Starter Pack (GitHub),https://github.com/Ro5s/Startup-Starter-Pack,开源法律文档合集：SAFE + Term Sheet + 顾问协议,en
+24,C. 融资 & 法律,Carta - Term Sheet 详解,https://carta.com/learn/startups/fundraising/term-sheets/,Term sheet 每一条都什么意思，创始人视角,en
+25,C. 融资 & 法律,Carta - SAFE 101,https://carta.com/learn/startups/fundraising/convertible-securities/safes/,SAFE 的完整解释，含 post-money 计算方法,en
+26,C. 融资 & 法律,Justin Kan - 股权分配指南,https://ltse.com/insights/founders-guide-to-allocating-co-founder-equity,Twitch 创始人写的合伙人股权分配实操,en
+27,C. 融资 & 法律,Seed 轮估值 2025 完整指南,https://www.flowjam.com/blog/seed-round-valuation-2025-complete-founders-guide,2025 median pre-money $16M，含估值方法论,en
+28,C. 融资 & 法律,Series A 估值 2026,https://www.zeni.ai/blog/series-a-valuations,需要 $1-3M ARR + 15-20% 月增长,en
+29,D. 增长 & 基准数据,2025 B2B SaaS Benchmarks,https://www.lightercapital.com/blog/2025-b2b-saas-startup-benchmarks,Churn/burn/ARR 各阶段基准数字，最全,en
+30,D. 增长 & 基准数据,Founder Institute 各阶段基准,https://fi.co/benchmarks,Pre-seed 到 Series A 的 revenue/users/growth 对标,en
+31,D. 增长 & 基准数据,Series A Crunch 数据,https://www.scaleup.finance/article/the-series-a-crunch-is-back-why-85-of-seed-stage-startups-now-fail-to-raise-series-a-and-how-to-beat-the-odds,85%的 seed 拿不到 A 轮，间隔已拉到744天,en
+32,D. 增长 & 基准数据,Burn Rate 2025 指南,https://www.phoenixstrategy.group/blog/burn-rate-trends-investors-expect-2025,投资人期望的 burn multiple: <1.6x,en
+33,D. 增长 & 基准数据,Open Startup List,https://openstartuplist.com/,公开收入数据的公司列表，直接看真实 MRR,en
+34,D. 增长 & 基准数据,TrustMRR（Stripe 验证收入）,https://trustmrr.com/open,经过 Stripe 验证的真实收入数据,en
+35,D. 增长 & 基准数据,openboard.fyi,https://openboard.fyi/,连接 Stripe 自动生成公开 dashboard,en
+36,D. 增长 & 基准数据,Stripe - 如何招前10个员工,https://stripe.com/resources/more/how-to-hire-the-first-employees-for-your-startup-a-guide-for-founders,Stripe 出的招人指南,en
+37,D. 增长 & 基准数据,Lenny - Hiring Your Early Team,https://www.lennysnewsletter.com/p/hiring-your-early-team-b2b,第1个、前3个、前10个员工分别怎么招,en
+38,D. 增长 & 基准数据,SaaS 定价完整指南 - Tomasz Tunguz,https://tomtunguz.com/pricing-guide/,VC 视角的 SaaS 定价框架,en
+39,E. 失败 & 决策复盘,CB Insights - 483 个 Startup Post-Mortem,https://www.cbinsights.com/research/startup-failure-post-mortem/,最大的创业失败案例库，按失败原因分类,en
+40,E. 失败 & 决策复盘,Autopsy - 2000+ Post-Mortem,https://www.getautopsy.com/,比 CB Insights 更大，可搜索的失败案例数据库,en
+41,E. 失败 & 决策复盘,Sahil Lavingia - Reflecting on My Failure,https://sahillavingia.com/reflecting,Gumroad：从 $350K/月 burn 到裁员75%到 $20M 收入0员工,en
+42,E. 失败 & 决策复盘,Groove - How Our Startup Almost Died,https://www.groovehq.com/blog/how-our-startup-almost-died,最详细的 near-death 复盘，含具体心理过程,en
+43,E. 失败 & 决策复盘,Groove - Rescuing Startup from Death,https://www.groovehq.com/blog/rescuing-startup-death,上面那篇的续集：具体怎么救回来的,en
+44,E. 失败 & 决策复盘,Fibery - Startups and Near-Death Experience,https://fibery.io/blog/essays/startups-and-near-death-experience/,Near-death 反而是转折点的规律分析,en
+45,E. 失败 & 决策复盘,AppDynamics - Why I Regret Selling for $3.7B,https://www.cnbc.com/2024/09/30/appdynamics-founder-why-i-regret-selling-my-startup-for-billions.html,卖掉公司后又创办了同等估值的新公司,en
+46,E. 失败 & 决策复盘,Mercury - 3 Founders on Pivoting,https://mercury.com/blog/startup-pivot-stories-from-founders,三个创始人的 pivot 真实决策过程,en
+47,E. 失败 & 决策复盘,Lenny - The Art of the Pivot,https://www.lennysnewsletter.com/p/the-art-of-the-pivot-part-2-how-why,Pivot 的时机、方法、信号,en
+48,F. 思维模型 & 心态,Paul Graham - How Not to Die,https://paulgraham.com/die.html,创业公司死因只有一个：创始人放弃,en
+49,F. 思维模型 & 心态,NFX - Startup Mental Models Part 1,https://www.nfx.com/post/mental-models-part-one,创业是终极心理游戏，具体思维模型,en
+50,F. 思维模型 & 心态,Bezos 全部决策框架,https://www.leadingsapiens.com/bezos-on-failure-decision-making-life/,Type 1 vs Type 2 决策、后悔最小化框架,en
+51,F. 思维模型 & 心态,First Round - 30 Best Advice 2024,https://review.firstround.com/the-30-best-pieces-of-company-building-advice-we-heard-in-2024/,每年精选30条，已连续12年,en
+52,F. 思维模型 & 心态,First Round - Must Reads 全集,https://review.firstround.com/articles/must-reads/,First Round Review 历史最高阅读量文章,en
+53,F. 思维模型 & 心态,First Round - First-Time Founder Guide,https://review.firstround.com/the-first-time-founders-guide-to-learning-everything-the-hard-way/,第一次创业者的完整避坑指南,en
+54,F. 思维模型 & 心态,Brutal Truths Nobody Told You,https://medium.com/jupitrr/brutal-truths-about-startup-founders-that-nobody-told-you-6256196bcf40,身份融合、孤独、和真实的心理代价,en
+55,F. 思维模型 & 心态,HN - I Don't Want to Be a Founder,https://news.ycombinator.com/item?id=23894387,反面视角：为什么有人选择不创业,en
+56,G. 中文生态,中国独立开发者生存现状 2025,https://blog.csdn.net/FansUnion/article/details/148829546,5%月入5万+，15%月入<3000，真实分层,cn
+57,G. 中文生态,Marc Lou 年入103万美元拆解,https://news.qq.com/rain/a/20260107A07ECX00,25个项目做了12个赚钱的，成功率48%,cn
+58,G. 中文生态,阿小信 - 2025年度总结,https://blog.axiaoxin.com/post/2025-summary/,自由职业第二年收入+62%，含至暗时刻细节,cn
+59,G. 中文生态,独立开发者书单 2025,https://www.ixiqin.com/2025/12/13/book-list-of-indiehacker/,中文独立开发者推荐书单,cn
+60,G. 中文生态,独立开发工具半月刊,https://www.cnblogs.com/leadingcode/p/18930982,中文定期更新的开发者工具推荐,cn
+61,G. 中文生态,W2Solo - 中文独立开发者社区,https://w2solo.com/,中文版 Indie Hackers,cn
+62,G. 中文生态,即刻 独立开发者社区,https://x.com/i/communities/1503688305988169728,活跃的中文 builder 讨论,cn
+63,H. 持续信息源,Lenny's Newsletter,https://www.lennysnewsletter.com/,产品/增长/PMF，最高质量的 founder newsletter,en
+64,H. 持续信息源,First Round Review,https://review.firstround.com/,深度创业文章，每篇都是3000+字的精品,en
+65,H. 持续信息源,Indie Hackers,https://www.indiehackers.com/,Builder 社区 + 真实收入数据 + 创业故事,en
+66,H. 持续信息源,Dalton & Michael Podcast,https://open.spotify.com/show/6a0FlIaYgSu9JKZI4HfyNl,YC 合伙人的创业 podcast，短且实用,en
+67,H. 持续信息源,How I Built This,https://www.npr.org/series/490248027/how-i-built-this,700+期，每期一个公司从0到1的完整故事,en
+68,H. 持续信息源,Masters of Scale (Reid Hoffman),https://mastersofscale.com/,LinkedIn 创始人对话顶级创业者,en
+69,H. 持续信息源,YC Startup Library / Carousel,https://www.ycombinator.com/library/carousel/Essays%20by%20Paul%20Graham,YC 所有内容的统一入口,en
