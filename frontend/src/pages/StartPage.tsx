@@ -30,7 +30,7 @@ const PATH_OPTIONS: { path: PlayerPath; emoji: string; title: string; desc: stri
 
 export default function StartPage() {
   const [name, setName] = useState('')
-  const [step, setStep] = useState<'name' | 'path'>('name')
+  const [step, setStep] = useState<'intro' | 'name' | 'path'>('intro')
   const startGame = useGameStore((s) => s.startGame)
   const navigate = useNavigate()
 
@@ -62,38 +62,120 @@ export default function StartPage() {
       style={{ backgroundImage: `url('${bgUrl}')` }}
     >
       <div className="flex flex-col bg-black/50 backdrop-blur-sm" style={{ minHeight: '874px' }}>
-        <div className="h-12" />
+        <div className="h-8" />
 
         <div className="flex-1 flex flex-col px-6">
-          {/* Claw character */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="flex flex-col items-center gap-3 mb-4"
-          >
-            <ClawSprite stage="baby" mood="idle" size={120} />
-          </motion.div>
-
-          {/* Title */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3, duration: 0.8 }}
-            className="flex flex-col items-center gap-1 mb-6"
-          >
-            <h1 className="text-3xl font-bold tracking-tight text-white">
-              A Claw's Purpose
-            </h1>
-            <p className="text-sm text-white/60">
-              {step === 'name'
-                ? '在 AI 时代，找到你的创业之路'
-                : `${name.trim()}，你现在处于哪个阶段？`}
-            </p>
-          </motion.div>
-
           <AnimatePresence mode="wait">
-            {step === 'name' ? (
+            {step === 'intro' ? (
+              <motion.div
+                key="intro-step"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.5 }}
+                className="flex-1 flex flex-col"
+              >
+                {/* Claw */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6 }}
+                  className="flex flex-col items-center gap-2 mb-4"
+                >
+                  <ClawSprite stage="baby" mood="idle" size={100} />
+                </motion.div>
+
+                {/* Title */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.2, duration: 0.6 }}
+                  className="text-center mb-5"
+                >
+                  <h1 className="text-2xl font-bold tracking-tight text-white">
+                    创业者自测
+                  </h1>
+                  <p className="text-xs text-white/50 mt-1">
+                    在 AI 时代，如何开始
+                  </p>
+                </motion.div>
+
+                {/* Description */}
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3, duration: 0.5 }}
+                  className="flex flex-col gap-4 mb-6"
+                >
+                  <div className="bg-white/[0.08] backdrop-blur-sm rounded-xl p-4 border border-white/10">
+                    <p className="text-sm text-white/80 leading-relaxed">
+                      这不是性格测试。
+                    </p>
+                    <p className="text-sm text-white/70 leading-relaxed mt-2">
+                      你将经历 10 个真实的创业场景——从发现问题、验证用户、做出 MVP，到面对失败、团队危机和至暗时刻。每一个场景都来自真实创业者的经历。
+                    </p>
+                    <p className="text-sm text-white/70 leading-relaxed mt-2">
+                      你的每一个选择，都会被记录和分析。
+                    </p>
+                  </div>
+
+                  {/* What you'll get */}
+                  <div className="flex flex-col gap-2.5 px-1">
+                    <p className="text-xs text-white/40 font-medium">完成后你会获得：</p>
+                    {[
+                      '你的创业者类型和四维能力画像',
+                      '决策盲点诊断——你可能没意识到的思维惯性',
+                      '个性化文章推荐——基于你的选择匹配最相关的深度内容',
+                      'AI 定制建议——结合你的背景给出具体行动方向',
+                    ].map((item, i) => (
+                      <motion.div
+                        key={i}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.4 + i * 0.08, duration: 0.3 }}
+                        className="flex items-start gap-2"
+                      >
+                        <span className="text-indigo-400 text-xs mt-0.5">{'>'}</span>
+                        <span className="text-xs text-white/60 leading-relaxed">{item}</span>
+                      </motion.div>
+                    ))}
+                  </div>
+                </motion.div>
+
+                {/* Quote */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.6, duration: 0.5 }}
+                  className="mb-6 px-2"
+                >
+                  <div className="bg-white/[0.06] rounded-lg p-3 border border-white/[0.08]">
+                    <p className="text-xs text-white/60 leading-relaxed italic">
+                      "这一代人如果不在AI时代做一次创业尝试，可能注定终身为其他人的公司或Agent打工。"
+                    </p>
+                    <p className="text-[10px] text-white/30 mt-2">— Roderick</p>
+                  </div>
+                </motion.div>
+
+                {/* CTA */}
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.7, duration: 0.4 }}
+                  className="mt-auto flex flex-col gap-3 mb-8"
+                >
+                  <button
+                    onClick={() => setStep('name')}
+                    className="w-full py-3.5 text-base font-medium rounded-xl bg-indigo-500/80 border border-indigo-400/30 hover:bg-indigo-500/90 active:scale-[0.98] transition-all"
+                  >
+                    开始测试
+                  </button>
+                  <p className="text-[10px] text-white/30 text-center">
+                    10 个场景 · 约 3 分钟 · 基于 6000+ 创业者的真实数据
+                  </p>
+                </motion.div>
+              </motion.div>
+            ) : step === 'name' ? (
               <motion.div
                 key="name-step"
                 initial={{ opacity: 0, y: 20 }}
@@ -102,54 +184,46 @@ export default function StartPage() {
                 transition={{ duration: 0.4 }}
                 className="flex-1 flex flex-col"
               >
-                {/* Quote */}
-                <div className="mb-6 px-2">
-                  <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/10">
-                    <p className="text-sm text-white/80 leading-relaxed">
-                      "这一代人如果不在AI时代做一次创业尝试，可能注定终身为其他人的公司或Agent打工。"
-                    </p>
-                    <p className="text-xs text-white/40 mt-2">— Roderick</p>
-                  </div>
+                {/* Claw */}
+                <div className="flex flex-col items-center gap-3 mb-6 mt-8">
+                  <ClawSprite stage="baby" mood="idle" size={120} />
                 </div>
 
-                {/* Description */}
-                <div className="mb-6 px-1">
-                  <p className="text-sm text-white/60 leading-relaxed text-center">
-                    给你的 Claw 取个名字，陪它经历 10 个创业抉择。
-                    <br />
-                    你的每一个选择，都在塑造它的创业者基因。
+                <div className="flex flex-col items-center gap-1 mb-8">
+                  <h2 className="text-xl font-bold text-white">
+                    给你的角色起个名字
+                  </h2>
+                  <p className="text-xs text-white/50">
+                    它会陪你经历这 10 个创业抉择
                   </p>
                 </div>
 
-                {/* Input */}
                 <div className="flex flex-col gap-4 mt-auto mb-8">
-                  <div className="flex flex-col gap-2">
-                    <label className="text-xs text-white/40 px-1">
-                      给你的 Claw 起个名字
-                    </label>
-                    <input
-                      type="text"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      onKeyDown={handleKeyDown}
-                      maxLength={20}
-                      className="w-full h-12 px-4 bg-white/10 border border-white/20 rounded-xl text-base text-white placeholder:text-white/30 focus:outline-none focus:border-white/40 focus:bg-white/15 transition-all"
-                      placeholder="它叫什么？"
-                      autoFocus
-                    />
-                  </div>
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    maxLength={20}
+                    className="w-full h-12 px-4 bg-white/10 border border-white/20 rounded-xl text-base text-white placeholder:text-white/30 focus:outline-none focus:border-indigo-500/50 focus:bg-white/15 transition-all"
+                    placeholder="输入名字"
+                    autoFocus
+                  />
 
                   <button
                     onClick={handleNameSubmit}
                     disabled={name.trim().length === 0}
-                    className="w-full py-3.5 text-base font-medium rounded-xl transition-all disabled:opacity-30 disabled:cursor-not-allowed bg-white/20 border border-white/20 hover:bg-white/30 active:scale-[0.98] backdrop-blur-sm"
+                    className="w-full py-3.5 text-base font-medium rounded-xl transition-all disabled:opacity-30 disabled:cursor-not-allowed bg-indigo-500/80 border border-indigo-400/30 hover:bg-indigo-500/90 active:scale-[0.98]"
                   >
                     下一步
                   </button>
 
-                  <p className="text-[11px] text-white/30 text-center">
-                    10 个回合 · 约 3 分钟 · 基于真实创业方法论
-                  </p>
+                  <button
+                    onClick={() => setStep('intro')}
+                    className="text-xs text-white/30 hover:text-white/50 transition-colors py-1"
+                  >
+                    返回
+                  </button>
                 </div>
               </motion.div>
             ) : (
@@ -161,16 +235,24 @@ export default function StartPage() {
                 transition={{ duration: 0.4 }}
                 className="flex-1 flex flex-col"
               >
-                {/* Path selection cards */}
+                <div className="flex flex-col items-center gap-1 mb-6 mt-8">
+                  <h2 className="text-xl font-bold text-white">
+                    {name.trim()}，你现在处于哪个阶段？
+                  </h2>
+                  <p className="text-xs text-white/50">
+                    这会影响你遇到的场景
+                  </p>
+                </div>
+
                 <div className="flex flex-col gap-3 mb-6">
                   {PATH_OPTIONS.map((option, index) => (
                     <motion.button
                       key={option.path}
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.12, duration: 0.4 }}
+                      transition={{ delay: index * 0.1, duration: 0.4 }}
                       onClick={() => handlePathSelect(option.path)}
-                      className="w-full text-left p-4 bg-white/8 hover:bg-white/15 border border-white/10 hover:border-white/25 rounded-xl transition-all active:scale-[0.98] backdrop-blur-sm"
+                      className="w-full text-left p-4 bg-white/[0.08] hover:bg-white/[0.15] border border-white/10 hover:border-white/25 rounded-xl transition-all active:scale-[0.98] backdrop-blur-sm"
                     >
                       <div className="flex items-start gap-3">
                         <span className="text-2xl mt-0.5">{option.emoji}</span>
@@ -182,19 +264,17 @@ export default function StartPage() {
                             {option.desc}
                           </p>
                         </div>
-                        <span className="text-white/20 mt-1">&rsaquo;</span>
                       </div>
                     </motion.button>
                   ))}
                 </div>
 
-                {/* Back button */}
                 <div className="mt-auto mb-8">
                   <button
                     onClick={() => setStep('name')}
-                    className="w-full py-3 text-sm text-white/40 hover:text-white/60 transition-colors"
+                    className="w-full py-3 text-sm text-white/30 hover:text-white/50 transition-colors"
                   >
-                    &larr; 返回修改名字
+                    返回修改名字
                   </button>
                 </div>
               </motion.div>

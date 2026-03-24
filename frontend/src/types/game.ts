@@ -17,6 +17,9 @@ export interface Choice {
   text: string
   effects: StatEffect
   clawReaction: string
+  // Diagnostic mapping
+  sourceIds?: readonly number[]
+  diagnosticTags?: Record<string, string>
 }
 
 export interface Scenario {
@@ -53,6 +56,21 @@ export const HIDDEN_ENDINGS: ReadonlySet<FounderType> = new Set([
   'polymath',
 ])
 
+export interface DiagnosticBlindSpot {
+  readonly title: string
+  readonly description: string
+  readonly sourceIds: readonly number[]
+}
+
+export interface QuickAnalysis {
+  readonly categoryScores: Record<string, { readonly total: number; readonly count: number; readonly avg: number }>
+  readonly weakCategories: readonly string[]
+  readonly strongCategories: readonly string[]
+  readonly totalScore: number
+  readonly maxScore: number
+  readonly highlightedQuestions: readonly { readonly questionId: number; readonly score: number; readonly category: string }[]
+}
+
 export interface GameResult {
   founderType: FounderType
   stats: PlayerStats
@@ -63,4 +81,10 @@ export interface GameResult {
   advice: string
   isHidden: boolean
   fingerprints: string[]
+  // Diagnostic output
+  recommendedSources: readonly number[]
+  blindSpots: readonly DiagnosticBlindSpot[]
+  stageSignal: string
+  // Quick question analysis
+  quickAnalysis?: QuickAnalysis
 }
