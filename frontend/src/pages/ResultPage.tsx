@@ -389,6 +389,11 @@ export default function ResultPage() {
                 >
                   {isSubmitting ? '正在生成报告...' : '解锁完整报告'}
                 </button>
+                {isSubmitting && (
+                  <p className="text-[10px] text-white/40 text-center animate-pulse">
+                    AI 正在分析你的 10 轮决策，大概需要 1 分钟
+                  </p>
+                )}
               </div>
 
               {/* Restart without unlocking */}

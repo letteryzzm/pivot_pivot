@@ -64,7 +64,7 @@ export default function StartPage() {
       <div className="flex flex-col bg-black/50 backdrop-blur-sm" style={{ minHeight: '874px' }}>
         <div className="h-8" />
 
-        <div className="flex-1 flex flex-col px-6">
+        <div className="flex-1 flex flex-col px-5">
           <AnimatePresence mode="wait">
             {step === 'intro' ? (
               <motion.div
@@ -162,7 +162,7 @@ export default function StartPage() {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.7, duration: 0.4 }}
-                  className="mt-auto flex flex-col gap-3 mb-8"
+                  className="flex flex-col gap-3 mt-6"
                 >
                   <button
                     onClick={() => setStep('name')}
@@ -198,7 +198,7 @@ export default function StartPage() {
                   </p>
                 </div>
 
-                <div className="flex flex-col gap-4 mt-auto mb-8">
+                <div className="flex flex-col gap-4 mt-6">
                   <input
                     type="text"
                     value={name}
@@ -269,7 +269,7 @@ export default function StartPage() {
                   ))}
                 </div>
 
-                <div className="mt-auto mb-8">
+                <div className="mt-6">
                   <button
                     onClick={() => setStep('name')}
                     className="w-full py-3 text-sm text-white/30 hover:text-white/50 transition-colors"
