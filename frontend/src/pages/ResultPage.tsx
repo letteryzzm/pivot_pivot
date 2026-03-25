@@ -175,7 +175,7 @@ export default function ResultPage() {
   const canSubmit =
     contactName.trim().length > 0 &&
     contactInfo.trim().length > 0 &&
-    selfIntro.trim().length >= 50
+    selfIntro.trim().length > 0
 
   const handleUnlock = async () => {
     if (!canSubmit) return
