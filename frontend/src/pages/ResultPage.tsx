@@ -334,8 +334,7 @@ export default function ResultPage() {
                     解锁你的完整诊断报告
                   </h2>
                   <p className="text-xs text-white/50 leading-relaxed">
-                    包含：决策盲点分析、个性化文章推荐、AI 定制建议。
-                    我认识多位天使投资人，如果你的背景和项目真的合适，我可以直接推荐。
+                    包含：决策盲点分析、文章推荐、AI 定制建议。
                   </p>
                 </div>
 
@@ -364,7 +363,7 @@ export default function ResultPage() {
                 {/* Self-intro */}
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs text-white/50">
-                    介绍下自己的背景（年龄、学历、经历、正在做的事等）
+                    介绍下自己的背景（年龄、学历、经历、正在做的事等）/ 也可以是用户反馈，50字以上
                   </label>
                   <p className="text-[10px] text-amber-400/70 leading-relaxed">
                     小声bb：这几天认识了几个天使投资人，写得越详细他们越可能联系你
