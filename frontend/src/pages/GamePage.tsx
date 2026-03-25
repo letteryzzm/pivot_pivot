@@ -21,18 +21,12 @@ const STAT_LABELS: Record<string, { label: string; color: string; bar: string }>
 }
 
 // Pick a scene-appropriate background based on round
-const ROUND_BACKGROUNDS = [
-  '/images/背景/深色反思背景1.png',
-  '/images/背景/暖色深思背景1.png',
-  '/images/背景/深色反思背景1.png',
-  '/images/背景/暖色深思背景1.png',
-  '/images/背景/深色反思背景1.png',
-  '/images/背景/暖色深思背景1.png',
-  '/images/背景/深色反思背景1.png',
-  '/images/背景/暖色深思背景1.png',
-  '/images/背景/深色反思背景1.png',
-  '/images/背景/暖色深思背景1.png',
-]
+// 三个阶段各一张背景：1-3学校，4-7电商，8-10深色思考
+function getRoundBackground(round: number): string {
+  if (round < 3) return '/images/背景/学校和街区背景_1.png'
+  if (round < 7) return '/images/背景/电商场景_1.png'
+  return '/images/背景/深色反思背景1.png'
+}
 
 export default function GamePage() {
   const navigate = useNavigate()
@@ -93,7 +87,7 @@ export default function GamePage() {
 
   const scenario = scenarios[currentRound]
   const clawStage = getClawStage(currentRound)
-  const bgImage = getImagePath(ROUND_BACKGROUNDS[currentRound] || ROUND_BACKGROUNDS[0])
+  const bgImage = getImagePath(getRoundBackground(currentRound))
 
   const progress = ((currentRound + 1) / TOTAL_ROUNDS) * 100
 
