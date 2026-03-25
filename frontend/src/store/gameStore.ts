@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { persist, createJSONStorage } from 'zustand/middleware'
 import type {
   PlayerStats,
   PlayerPath,
@@ -40,7 +41,7 @@ interface GameStore {
   resetGame: () => void
 }
 
-export const useGameStore = create<GameStore>((set, get) => ({
+export const useGameStore = create<GameStore>()(persist((set, get) => ({
   playerName: '',
   playerPath: null,
   stats: { ...INITIAL_STATS },
@@ -161,4 +162,20 @@ export const useGameStore = create<GameStore>((set, get) => ({
       isFinished: false,
     })
   },
+}), {
+  name: 'game-store',
+  storage: createJSONStorage(() => sessionStorage),
+  partialize: (state) => ({
+    playerName: state.playerName,
+    playerPath: state.playerPath,
+    stats: state.stats,
+    currentRound: state.currentRound,
+    history: state.history,
+    result: state.result,
+    scenarios: state.scenarios,
+    bridge: state.bridge,
+    choiceTimes: state.choiceTimes,
+    isPlaying: state.isPlaying,
+    isFinished: state.isFinished,
+  }),
 }))

@@ -363,7 +363,7 @@ export default function ResultPage() {
                 {/* Self-intro */}
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs text-white/50">
-                    介绍下自己的背景（年龄、学历、经历、正在做的事等）/ 也可以是用户反馈，50字以上
+                    介绍下自己的背景（年龄、学历、经历、正在做的事等）/ 也可以是用户反馈，写越多越好
                   </label>
                   <p className="text-[10px] text-amber-400/70 leading-relaxed">
                     小声bb：这几天认识了几个天使投资人，写得越详细他们越可能联系你
@@ -371,12 +371,12 @@ export default function ResultPage() {
                   <textarea
                     value={selfIntro}
                     onChange={(e) => setSelfIntro(e.target.value)}
-                    placeholder={"例如：我今年22岁，浙大计算机大三在读。做过一个校园外卖小程序，有1000+用户但没有收入。现在想用AI做一个帮助实验室自动处理数据的工具，已经和3个教授聊过需求...\n\n写得越真实越好，至少50字"}
+                    placeholder={"例如：我今年22岁，浙大计算机大三在读。做过一个校园外卖小程序，有1000+用户但没有收入。现在想用AI做一个帮助实验室自动处理数据的工具，已经和3个教授聊过需求...\n\n写得越真实越详细越好"}
                     rows={6}
                     className="w-full bg-white/[0.08] rounded-lg px-3 py-2.5 text-sm text-white placeholder:text-white/30 border border-white/10 focus:outline-none focus:border-indigo-500/50 transition-colors resize-none leading-relaxed"
                   />
                   <p className="text-[10px] text-white/30 text-right">
-                    {selfIntro.length} 字{selfIntro.trim().length < 50 ? `（至少还需要 ${50 - selfIntro.trim().length} 字）` : ' ✓'}
+                    {selfIntro.length} 字
                   </p>
                 </div>
 
@@ -484,25 +484,20 @@ export default function ResultPage() {
                 )}
               </div>
 
-              {/* Investor note */}
-              <div className="bg-amber-500/[0.08] border border-amber-400/20 rounded-xl p-4">
-                <p className="text-xs text-amber-300/80 leading-relaxed">
-                  小声bb：这些天认识了很多人，就有投资人，可以多写点，我保证他们触达（doge）
+              {/* Share CTA */}
+              <div className="bg-white/[0.04] border border-white/[0.06] rounded-xl p-4 flex flex-col items-center gap-3">
+                <p className="text-sm text-white/80 leading-relaxed text-center">
+                  如果你有100万，你会投给谁？截图发给他测一测，看你的判断准不准
                 </p>
+                <img
+                  src="/QRcode.png"
+                  alt="扫码测试"
+                  className="w-36 h-36 rounded-lg"
+                />
               </div>
 
               {/* Action Buttons */}
               <div className="flex flex-col gap-3">
-                <button
-                  onClick={() => setShowSharePlaceholder(true)}
-                  className="w-full flex items-center gap-3 bg-white/[0.06] border border-white/10 rounded-xl p-4 hover:bg-white/[0.1] active:scale-[0.98] transition-all text-left"
-                >
-                  <div className="flex-1">
-                    <p className="text-sm text-white/80 font-medium">分享结果</p>
-                    <p className="text-[10px] text-white/40 mt-0.5">让朋友也来测测</p>
-                  </div>
-                </button>
-
                 <button
                   onClick={handleRestart}
                   className="w-full flex items-center gap-3 bg-white/[0.06] border border-white/10 rounded-xl p-4 hover:bg-white/[0.1] active:scale-[0.98] transition-all text-left"
