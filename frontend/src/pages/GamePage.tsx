@@ -22,14 +22,14 @@ const STAT_LABELS: Record<string, { label: string; color: string; bar: string }>
 
 // Pick a scene-appropriate background based on round
 const ROUND_BACKGROUNDS = [
-  '/images/背景/学校和街区背景_1.png',
-  '/images/背景/学校和街区背景_2.png',
-  '/images/背景/图书馆场景_1.png',
-  '/images/背景/虚拟工作空间_1.png',
-  '/images/背景/虚拟工作空间_2.png',
-  '/images/背景/社交活动场景_1.png',
-  '/images/背景/电商场景_1.png',
-  '/images/背景/社交活动场景_3.png',
+  '/images/背景/深色反思背景1.png',
+  '/images/背景/暖色深思背景1.png',
+  '/images/背景/深色反思背景1.png',
+  '/images/背景/暖色深思背景1.png',
+  '/images/背景/深色反思背景1.png',
+  '/images/背景/暖色深思背景1.png',
+  '/images/背景/深色反思背景1.png',
+  '/images/背景/暖色深思背景1.png',
   '/images/背景/深色反思背景1.png',
   '/images/背景/暖色深思背景1.png',
 ]
