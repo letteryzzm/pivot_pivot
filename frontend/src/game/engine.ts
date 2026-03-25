@@ -200,9 +200,9 @@ const RESULT_PROFILES: Record<
   prophet: {
     title: '先知',
     description:
-      '你在某个维度上达到了近乎变态的专注。这不是均衡发展，这是偏执——而偏执者改变世界。',
+      '你的{topStat}达到了{topValue}——近乎变态的专注。这不是均衡发展，这是偏执——而偏执者改变世界。',
     advice:
-      '你的极致专注是你最大的武器。找到一个能把这种专注转化为产品的领域，然后找一个和你互补的合伙人来补短板。',
+      '你的{topStat}是你最大的武器。找到一个能把这种极致转化为产品的领域，然后找一个和你互补的合伙人来补短板。',
   },
   philosopher: {
     title: '哲学家',
@@ -586,6 +586,16 @@ export function generateResult(
     ? analyzeQuickAnswers(quickAnswers)
     : undefined
 
+  // Dynamic text replacement for hidden endings
+  let { description, advice, title } = profile
+  if (founderType === 'prophet') {
+    const topKey = STAT_KEYS.reduce((a, b) => stats[a] >= stats[b] ? a : b)
+    const topName = STAT_NAMES[topKey]
+    const topValue = stats[topKey]
+    description = description.replace(/\{topStat\}/g, topName).replace(/\{topValue\}/g, String(topValue))
+    advice = advice.replace(/\{topStat\}/g, topName)
+  }
+
   return {
     founderType,
     stats,
@@ -597,7 +607,9 @@ export function generateResult(
     blindSpots: diagnosis.blindSpots,
     stageSignal: diagnosis.stageSignal,
     quickAnalysis,
-    ...profile,
+    title,
+    description,
+    advice,
   }
 }
 
