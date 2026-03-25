@@ -198,11 +198,11 @@ const RESULT_PROFILES: Record<
       '你的胆量是稀缺资源，但赌徒和创业者的区别在于：创业者知道自己在赌什么。找到那个你愿意用三年青春去赌的问题，然后用数据而不是直觉来验证它。',
   },
   prophet: {
-    title: '先知',
+    title: '{prophetTitle}',
     description:
-      '你的{topStat}达到了{topValue}——近乎变态的专注。这不是均衡发展，这是偏执——而偏执者改变世界。',
+      '你的{topStat}达到了{topValue}——这不是均衡发展，这是极致。{prophetDesc}',
     advice:
-      '你的{topStat}是你最大的武器。找到一个能把这种极致转化为产品的领域，然后找一个和你互补的合伙人来补短板。',
+      '{prophetAdvice}',
   },
   philosopher: {
     title: '哲学家',
@@ -592,8 +592,41 @@ export function generateResult(
     const topKey = STAT_KEYS.reduce((a, b) => stats[a] >= stats[b] ? a : b)
     const topName = STAT_NAMES[topKey]
     const topValue = stats[topKey]
-    description = description.replace(/\{topStat\}/g, topName).replace(/\{topValue\}/g, String(topValue))
-    advice = advice.replace(/\{topStat\}/g, topName)
+
+    const prophetProfiles: Record<string, { title: string; desc: string; advice: string }> = {
+      judgment: {
+        title: '决策之眼',
+        desc: '你总能在信息不完整的时候做出正确判断。别人还在犹豫，你已经看清了方向。这种直觉不是天赋，是你反复在不确定性中练出来的。',
+        advice: '你的判断力是稀缺资源。找一个你笃信的方向，搭一个行动力强的团队，让他们去执行你看到的东西。你最大的风险不是判断错误，而是因为过于自信而忽略了盲区——找一个敢质疑你的合伙人。',
+      },
+      action: {
+        title: '行动机器',
+        desc: '你几乎每一轮都选了最快的那条路。想到就干，干完再说。你的速度是你的核心竞争力——大多数人还在PPT上画饼的时候，你已经有了第一批用户。',
+        advice: '你的执行力是碾压级的，但速度快不等于方向对。每周给自己留2小时，问一个问题："我在解决的问题，用户的痛感真的到了掏钱的程度吗？"跑得快的人如果方向错了，只是更快地到达错误的终点。',
+      },
+      cognition: {
+        title: '认知怪物',
+        desc: '你对世界的理解深度超过了绝大多数同龄人。你能看到别人看不到的关联，能把复杂问题拆解成清晰的结构。但你可能太享受"理解"本身了——理解了不等于做了。',
+        advice: '你的认知深度需要一个出口。找一个具体的问题，把你的理解转化为产品。不要再写分析报告了，写一行代码、发一条朋友圈、帮一个人解决一个问题。认知的价值只有在行动中才能兑现。',
+      },
+      connection: {
+        title: '超级连接者',
+        desc: '你天生就知道怎么和人打交道。每一轮你都优先考虑"人"的因素——找用户聊、拉合伙人、建立信任。你的社交直觉是创业中最被低估的能力。',
+        advice: '你的连接力是你的护城河。用它来做两件事：第一，找到20个目标用户深度访谈，你比任何人都更容易让他们打开话匣子；第二，找到一个技术合伙人，你负责需求和增长，他负责产品。你们会是绝配。',
+      },
+    }
+
+    const pp = prophetProfiles[topKey] ?? prophetProfiles.judgment
+    const replace = (s: string) =>
+      s.replace(/\{topStat\}/g, topName)
+       .replace(/\{topValue\}/g, String(topValue))
+       .replace(/\{prophetTitle\}/g, pp.title)
+       .replace(/\{prophetDesc\}/g, pp.desc)
+       .replace(/\{prophetAdvice\}/g, pp.advice)
+
+    title = replace(title)
+    description = replace(description)
+    advice = replace(advice)
   }
 
   return {
