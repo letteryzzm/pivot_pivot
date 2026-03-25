@@ -2,6 +2,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import StartPage from './pages/StartPage.tsx'
 import GamePage from './pages/GamePage.tsx'
 import ResultPage from './pages/ResultPage.tsx'
+import HuangzhengPage from './pages/HuangzhengPage.tsx'
+import HuangzhengResultPage from './pages/HuangzhengResultPage.tsx'
 
 function App() {
   return (
@@ -12,6 +14,8 @@ function App() {
             <Route path="/" element={<StartPage />} />
             <Route path="/game" element={<GamePage />} />
             <Route path="/result" element={<ResultPage />} />
+            <Route path="/huangzheng" element={<HuangzhengPage />} />
+            <Route path="/huangzheng/result" element={<HuangzhengResultPage />} />
           </Routes>
         </BrowserRouter>
       </div>
