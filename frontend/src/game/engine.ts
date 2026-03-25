@@ -119,7 +119,7 @@ export function determineFounderType(stats: PlayerStats): FounderType {
     (stats.judgment + stats.action + stats.cognition + stats.connection) / 4
 
   // Founder: balanced and high
-  if (avg >= 68) {
+  if (avg >= 78) {
     const values = [
       stats.judgment,
       stats.action,
@@ -127,23 +127,23 @@ export function determineFounderType(stats: PlayerStats): FounderType {
       stats.connection,
     ]
     const spread = Math.max(...values) - Math.min(...values)
-    if (spread < 22) return 'founder'
+    if (spread < 15) return 'founder'
   }
 
   const thinkScore = stats.judgment + stats.cognition
   const doScore = stats.action + stats.connection
 
   // Extreme action dominance = hustler
-  if (stats.action >= 75 && stats.judgment < 55) return 'hustler'
+  if (stats.action >= 85 && stats.judgment < 65) return 'hustler'
 
   // High judgment + cognition but low action = thinker
-  if (thinkScore > doScore + 12) return 'thinker'
+  if (thinkScore > doScore + 15) return 'thinker'
 
   // High action + connection but low thinking = hustler
-  if (doScore > thinkScore + 12) return 'hustler'
+  if (doScore > thinkScore + 15) return 'hustler'
 
   // Low overall = observer
-  if (avg < 45) return 'observer'
+  if (avg < 55) return 'observer'
 
   return 'explorer'
 }
@@ -242,15 +242,15 @@ function checkHiddenEnding(
     if (allAggressive) return 'gambler'
   }
 
-  // Prophet: any single stat >= 95
+  // Prophet: any single stat >= 90
   const statValues = [stats.judgment, stats.action, stats.cognition, stats.connection]
-  if (statValues.some((v) => v >= 95)) return 'prophet'
+  if (statValues.some((v) => v >= 90)) return 'prophet'
 
-  // Polymath: all four stats > 75
-  if (statValues.every((v) => v > 75)) return 'polymath'
+  // Polymath: all four stats >= 85
+  if (statValues.every((v) => v >= 85)) return 'polymath'
 
-  // Philosopher: action <= 30
-  if (stats.action <= 30) return 'philosopher'
+  // Philosopher: action <= 40
+  if (stats.action <= 40) return 'philosopher'
 
   return null
 }
