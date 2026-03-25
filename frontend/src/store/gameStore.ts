@@ -78,57 +78,71 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   makeChoice: (choice: Choice, thinkTime: number) => {
-    const state = get()
-    const nextRound = state.currentRound + 1
-    const scenario = state.scenarios[state.currentRound]
+    try {
+      const state = get()
+      const nextRound = state.currentRound + 1
+      const scenario = state.scenarios[state.currentRound]
+      if (!scenario) return
 
-    const record: ChoiceRecord = {
-      round: nextRound,
-      scenarioId: scenario.id,
-      choiceId: choice.id,
-      effects: choice.effects,
-    }
+      const record: ChoiceRecord = {
+        round: nextRound,
+        scenarioId: scenario.id,
+        choiceId: choice.id,
+        effects: choice.effects,
+      }
 
-    const newStats = applyEffects(state.stats, choice.effects)
-    const newHistory = [...state.history, record]
-    const newChoiceTimes = [...state.choiceTimes, thinkTime]
+      const newStats = applyEffects(state.stats, choice.effects)
+      const newHistory = [...state.history, record]
+      const newChoiceTimes = [...state.choiceTimes, thinkTime]
 
-    trackChoice(
-      record,
-      scenario.title,
-      scenario.description.replace(/\{name\}/g, state.playerName),
-      choice.text,
-      choice.clawReaction.replace(/\{name\}/g, state.playerName),
-      thinkTime,
-    )
+      trackChoice(
+        record,
+        scenario.title,
+        scenario.description.replace(/\{name\}/g, state.playerName),
+        choice.text,
+        choice.clawReaction.replace(/\{name\}/g, state.playerName),
+        thinkTime,
+      )
 
-    const isLastRound = nextRound >= TOTAL_ROUNDS
+      const isLastRound = nextRound >= TOTAL_ROUNDS
 
-    const nextBridge = isLastRound
-      ? ''
-      : generateBridge(choice.effects, state.playerName)
+      let nextBridge = ''
+      try {
+        nextBridge = isLastRound ? '' : generateBridge(choice.effects, state.playerName)
+      } catch {
+        // bridge generation failure is non-critical
+      }
 
-    if (isLastRound) {
-      const result = generateResult(newStats, newHistory, state.scenarios)
-      trackGameEnd(newStats, result.score, result.founderType)
+      if (isLastRound) {
+        let result
+        try {
+          result = generateResult(newStats, newHistory, state.scenarios)
+        } catch (e) {
+          console.error('generateResult failed:', e)
+          result = generateResult(newStats, newHistory, [])
+        }
+        trackGameEnd(newStats, result.score, result.founderType)
 
-      set({
-        stats: newStats,
-        currentRound: nextRound,
-        history: newHistory,
-        choiceTimes: newChoiceTimes,
-        result,
-        bridge: '',
-        isFinished: true,
-      })
-    } else {
-      set({
-        stats: newStats,
-        currentRound: nextRound,
-        history: newHistory,
-        choiceTimes: newChoiceTimes,
-        bridge: nextBridge,
-      })
+        set({
+          stats: newStats,
+          currentRound: nextRound,
+          history: newHistory,
+          choiceTimes: newChoiceTimes,
+          result,
+          bridge: '',
+          isFinished: true,
+        })
+      } else {
+        set({
+          stats: newStats,
+          currentRound: nextRound,
+          history: newHistory,
+          choiceTimes: newChoiceTimes,
+          bridge: nextBridge,
+        })
+      }
+    } catch (e) {
+      console.error('makeChoice failed:', e)
     }
   },
 
