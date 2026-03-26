@@ -1,8 +1,73 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useHuangzhengStore, computeHzSummary } from '../store/huangzhengStore.ts'
 import { HUANGZHENG_SCENARIOS, HZ_TAGS } from '../game/huangzheng-scenarios.ts'
 import { motion } from 'framer-motion'
+
+function ContactSection() {
+  const [contact, setContact] = useState('')
+  const [submitted, setSubmitted] = useState(false)
+
+  const handleSubmit = () => {
+    const trimmed = contact.trim()
+    if (!trimmed) return
+
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+    const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+    if (supabaseUrl && supabaseKey) {
+      fetch(`${supabaseUrl}/rest/v1/hz_contacts`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          apikey: supabaseKey,
+          Authorization: `Bearer ${supabaseKey}`,
+          Prefer: 'return=minimal',
+        },
+        body: JSON.stringify({ contact: trimmed }),
+      }).catch(() => {})
+    }
+    setSubmitted(true)
+  }
+
+  if (submitted) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="bg-amber-500/[0.06] border border-amber-500/15 rounded-xl p-4 text-center mb-4"
+      >
+        <p className="text-sm text-amber-200/80">收到了，稍后把文字稿发给你</p>
+      </motion.div>
+    )
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 0.7, duration: 0.5 }}
+      className="bg-white/[0.04] border border-white/[0.06] rounded-xl p-4 flex flex-col gap-3 mb-4"
+    >
+      <p className="text-sm text-white/70 leading-relaxed">
+        这些题目来自黄峥的公众号原文。留个联系方式，把完整文字稿发给你。
+      </p>
+      <input
+        value={contact}
+        onChange={(e) => setContact(e.target.value)}
+        onKeyDown={(e) => { if (e.key === 'Enter') handleSubmit() }}
+        placeholder="微信 / 手机 / 邮箱"
+        className="w-full bg-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/30 border border-white/10 focus:outline-none focus:border-amber-500/30 transition-colors"
+      />
+      <button
+        onClick={handleSubmit}
+        disabled={!contact.trim()}
+        className="w-full py-3 text-sm font-medium rounded-xl bg-white/10 border border-white/15 hover:bg-white/15 active:scale-[0.98] transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+      >
+        获取文字稿
+      </button>
+    </motion.div>
+  )
+}
 
 export default function HuangzhengResultPage() {
   const navigate = useNavigate()
@@ -179,6 +244,9 @@ export default function HuangzhengResultPage() {
             })}
           </div>
         </motion.div>
+
+        {/* Contact form */}
+        <ContactSection />
 
         {/* Footer */}
         <motion.div

@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { persist, createJSONStorage } from 'zustand/middleware'
 import type { HzScenario, HzTag } from '../game/huangzheng-scenarios.ts'
 import { HUANGZHENG_SCENARIOS, HZ_TAGS } from '../game/huangzheng-scenarios.ts'
 
@@ -18,6 +19,7 @@ interface HuangzhengState {
   choices: HzChoiceRecord[]
   currentUserChoice: string | null
   scenarios: HzScenario[]
+  _hasHydrated: boolean
 
   startQuiz: () => void
   makeChoice: (choiceId: string) => void
@@ -25,69 +27,89 @@ interface HuangzhengState {
   reset: () => void
 }
 
-export const useHuangzhengStore = create<HuangzhengState>((set, get) => ({
-  currentQuestion: 0,
-  isPlaying: false,
-  isFinished: false,
-  phase: 'choose',
-  choices: [],
-  currentUserChoice: null,
-  scenarios: HUANGZHENG_SCENARIOS,
-
-  startQuiz: () => {
-    set({
-      currentQuestion: 0,
-      isPlaying: true,
-      isFinished: false,
-      phase: 'choose',
-      choices: [],
-      currentUserChoice: null,
-    })
-  },
-
-  makeChoice: (choiceId: string) => {
-    const { currentQuestion, scenarios } = get()
-    const scenario = scenarios[currentQuestion]
-    set({
-      currentUserChoice: choiceId,
-      phase: 'reveal',
-      choices: [
-        ...get().choices,
-        {
-          scenarioId: scenario.id,
-          userChoiceId: choiceId,
-          huangzhengChoiceId: scenario.huangzhengChoice,
-          isMatch: choiceId === scenario.huangzhengChoice,
-          tag: scenario.tag,
-        },
-      ],
-    })
-  },
-
-  nextQuestion: () => {
-    const { currentQuestion, scenarios } = get()
-    if (currentQuestion >= scenarios.length - 1) {
-      set({ isFinished: true })
-    } else {
-      set({
-        currentQuestion: currentQuestion + 1,
-        phase: 'choose',
-        currentUserChoice: null,
-      })
-    }
-  },
-
-  reset: () => {
-    set({
+export const useHuangzhengStore = create<HuangzhengState>()(
+  persist(
+    (set, get) => ({
       currentQuestion: 0,
       isPlaying: false,
       isFinished: false,
       phase: 'choose',
       choices: [],
       currentUserChoice: null,
-    })
-  },
-}))
+      scenarios: HUANGZHENG_SCENARIOS,
+      _hasHydrated: false,
+
+      startQuiz: () => {
+        set({
+          currentQuestion: 0,
+          isPlaying: true,
+          isFinished: false,
+          phase: 'choose',
+          choices: [],
+          currentUserChoice: null,
+        })
+      },
+
+      makeChoice: (choiceId: string) => {
+        const { currentQuestion, scenarios } = get()
+        const scenario = scenarios[currentQuestion]
+        set({
+          currentUserChoice: choiceId,
+          phase: 'reveal',
+          choices: [
+            ...get().choices,
+            {
+              scenarioId: scenario.id,
+              userChoiceId: choiceId,
+              huangzhengChoiceId: scenario.huangzhengChoice,
+              isMatch: choiceId === scenario.huangzhengChoice,
+              tag: scenario.tag,
+            },
+          ],
+        })
+      },
+
+      nextQuestion: () => {
+        const { currentQuestion, scenarios } = get()
+        if (currentQuestion >= scenarios.length - 1) {
+          set({ isFinished: true })
+        } else {
+          set({
+            currentQuestion: currentQuestion + 1,
+            phase: 'choose',
+            currentUserChoice: null,
+          })
+        }
+      },
+
+      reset: () => {
+        set({
+          currentQuestion: 0,
+          isPlaying: false,
+          isFinished: false,
+          phase: 'choose',
+          choices: [],
+          currentUserChoice: null,
+        })
+      },
+    }),
+    {
+      name: 'hz-quiz-state',
+      storage: createJSONStorage(() => sessionStorage),
+      partialize: (state) => ({
+        currentQuestion: state.currentQuestion,
+        isPlaying: state.isPlaying,
+        isFinished: state.isFinished,
+        phase: state.phase,
+        choices: state.choices,
+        currentUserChoice: state.currentUserChoice,
+      }),
+      onRehydrateStorage: () => () => {
+        useHuangzhengStore.setState({ _hasHydrated: true })
+      },
+    },
+  ),
+)
 
 /** Compute summary stats from choices */
 export function computeHzSummary(choices: HzChoiceRecord[]) {

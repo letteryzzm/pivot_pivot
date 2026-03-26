@@ -18,12 +18,15 @@ export default function HuangzhengPage() {
     makeChoice,
     nextQuestion,
     startQuiz,
+    _hasHydrated,
   } = useHuangzhengStore()
 
-  // Auto-start on mount
+  // Wait for hydration, then auto-start if not already playing
   useEffect(() => {
-    if (!isPlaying) startQuiz()
-  }, [isPlaying, startQuiz])
+    if (_hasHydrated && !isPlaying && !isFinished) {
+      startQuiz()
+    }
+  }, [_hasHydrated, isPlaying, isFinished, startQuiz])
 
   useEffect(() => {
     if (isFinished) navigate('/huangzheng/result', { replace: true })
@@ -41,6 +44,8 @@ export default function HuangzhengPage() {
     nextQuestion()
   }, [nextQuestion])
 
+  // Show nothing until hydrated
+  if (!_hasHydrated) return null
   if (!isPlaying || currentQuestion >= TOTAL_HZ_QUESTIONS) return null
 
   const scenario = scenarios[currentQuestion]
